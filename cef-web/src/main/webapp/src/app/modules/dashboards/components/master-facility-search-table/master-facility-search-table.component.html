@@ -1,0 +1,88 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div>
+  <div class="row">
+    <div class="form-inline col-3">
+      <label for="id-filter-text" class="col-form-label mr-2">
+          <strong>Filter Table:</strong>
+      </label>
+      <div class="input-group">
+          <input id="id-filter-text" type="text" placeholder="Search"
+                class="form-control form-control-sm"
+                [formControl]="filter"/>
+          <div class="input-group-append">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Clear filter"
+                    (click)="onClearFilterClick()">
+                <fa-icon icon="times"></fa-icon>
+            </button>
+          </div>
+      </div>
+    </div>
+
+    <div class="form-inline col-3">
+      <label for="id-filter-text" class="col-form-label mr-2">
+          <strong>Filter Request Status:</strong>
+      </label>
+      <div class="input-group">
+          <select type="text" class="form-control" id="statusSelect" [formControl]="statusFilter">
+            <option [ngValue]="null"></option>
+            <option ngValue="UNASSOCIATED">No Request Sent</option>
+            <option ngValue="PENDING">Pending Request</option>
+            <option ngValue="APPROVED">Approved Request</option>
+          </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="mh-100 overflow-auto">
+    <table class="table table-sm table-striped table-bordered">
+      <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Facility Name</th>
+          <th scope="col" sortable="agencyFacilityIdentifier" (sort)="onSort($event)">Agency Facility ID</th>
+          <th scope="col" sortable="streetAddress" (sort)="onSort($event)">Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!tableItems || tableItems.length === 0">
+          <td colspan="4" class="text-center">
+              <strong class="text-larger">No data available.</strong>
+          </td>
+        </tr>
+        <ng-container *ngFor="let item of tableItems">
+          <tr [class.cursor-pointer]="!item.associationStatus" [class.table-dark]="item === selectedFacility" [class.text-muted]="item.associationStatus" (click)="selectFacility(item)">
+            <td>
+              {{item.name}} 
+              <strong *ngIf="item.associationStatus">
+                <span *ngIf="item.associationStatus == 'ACTIVE'" class="text-bs-teal">
+                  (<fa-icon icon="check"></fa-icon> Access Request Approved)
+                </span>
+                <span *ngIf="item.associationStatus == 'PENDING'" class="text-info">
+                  (<fa-icon icon="clock"></fa-icon> Request Pending Approval)
+                </span>
+              </strong>
+            </td>
+            <td>{{item.agencyFacilityIdentifier}}</td>
+            <td>{{item.streetAddress}}, {{item.city}}, {{item?.stateCode?.uspsCode}} {{item.postalCode}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+  </div>
+
+  <div>
+    <button type="button" class="btn btn-success" (click)="openRequestAccessModal()" [disabled]="!selectedFacility">Request Access</button>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="reviewForm">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    {{message}}
+    <br>
+    <label for="commentsInput" class="col-sm-6 col-md-2 col-form-label"><strong>Comments:</strong></label>
+    <div class="col-sm-6 col-md-10">
+      <textarea maxlength="2000" rows="3" class="form-control" id="commentsInput" formControlName="comments"></textarea>
+       (2000 character limit)
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="onClose()" class="btn btn-success">{{cancelButtonText}}</button>
+    <button type="button" (click)="onSubmit()" class="btn btn-primary">{{confirmButtonText}}</button>
+  </div>
+</form>

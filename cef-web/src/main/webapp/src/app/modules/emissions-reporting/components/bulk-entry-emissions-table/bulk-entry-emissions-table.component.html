@@ -1,0 +1,133 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div  *ngIf="tableData">
+  <form [formGroup]="emissionForm">
+    <div  class="overflow-auto" style="max-height: 60vh;">
+      <table class="table table-sm table-bordered">
+        <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col" sortable="unitIdentifier" (sort)="onSort($event)">Unit ID</th>
+          <th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+          <th scope="col">Pollutant</th>
+          <th scope="col">Calculation Method</th>
+            <th scope="col">Not Reporting This Year</th>
+          <th scope="col">Emission Factor</th>
+          <th scope="col">Total Emissions</th>
+          <th scope="col">Previously Reported Emission Factor</th>
+          <th scope="col">Previously Reported Total Emissions</th>
+          <th scope="col">% Change in Emissions</th>
+        </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of tableItems; let i=index">
+          <tr [class.striped]="!(i%2)">
+            <td class="align-middle" [attr.rowSpan]="item.emissions.length + 1">
+              {{item.unitIdentifier}}
+              <br>
+              <fa-icon class="mt-2 ml-1" [icon]="['fas', 'question-circle']" [title]="item.unitDescription"></fa-icon>
+              <span *ngIf="item.unitStatus.code === operatingStatus.TEMP_SHUTDOWN">
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']"
+                    title="This Emissions Unit is Temporarily Shutdown. Each sub-facility component must also be either Temporarily Shutdown or Permanently Shutdown."></fa-icon>
+              </span>
+              <span *ngIf="item.unitStatus.code === operatingStatus.PERM_SHUTDOWN">
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" title="This Emissions Unit is Permanently Shutdown. Each sub-facility component must also be Permanently Shutdown."></fa-icon>
+              </span>
+            </td>
+            <td class="align-middle" [attr.rowSpan]="item.emissions.length + 1">
+              {{item.emissionsProcessIdentifier}}
+              <br>
+              <fa-icon class="mt-2 ml-1" [icon]="['fas', 'question-circle']" [title]="item.emissionsProcessDescription"></fa-icon>
+              <span *ngIf="item.operatingStatusCode.code === operatingStatus.TEMP_SHUTDOWN">
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" title="This process is Temporarily Shutdown and cannot be edited."></fa-icon>
+              </span>
+            </td>
+          </tr>
+            <ng-container *ngFor="let emission of item.emissions">
+              <tr [class.striped]="!(i%2)">
+              <td>
+                <a *ngIf="((emission.pollutant.pollutantName === 'Lead' && reportYear % 3 !== 1) || emission.pollutant.pollutantType!=='CAP') else CAP" routerLink="{{baseUrl}}/period/{{item.reportingPeriodId}}/emission/{{emission.id}}"
+                      [attr.aria-label]="'emissions process' + item?.emissionsProcessIdentifier">
+                  {{emission.pollutant?.pollutantName}}
+                </a>
+                  <ng-template #CAP>
+                      {{emission.pollutant?.pollutantName}}
+                  </ng-template>
+              </td>
+              <td>{{emission.emissionsCalcMethodCode?.description}}</td>
+                  <td class="no-reporting-checkbox d-flex flex-column">
+                      <input type="checkbox"
+                             [checked]="emission.notReporting"
+                             (change)="onCheckboxChange($event, emission)"
+                             [disabled]="((emission.pollutant.pollutantName === 'Lead' && reportYear % 3 === 1) || (emission.pollutant.pollutantName !== 'Lead' && emission?.pollutant?.pollutantType === 'CAP')) || emission?.previousTotalEmissions === null"
+                      />
+                  </td>
+              <td>
+                {{emission.emissionsFactor}}
+                <span *ngIf="emission.emissionsNumeratorUom && emission.emissionsDenominatorUom">
+                  {{emission.emissionsNumeratorUom.description}}/{{emission.emissionsDenominatorUom.description}}
+                </span>
+              </td>
+              <td>
+                <div class="row">
+                  <div class="col-sm-12 col-lg-8">
+                  <input type="number" class="form-control" id="{{emission.id + 'Input'}}" formControlName="{{emission.id}}" [readOnly]="readOnlyMode || emission.notReporting" onclick="this.focus();"
+                          [attr.aria-label]="'Total Emissions for ' + emission.pollutant?.pollutantName">
+                    <app-validation-message [control]="emissionForm.get('' + emission.id)"></app-validation-message>
+                  </div>
+                  <div class="col-sm-12 col-lg-4">
+                    {{emission.emissionsUomCode?.description}}
+                    <span *ngIf="!(emission.totalManualEntry || emission.emissionsCalcMethodCode.totalDirectEntry)">
+                      <fa-icon *ngIf="emission.calculationFailed === false" class="mt-2" style="color: #28a745" [icon]="['fas', 'check']" title="Total Emissions were recalculated."></fa-icon>
+                      <fa-icon *ngIf="emission.calculationFailed === true" class="mt-2 text-danger" [icon]="['fas', 'times-circle']"
+                          [title]="'Total Emissions could not be calculated because ' + emission.calculationFailureMessage + ' To update click the Pollutant to be redicrect to the Emission Information Page.'"></fa-icon>
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span *ngIf="emission.previousEmissionsFactor; else elseBlock">
+                  {{emission.previousEmissionsFactor}}
+                  <ng-container *ngIf="emission.previousEmissionsNumeratorUomCode && emission.previousEmissionsDenominatorUomCode">
+                    {{emission.previousEmissionsNumeratorUomCode}}/{{emission.previousEmissionsDenominatorUomCode}}
+                  </ng-container>
+                </span>
+                <ng-template #elseBlock>N/A</ng-template>
+              </td>
+              <td>
+                <span *ngIf="emission.previousTotalEmissions; else elseBlock">
+                  {{emission.previousTotalEmissions}} {{emission.previousEmissionsUomCode}}
+                </span>
+                <ng-template #elseBlock>N/A</ng-template>
+              </td>
+              <td>
+                <span *ngIf="emission.previousTotalEmissions; else elseBlock">
+                  {{((emissionForm.get('' + emission.id).value - emission.previousTotalEmissions) / emission.previousTotalEmissions * 100).toFixed(3)}}
+                </span>
+                <ng-template #elseBlock>N/A</ng-template>
+
+              </td>
+            </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="float-right mt-3" *ngIf="!readOnlyMode">
+      <button type="button" class="btn btn-success" (click)="onSubmit()">Save Emissions
+        <div *ngIf="savingBulkInfo" class="spinner-border spinner-border-sm" role="status" title="Saving Emission Information...">
+          <span class="sr-only">Saving Emission Information...</span>
+        </div>
+      </button>
+    </div>
+  </form>
+</div>

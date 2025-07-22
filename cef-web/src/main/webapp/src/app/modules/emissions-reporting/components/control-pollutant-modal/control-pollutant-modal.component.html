@@ -1,0 +1,56 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="pollutantForm">
+    <div class="modal-header">
+        <h4 class="modal-title w-100" *ngIf="controlPollutantFor == 'CONTROL_PATH'"><strong>Control Path Pollutant</strong></h4>
+        <h4 class="modal-title w-100" *ngIf="controlPollutantFor === 'CONTROL_DEVICE'"><strong>Control Device Pollutant</strong></h4>
+    </div>
+
+    <div class="modal-body" style="height: 350px;">
+        <div class="row pb-1">
+            <div class="col-sm-4">
+                <fa-icon class="mt-2 ml-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="pollutantSelect" class="ml-1 col-form-label"><strong>Pollutant:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('pollutant')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-6">
+                <input [attr.aria-multiline]="null" id="pollutantSelect" type="text" class="form-control"
+                       formControlName="pollutant" [ngbTypeahead]="searchPollutants" [editable]="true"
+                       [inputFormatter]="pollutantFormatter" [resultFormatter]="pollutantFormatter"/>
+                        <!--[editable]="true" needed for error handling-->
+                <app-validation-message [control]="pollutantForm.get('pollutant')"></app-validation-message>
+            </div>
+        </div>
+        <div class="row pb-1">
+            <div class="col-sm-4" *ngIf="controlPollutantFor === 'CONTROL_DEVICE'">
+                <fa-icon class="mt-2 ml-2" title="The percent reduction achieved for the controlled pollutant when all control measures are operating as designed." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="percentReductionSelect" class="ml-1 col-form-label"><strong>Percent Reduction Efficiency:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('percentReduction')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-4" *ngIf="controlPollutantFor === 'CONTROL_PATH'">
+                <fa-icon class="mt-2 ml-2" title="The combined percent reduction efficiency of all controls in that path that apply to a single pollutant.  It is the same as the control device percent reduction efficiency when there is only one control." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="percentReductionSelect" class="ml-1 col-form-label"><strong>Percent Reduction Efficiency:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('percentReduction')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-6">
+                <input id="percentReductionSelect" class="form-control" formControlName="percentReduction" maxlength="6"/>
+                <app-validation-message [control]="pollutantForm.get('percentReduction')"></app-validation-message>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="onClose()">Cancel</button>
+    </div>
+
+</form>

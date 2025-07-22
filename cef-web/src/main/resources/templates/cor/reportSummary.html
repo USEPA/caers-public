@@ -1,0 +1,75 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="container print-page-break pb-5">
+    <h1 class="pb-4 pl-3 child-header">Report Summary</h1>
+    <div class="col-12">
+		<table class="summary-table">
+			<thead>
+				<tr>
+					<th>Pollutant</th>
+					<th>Type</th>
+					<th>Fugitive Amount</th>
+					<th>Stack Amount</th>
+					<th>Units of Measure</th>
+					<th><span th:text="${report.getYear()}" /> Reported Emissions</th>
+					<th>Previous Year Reported Emissions</th>
+					<th>Previous Submitted Year</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr th:unless="${reportSummary ne null and !reportSummary.isEmpty()}">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="summary-tr" th:each="row : ${reportSummaryTon}">
+                <td th:text="${row.pollutantName}" th:style="'font-weight: bold; word-break: break-all;'"></td>
+				<td th:text="${row.pollutantType}"></td>
+				<td th:text="${row.fugitiveTonsTotal}"></td>
+				<td th:text="${row.stackTonsTotal}"></td>
+				<td style="width:5%">Tons</td>
+				<td th:text="${row.emissionsTonsTotal}"></td>
+				<td th:text="${row.previousYearTonsTotal ne null} ? ${row.previousYearTonsTotal} : 'None Reported'"></td>
+				<td th:text="${row.previousYear}" th:style="'width:5%'"></td>
+			</tr>
+            <tr th:if="${reportSummaryCuries ne null and !reportSummaryCuries.isEmpty()}" class="summary-tr" th:each="row : ${reportSummaryCuries}">
+                <td th:text="${row.pollutantName}" th:style="'font-weight: bold; word-break: break-all;'"></td>
+                <td th:text="${row.pollutantType}"></td>
+                <td th:text="${row.fugitiveTonsTotal}"></td>
+                <td th:text="${row.stackTonsTotal}"></td>
+                <td style="width:5%">Curies</td>
+                <td th:text="${row.emissionsTonsTotal}"></td>
+                <td th:text="${row.previousYearTonsTotal ne null} ? ${row.previousYearTonsTotal} : 'None Reported'"></td>
+                <td th:text="${row.previousYear}" th:style="'width:5%'"></td>
+            </tr>
+				<tr>
+					<th>Total Emissions (Tons) <span class="note" th:if="${reportSummaryCuries ne null and !reportSummaryCuries.isEmpty()}"><br/>Total Emissions do not include Radionuclides (Radioactivity -including Radon)</span></td>
+					<th>--</th>
+					<th>--</th>
+					<th>--</th>
+                    <th>--</th>
+					<th th:text="${currentYearTotalEmissions}"></th>
+					<th th:text="${previousYearTotalEmissions}"></th>
+					<th>--</th>
+				</tr>
+			</tbody>
+		</table>
+        <div class="pt-4" th:if="${#strings.toString(report.getThresholdStatus())} =='OPERATING_BELOW_THRESHOLD'">
+            <span th:text="|The ${fs.name} facility is &ldquo;Operating&rdquo; below the AERR thresholds for the ${report.year} inventory year. The emissions Inventory Report for the facility will not be submitted to EIS this year.|"></span>
+        </div>
+    </div>
+</div>

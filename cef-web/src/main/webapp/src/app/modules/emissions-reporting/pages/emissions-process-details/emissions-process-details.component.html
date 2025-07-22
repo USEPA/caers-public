@@ -1,0 +1,325 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div *ngIf="process">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="float-right pb-3 pr-3" *ngIf="!readOnlyMode && !processHasSubmittedSemiannualData(process)">
+                <button type="button" class="btn btn-success" (click)="openCopyModal()">Add Alternative Throughput for this Process</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Process Information</strong>
+                    <div class="float-right" *ngIf="!editInfo && (!readOnlyMode || sccEditMode)">
+                        <button type="button" id="editProcessInfoBtn" class="btn btn-success" aria-label="edit process information" (click)="setEditInfo(true)">Edit</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="!editInfo">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>Unit ID:</strong></div>
+                            <div class="col-sm-6 col-md-6">{{unitIdentifier}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>Process ID:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{process.emissionsProcessIdentifier}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Process Description:</strong></div>
+                            <div class="col-sm-6 col-md-6">{{process.description}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>Operating Status:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{process.operatingStatusCode.description}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Year Op Status Changed:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{process.statusYear}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>SCC:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{process.sccCode}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>SCC Description:</strong></div>
+                            <div class="col-sm-6 col-md-6">{{process.sccDescription}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2" *ngIf="monthlyReportingEnabled"><strong>Initial Reporting Month for {{facilitySite.emissionsReport.year}}:</strong></div>
+                            <div class="col-sm-6 col-md-2" *ngIf="monthlyReportingEnabled">{{process.initialMonthlyReportingPeriod}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2" *ngIf="hasAircraftCode"><strong>Aircraft Engine Code:</strong></div>
+                            <div class="col-sm-6 col-md-6" *ngIf="hasAircraftCode">{{process.aircraftEngineTypeCode?.faaAircraftType}}&nbsp;-&nbsp;{{process.aircraftEngineTypeCode?.engine}}</div>
+                        </div>
+
+                        <div class="row" *ngIf="sltBillingExemptEnabled">
+                            <div class="col-sm-6 col-md-2"><strong>SLT Billing-Exempt:</strong></div>
+                            <div *ngIf="process.sltBillingExempt" class="col-sm-6 col-md-2"><input type="checkbox" checked="checked" disabled></div>
+                            <div *ngIf="!process.sltBillingExempt" class="col-sm-6 col-md-2"><input type="checkbox" disabled></div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>Comments:</strong></div>
+                            <div class="col-sm-6 col-md-10">{{process.comments}}</div>
+                        </div>
+
+                        <app-reviewer-comment [entityId]="process.id" [entityType]="entityType.EMISSIONS_PROCESS"></app-reviewer-comment>
+                    </div>
+
+                    <div *ngIf="editInfo">
+                        <app-edit-process-info-panel [process]="process" [emissionsUnit]="emissionsUnit" [sltEditEnabled]="sltEditEnabled" [sccEditMode]="sccEditMode"></app-edit-process-info-panel>
+                        <div class="float-right pb-3 pr-3" *ngIf="infoComponent">
+                            <button type="button" class="btn btn-primary mr-2" (click)="setEditInfo(false)">Cancel</button>
+                            <button type="submit" class="btn btn-success" (click)="updateProcess()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="(process?.operatingStatusCode?.code !== operatingStatus.PERM_SHUTDOWN) && (process?.operatingStatusCode?.code !== operatingStatus.TEMP_SHUTDOWN)">
+        <ng-container *ngFor="let period of process.reportingPeriods">
+        <div *ngIf="period.reportingPeriodTypeCode.shortName === monthlyReportingPeriods.ANNUAL">
+            <div class="row" *ngFor="let operatingDetail of period.operatingDetails">
+                <div class="col-sm-12">
+                    <div class="card mb-3">
+                        <div class="card-header text-center">
+                            <strong>Operating Details</strong>
+                            <div class="float-right" *ngIf="!editDetails && !readOnlyMode">
+                                <button type="button" id="editOperatingDetailsBtn" class="btn btn-success" aria-label="edit operating detail" (click)="setEditDetails(true)">Edit</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div *ngIf="!editDetails">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-2"><strong>Avg. Days per Week:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.avgDaysPerWeek}}</div>
+                                    <div class="col-sm-6 col-md-2"><strong>Hours per Reporting Period:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.actualHoursPerPeriod}}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-2"><strong>Avg. Hours per Day:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.avgHoursPerDay}}</div>
+                                    <div class="col-sm-6 col-md-2"><strong>Winter Operating Percent:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.percentWinter}}</div>
+                                    <div class="col-sm-6 col-md-2"><strong>Summer Operating Percent:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.percentSummer}}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-2"><strong>Avg. Weeks per Reporting Period:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.avgWeeksPerPeriod}}</div>
+                                    <div class="col-sm-6 col-md-2"><strong>Spring Operating Percent:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.percentSpring}}</div>
+                                    <div class="col-sm-6 col-md-2"><strong>Fall Operating Percent:</strong></div>
+                                    <div class="col-sm-6 col-md-2">{{operatingDetail.percentFall}}</div>
+                                </div>
+
+                                <app-reviewer-comment [entityId]="operatingDetail.id" [entityType]="entityType.OPERATING_DETAIL"></app-reviewer-comment>
+                            </div>
+
+                            <div *ngIf="editDetails">
+                                <app-edit-process-operating-detail-panel [operatingDetails]="operatingDetail" [isMonthlyReportingProcess]="isMonthlyReportingProcess()" [facilitySite]="facilitySite"></app-edit-process-operating-detail-panel>
+                                <div class="float-right pb-3 pr-3" *ngIf="operatingDetailsComponent">
+                                    <button type="button" class="btn btn-primary mr-2" (click)="setEditDetails(false)">Cancel</button>
+                                    <button type="submit" class="btn btn-success" (click)="updateOperatingDetail(operatingDetail)" [disabled]="isMonthlyReportingProcess()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card mb-3">
+                        <div class="card-header text-center">
+                            <strong>Reporting Period</strong>
+                            <div class="float-right" *ngIf="!editPeriod && !readOnlyMode">
+                                <button type="button" id="editReportingPeriodBtn" class="btn btn-success" aria-label="edit reporting period" (click)="setEditPeriod(true)">Edit</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div *ngIf="!editPeriod">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2"><strong>Reporting Period:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.reportingPeriodTypeCode?.shortName}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Operating Type:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.emissionsOperatingTypeCode?.shortName}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Throughput Parameter:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.calculationParameterTypeCode?.description}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2"><strong>Throughput Material:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.calculationMaterialCode?.description}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Throughput Value:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.calculationParameterValue}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Throughput UoM:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.calculationParameterUom?.description}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2"><strong>Fuel Material:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.fuelUseMaterialCode?.description}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Fuel Value:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.fuelUseValue}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Fuel UoM:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.fuelUseUom?.description}}</div>
+                            </div>
+
+                            <div class="row justify-content-end">
+                                <div class="col-sm-6 col-md-2"><strong>Heat Content Ratio:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.heatContentValue}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Heat Content Ratio Numerator:</strong></div>
+                                <div class="col-sm-6 col-md-2">{{period.heatContentUom?.description}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Heat Content Ratio Denominator:</strong></div>
+                                <div class="col-sm-6 col-md-2" *ngIf="period.heatContentValue">{{period.fuelUseUom?.description}}</div>
+                                <div class="col-sm-6 col-md-2" *ngIf="!period.heatContentValue"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2"><strong>Comments:</strong></div>
+                                <div class="col-sm-6 col-md-10">{{period.comments}}</div>
+                            </div>
+                                <app-reviewer-comment [entityId]="period.id" [entityType]="entityType.REPORTING_PERIOD"></app-reviewer-comment>
+                            </div>
+
+                            <div *ngIf="editPeriod">
+                                <app-edit-process-reporting-period-panel [reportingPeriod]="period" [sccCode]="process.sccCode" [facilitySite]="facilitySite" [processOpStatus]="process.operatingStatusCode.code"></app-edit-process-reporting-period-panel>
+                                <div class="float-right pb-3 pr-3" *ngIf="reportingPeriodComponent">
+                                    <button type="button" class="btn btn-primary mr-2" (click)="setEditPeriod(false)">Cancel</button>
+                                    <button type="submit" class="btn btn-success" (click)="updateReportingPeriod(period)">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </ng-container>
+    </div>
+
+<div *ngIf="(process?.operatingStatusCode?.code !== operatingStatus.PERM_SHUTDOWN) && (process?.operatingStatusCode?.code !== operatingStatus.TEMP_SHUTDOWN)">
+    <div *ngIf="createPeriod">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Operating Details</strong>
+                    </div>
+                    <div class="card-body">
+                        <app-edit-process-operating-detail-panel [isMonthlyReportingProcess]="isMonthlyReportingProcess()"></app-edit-process-operating-detail-panel>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Reporting Period</strong>
+                    </div>
+                    <div class="card-body">
+                        <app-edit-process-reporting-period-panel [facilitySite]="facilitySite" [facilitySite]="facilitySite"></app-edit-process-reporting-period-panel>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-1" *ngIf="!(process.reportingPeriods && process.reportingPeriods.length) && !readOnlyMode">
+        <div class="col">
+            <div class="float-right pb-3 pr-3">
+                <button *ngIf="!createPeriod" type="button" class="btn btn-success mr-2" (click)="setCreatePeriod(true)">Create Reporting Period</button>
+                <button *ngIf="createPeriod" type="button" class="btn btn-primary mr-2" (click)="setCreatePeriod(false)">Cancel</button>
+                <button *ngIf="createPeriod" type="submit" class="btn btn-success" (click)="createReportingPeriod()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngFor="let period of process.reportingPeriods">
+        <div *ngIf="period.reportingPeriodTypeCode.shortName === monthlyReportingPeriods.ANNUAL">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card mb-3">
+                        <div class="card-header text-center">
+                            <strong>Emissions Associated with this Process</strong>
+                        </div>
+                        <div class="card-body">
+                            <app-emission-table [tableData]="period.emissions" [reportingPeriod]="period" [process]="process" [readOnlyMode]="readOnlyMode"
+                                                [emissionsReportId]="facilitySite.emissionsReport.id" [monthlyReportingProcess]="isMonthlyReportingProcess()"
+                                                [semiannualSubmitted]="semiAnnualReportSubmittedOrApproved"></app-emission-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Release Points Associated with this Process</strong>
+                </div>
+                <div class="card-body">
+                    <app-release-point-appt-table [facilitySiteId]="facilitySite.id" [tableData]="process.releasePointAppts" [process]="process" [readOnlyMode]="readOnlyMode"></app-release-point-appt-table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Controls Associated with this Process</strong>
+                    </div>
+                    <div class="card-body">
+                        <app-control-path-panel [tableData]="controlPaths" [readOnlyMode]="readOnlyMode"></app-control-path-panel>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+    <div class="row" *ngIf="(process?.operatingStatusCode?.code === operatingStatus.PERM_SHUTDOWN) || (process?.operatingStatusCode?.code === operatingStatus.TEMP_SHUTDOWN)">
+        <div class="col-sm-12 col-md-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Release Points Associated with this Process</strong>
+                </div>
+                <div class="card-body">
+                    <app-release-point-appt-table [facilitySiteId]="facilitySite.id" [tableData]="process.releasePointAppts" [process]="process" [readOnlyMode]="readOnlyMode"></app-release-point-appt-table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Controls Associated with this Process</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-path-panel [tableData]="controlPaths" [readOnlyMode]="readOnlyMode"></app-control-path-panel>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

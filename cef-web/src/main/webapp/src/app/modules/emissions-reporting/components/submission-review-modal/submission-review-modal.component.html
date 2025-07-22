@@ -1,0 +1,64 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="modal-header">
+  <h4 class="modal-title">Submission Review</h4>
+  <button type="button" class="close" aria-label="Close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+	<div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Facility Name:</strong></div>
+			<div class="col-md-6">{{facility.name}}</div>
+		</div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Facility ID:</strong></div>
+			<div class="col-md-6">{{facility.agencyFacilityIdentifier}}</div>
+		</div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Report Year:</strong></div>
+			<div *ngIf="!semiannualReport" class="col-md-6">{{report.year}}</div>
+            <div *ngIf="semiannualReport" class="col-md-6">{{report.year}} - Semi-annual</div>
+		</div>
+		<div class="row pb-2">
+			<div class="col-md-4"><strong>Emissions Report Last Updated:</strong></div>
+			<div class="col-md-6">{{lastModifiedDate | date: 'long'}}</div>
+		</div>
+		<p>Before submitting your report, you should view a copy and review it for accuracy.</p>
+		<div class ="buttonCenter">
+			<span *ngIf="semiannualReport"><a href="semiannual/cor/{{report.id}}?generate=false" target="_blank" class="btn btn-success">View Report</a></span>
+			<span *ngIf="!semiannualReport"><a href="cor/{{report.id}}?generate=false" target="_blank" class="btn btn-success">View Report</a></span>
+		</div>
+		<div *ngIf="tableData">
+			<h6><strong>Download Report Attachments</strong></h6>
+			<ul *ngFor="let attachment of tableData">
+				<li class="attachList">
+					<a routerLink="{{url}}/summary" (click)="download(attachment)">{{attachment?.fileName}}</a>
+				</li>
+			</ul>
+		<div>
+		<br>
+	</div>
+	<div class="form-check">
+		<div>
+			<input type="checkbox" class="form-check-input" [checked]="acknowledgmentChecked" (change)="acknowledgment(acknowledgmentChecked)" id="acknowledgment" aria-label="submission review acknowledgment">&nbsp;
+			<span class="form-check-label" for="acknowledgment">I acknowledge that I have had the opportunity to download and review the data in this report.</span>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" id="certifyAndSubmit"
+			[style.visibility]="'hidden'" [disabled]="!acknowledgmentChecked">certifyAndSubmit</button>
+	<button type="button" (click)="onContinue()" class="btn btn-success" id="modalProceedBtn" [disabled]="!acknowledgmentChecked">Proceed</button>
+    <button type="button" (click)="onCancel()" class="btn btn-primary" id="modalCancelBtn">Cancel</button>
+</div>

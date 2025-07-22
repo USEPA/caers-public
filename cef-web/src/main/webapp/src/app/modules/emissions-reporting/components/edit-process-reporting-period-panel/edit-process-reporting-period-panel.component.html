@@ -1,0 +1,211 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="reportingPeriodForm" (ngSubmit)="onSubmit()">
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The time period type for which emissions are reported." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpTypeCodeSelect" class="ml-1 col-form-label"><strong>Reporting Period:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.reportingPeriodTypeCode"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <select type="text" class="form-control" id="rpTypeCodeSelect" formControlName="reportingPeriodTypeCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of reportingPeriodValues" [ngValue]="opt">{{opt.shortName}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.reportingPeriodTypeCode"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code identifying the operating state for the emissions being reported." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpOperatingCodeSelect" class="ml-1 col-form-label"><strong>Operating Type:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.emissionsOperatingTypeCode"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <select type="text" class="form-control" id="rpOperatingCodeSelect" formControlName="emissionsOperatingTypeCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of operatingStatusValues" [ngValue]="opt">{{opt.shortName}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.emissionsOperatingTypeCode"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code indicating whether the material measured is an input to the process, an output of the process or a static count (not a throughput)." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpParamSelect" style="font-size:93%" class="ml-1 col-form-label"><strong>Throughput Parameter:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.calculationParameterTypeCode"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <select type="text" class="form-control" id="rpParamSelect" formControlName="calculationParameterTypeCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of parameterTypeValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.calculationParameterTypeCode"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code for material or fuel processed." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpMaterialSelect" class="ml-1 col-form-label"><strong>Throughput Material:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.calculationMaterialCode"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <select type="text" class="form-control" id="rpMaterialSelect" formControlName="calculationMaterialCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of materialValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.calculationMaterialCode"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Activity or throughput of the process for a given time period." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpValueInput" class="ml-1 col-form-label"><strong>Throughput Value:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.calculationParameterValue"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="rpValueInput" formControlName="calculationParameterValue" [readOnly]="isMonthlyReportingProcess()">
+            <app-validation-message [control]="reportingPeriodForm.controls.calculationParameterValue"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code for the unit of measure for calculation parameter value." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpUomSelect" class="ml-1 col-form-label"><strong>Throughput UoM:</strong></label>
+    		<app-required-asterisk [control]="reportingPeriodForm.controls.calculationParameterUom"></app-required-asterisk>
+        </div>
+        <div class="col-sm-2">
+            <select type="text" class="form-control" id="rpUomSelect" formControlName="calculationParameterUom" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of denominatorUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.calculationParameterUom"></app-validation-message>
+        </div>
+    </div>
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The type of fuel used by the process.  Required for some SCCs.  May be the same as the throughput." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpMaterialSelect" class="ml-1 col-form-label"><strong>Fuel Material:</strong></label>
+        </div>
+        <div class="col-sm-2" >
+            <select *ngIf="isFuelUseScc || isMonthlyReportingScc" type="text" class="form-control" id="rpFuelMaterialSelect" formControlName="fuelUseMaterialCode" [compareWith]="formUtils.compareCode" [attr.disabled]="semiAnnualReportSubmittedOrApproved">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="sccFuelUseMaterialValue">{{sccFuelUseMaterialValue?.description}}</option>
+            </select>
+            <select *ngIf="!isFuelUseScc && !isMonthlyReportingScc" type="text" class="form-control" id="rpFuelMaterialSelect" formControlName="fuelUseMaterialCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fuelUseMaterialValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.fuelUseMaterialCode"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Amount of fuel material used in the process." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpFuelValueInput" class="ml-1 col-form-label"><strong>Fuel Value:</strong></label>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="rpFuelValueInput" formControlName="fuelUseValue" [readonly]="fuelValueInputEnabled">
+            <app-validation-message [control]="reportingPeriodForm.controls.fuelUseValue"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code for the unit of measure for fuel use value." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpFuelUomSelect" class="ml-1 col-form-label"><strong>Fuel UoM:</strong></label>
+        </div>
+        <div class="col-sm-2">
+            <select *ngIf="isFuelUseScc" type="text" class="form-control" id="rpFuelUomSelect" formControlName="fuelUseUom" [compareWith]="formUtils.compareCode" [attr.disabled]="semiAnnualReportSubmittedOrApproved">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of sccFuelUseUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <select *ngIf="!isFuelUseScc" type="text" class="form-control" id="rpFuelUomSelect" formControlName="fuelUseUom" [compareWith]="formUtils.compareCode" [attr.disabled]="semiAnnualReportSubmittedOrApproved">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fuelUseUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="reportingPeriodForm.controls.fuelUseUom"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-2 pt-2">
+        <div class="col-sm-12" *ngIf="reportingPeriodForm.errors?.fuelUsefields">
+            <div class="validation-message" style="padding-left: 10px;">
+                If Fuel data is being reported then all fields must contain inputs in order to save.
+            </div>
+        </div>
+        <div class="col-sm-12" *ngIf="showFuelDataCopyMessage">
+            <div class="validation-warning" style="padding-left: 10px; vertical-align: text-bottom;">
+                Fuel data copied to Throughput data fields will be used to calculate total emissions for these pollutants.
+            </div>
+        </div>
+        <div class="col-sm-12" *ngIf="sccFuelUsefieldsWarning">
+            <div class="validation-warning" style="padding-left: 10px;">
+                {{sccFuelUsefieldsWarning}}
+            </div>
+        </div>
+    </div>
+	<div class="row pb-1">
+        <div class="col-sm-4 float-left">
+            <button type="button" class="btn btn-success" *ngIf="!isMonthlyReportingProcessAndSemiannualSubmitted()" (click)="copyFuelDataToThroughput()">Copy Fuel Data to Throughput Data Fields</button>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The heat content of the fuel, use the default or enter your own." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpHeatContentValueInput" class="ml-1 col-form-label"><strong>Heat Content Ratio:</strong></label>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="rpHeatContentValueInput" formControlName="heatContentValue" >
+            <app-validation-message [control]="reportingPeriodForm.controls.heatContentValue"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Unit of measure for the heat content conversion ratio. E.g. E6BTU for 124.93 Million BTU per short ton." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpHeatContentUomSelect" class="ml-1 d-inline col-form-label"><strong>Heat Content Ratio Numerator:</strong></label>
+        </div>
+        <div class="col-sm-2">
+			<select *ngIf="isFuelUseScc" type="text" class="form-control" id="rpHeatContentUomSelect" formControlName="heatContentUom" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of sccFuelUseUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <select *ngIf="!isFuelUseScc" type="text" class="form-control" id="rpHeatContentUomSelect" formControlName="heatContentUom" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fuelUseUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <div class="validation-message" *ngIf="reportingPeriodForm.errors?.heatFuelUomInvalid">
+                {{reportingPeriodForm.errors?.heatFuelUomInvalid}}
+            </div>
+            <app-validation-message [control]="reportingPeriodForm.controls.heatContentUom"></app-validation-message>
+        </div>
+	</div>
+	<div class="row pb-1">
+		<div class="col-sm-8">
+		</div>
+		<div class="col-sm-2">
+            <fa-icon class="mt-2" title="Unit of measure for the heat content conversion ratio denominator. E.g. TON for 124.93 Million BTU per short ton." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpHeatContentDenomUom" class="ml-1 d-inline col-form-label"><strong>Heat Content Ratio Denominator:</strong></label>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="rpHeatContentDenomUom" value="{{heatContentDenomUom?.description}}" readonly>
+        </div>
+    </div>
+    <div class="row pb-1" *ngIf="heatContentInvalid">
+        <div class="col-sm-10">
+            <div class="validation-message" style="padding-left: 10px;">
+                {{heatContentInvalid}}
+            </div>
+        </div>
+    </div>
+    <div class="row pb-1" *ngIf="sccHeatContentfieldsWarning">
+        <div class="col-sm-10">
+            <div class="validation-warning" style="padding-left: 10px;">
+                {{sccHeatContentfieldsWarning}}
+            </div>
+        </div>
+    </div>
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="rpCommentsInput" class="ml-1 col-form-label"><strong>Comments:</strong></label>
+        </div>
+        <div class="col-sm-10">
+            <textarea rows="3" class="form-control" maxlength="400" style="height:100%;" id="rpCommentsInput" formControlName="comments"></textarea>
+            <app-validation-message [control]="reportingPeriodForm.controls.comments"></app-validation-message>
+        </div>
+    </div>
+</form>

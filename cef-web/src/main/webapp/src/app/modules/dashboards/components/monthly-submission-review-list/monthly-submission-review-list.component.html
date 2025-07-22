@@ -1,0 +1,62 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form>
+
+  <div class="mh-100 overflow-auto">
+    <table class="table table-sm table-striped table-bordered">
+      <thead class="thead-cef-medium">
+      <tr>
+        <th *ngIf="reviewer && (monthlyReportStatus !== 'IN_PROGRESS' && monthlyReportStatus !== 'RETURNED')" scope="col">Select</th>
+        <th scope="col" sortable="facilityName" (sort)="onSort($event)">Facility Name</th>
+        <th scope="col" sortable="agencyFacilityIdentifier" (sort)="onSort($event)">Agency Facility ID</th>
+        <th scope="col" sortable="operatingStatus" (sort)="onSort($event)">Operating Status</th>
+        <th scope="col" sortable="industry" (sort)="onSort($event)">Industry Sector</th>
+        <th scope="col" sortable="year" (sort)="onSort($event)">Submittal Year</th>
+        <th scope="col" style="width:310px;">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!tableItems || tableItems.length === 0">
+          <td *ngIf="reviewer && (monthlyReportStatus !== 'IN_PROGRESS' && monthlyReportStatus !== 'RETURNED')" colspan="8" class="text-center">
+              <strong class="text-larger">No data available.</strong>
+          </td>
+          <td *ngIf="!(reviewer && (monthlyReportStatus !== 'IN_PROGRESS' && monthlyReportStatus !== 'RETURNED'))" colspan="7" class="text-center">
+              <strong class="text-larger">No data available.</strong>
+          </td>
+        </tr>
+        <tr *ngFor="let submission of tableItems">
+          <th *ngIf="reviewer && (monthlyReportStatus !== 'IN_PROGRESS' && monthlyReportStatus !== 'RETURNED')" scope="row">
+            <input type="checkbox" name="report{{submission.emissionsReportId}}" [(ngModel)]="submission.checked"  aria-label="select report">
+          </th>
+          <td><ngb-highlight [result]="submission.facilityName"></ngb-highlight></td>
+          <td><ngb-highlight [result]="submission.agencyFacilityIdentifier"></ngb-highlight></td>
+          <td><ngb-highlight [result]="submission.operatingStatus"></ngb-highlight></td>
+          <td><ngb-highlight [result]="submission.industry"></ngb-highlight></td>
+          <td><ngb-highlight [result]="submission.year"></ngb-highlight></td>
+          <td>
+            <button class="btn btn-primary btn-sm mr-1"
+                  [routerLink]="['/facility', submission.masterFacilityId, 'report', submission.emissionsReportId, 'summary']"
+                  [attr.aria-label]="'view' + submission?.year + submission?.facilityName + 'report'">View Report</button>
+              <br>
+              <button class="btn btn-primary btn-sm mt-1"
+                      (click)="downloadMonthlyReport(submission.facilitySiteId, submission.emissionsReportId, submission.year)"
+                      [attr.aria-label]="'download ' + submission?.year + ' ' + submission?.facilityName + ' monthly report'">Download Monthly Report</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div [class.d-none]="!(tableItems && tableItems.length > 0)">
+      <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+    </div>
+  </div>
+
+</form>

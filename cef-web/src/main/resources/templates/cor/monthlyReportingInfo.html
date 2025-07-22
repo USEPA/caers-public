@@ -1,0 +1,105 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="container">
+    <div th:each="period : ${monthlyPeriods}" class="print-page-break">
+        <h1 class="child-header" th:if="${period} == 'Semiannual'">Semi-Annual Report</h1>
+        <h1 class="child-header" th:unless="${period} == 'Semiannual'"><span th:text="${period}"></span> Monthly Report</h1>
+        <h2 class="text-center pt-4">Operating Details, Throughput, and Fuel Use</h2>
+        <table class="table">
+            <thead>
+            <tr class="monthly-tr">
+                <th>Unit ID</th>
+                <th>Process ID</th>
+                <th>SCC</th>
+                <th>Throughput Material</th>
+                <th>Throughput Value</th>
+                <th>Fuel Material</th>
+                <th>Fuel Value</th>
+                <th>Hours per Reporting Period</th>
+                <th>Avg. Hours per Day</th>
+                <th>Avg. Days per Week</th>
+                <th>Avg. Weeks per Reporting Period</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="detail : ${opDetails}">
+                <tr th:if="${detail.period == period}" class="monthly-tr">
+                    <td th:text="${detail.unitIdentifier}"></td>
+                    <td th:text="${detail.emissionsProcessIdentifier}"></td>
+                    <td th:text="${detail.emissionsProcessSccCode}"></td>
+                    <td th:text="${detail.calculationMaterialCode?.description}"></td>
+                    <td>
+                        <span th:if="${detail.calculationParameterValue ne null}" th:text="|${detail.calculationParameterValue} ${detail.calculationParameterUom?.description}|"></span>
+                    </td>
+                    <td th:text="${detail.fuelUseMaterialCode?.description}"></td>
+                    <td>
+                        <span th:if="${detail.fuelUseValue ne null}" th:text="|${detail.fuelUseValue} ${detail.fuelUseUom?.description}|"></span>
+                    </td>
+                    <td th:text="${detail.actualHoursPerPeriod}"></td>
+                    <td th:text="${detail.avgHoursPerDay}"></td>
+                    <td th:text="${detail.avgDaysPerWeek}"></td>
+                    <td th:text="${detail.avgWeeksPerPeriod}"></td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+
+        <h2 class="pt-4 text-center">Emissions</h2>
+        <table class="table">
+            <thead>
+            <tr class="monthly-tr">
+                <th>Unit ID</th>
+                <th>Process ID</th>
+                <th>Pollutant</th>
+                <th>Calculation Method</th>
+                <th>Monthly Rate</th>
+                <th>Emissions Factor</th>
+                <th>Total Emissions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="emissionHolder : ${emissionHolders}" th:with="emissionCount = ${emissionHolder.emissions.size()}">
+                <div th:if="${emissionHolder.period == period}">
+                    <tr class="monthly-tr">
+                        <td th:text="${emissionHolder.unitIdentifier}" th:rowspan="${emissionHolder.emissions.size()}"></td>
+                        <td th:text="${emissionHolder.emissionsProcessIdentifier}" th:rowspan="${emissionHolder.emissions.size()}"></td>
+                        <td th:text="${emissionCount>0} ? ${emissionHolder.emissions[0].pollutant?.pollutantName} : ''"></td>
+                        <td th:text="${emissionCount>0} ? ${emissionHolder.emissions[0].emissionsCalcMethodCode?.description} : ''"></td>
+                        <td>
+                          <span th:if="${emissionHolder.emissions[0].monthlyRate ne null}" th:text="${emissionCount>0} ? ${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(emissionHolder.emissions[0].monthlyRate) + ' ' + emissionHolder.emissions[0].emissionsNumeratorUom?.description + '/' + emissionHolder.emissions[0].emissionsDenominatorUom?.description} : ''"></span>
+                        </td>
+                        <td>
+                            <span th:if="${emissionHolder.emissions[0].emissionsFactor ne null}" th:text="${emissionCount>0} ? ${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(emissionHolder.emissions[0].emissionsFactor) + ' ' + emissionHolder.emissions[0].emissionsNumeratorUom?.description + '/' + emissionHolder.emissions[0].emissionsDenominatorUom?.description} : ''"></span>
+                        </td>
+                        <td>
+                            <span th:if="${emissionHolder.emissions[0].totalEmissions ne null}" th:text="${emissionCount>0} ? ${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(emissionHolder.emissions[0].totalEmissions) + ' ' + emissionHolder.emissions[0].emissionsUomCode?.description} : ''"></span>
+                        </td>
+                    </tr>
+                    <tr th:each="e,stats : ${emissionHolder.emissions}" th:if="${!stats.first}" class="monthly-tr">
+                        <td th:text="${e.pollutant?.pollutantName}"></td>
+                        <td th:text="${e.emissionsCalcMethodCode?.description}"></td>
+                        <td>
+                            <span th:if="${e.monthlyRate ne null}" th:text="|${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(e.monthlyRate)} ${e.emissionsNumeratorUom?.description}/${e.emissionsDenominatorUom?.description}|"></span>
+                        </td>
+                        <td>
+                            <span th:if="${e.emissionsFactor ne null}" th:text="|${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(e.emissionsFactor)} ${e.emissionsNumeratorUom?.description}/${e.emissionsDenominatorUom?.description}|"></span>
+                        </td>
+                        <td>
+                            <span th:if="${e.totalEmissions ne null}" th:text="|${T(gov.epa.cef.web.controller.CorController).stripTrailingZeros(e.totalEmissions)} ${e.emissionsUomCode?.description}|"></span>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+            </tbody>
+        </table>
+    </div>
+</div>

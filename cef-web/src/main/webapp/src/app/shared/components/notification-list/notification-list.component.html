@@ -1,0 +1,67 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div style="flex: 0 0 250px">
+  <div class="card">
+    <div class="card-header text-center">
+      <strong>My Notifications</strong>
+    </div>
+    <div class="card-body">
+      <div *ngIf="currentUser?.isReviewer()">
+        <strong>{{currentYear}} Status Report</strong>
+        <br>  
+        <br>
+      <div class="mb-3 align-middle">
+        <span class="badge badge-pill badge-danger text-larger mr-3"
+          style="background-color: #ff1a1a; font-size: 100%;"
+          [textContent]="inProgressCount">
+        </span>
+        <strong class="mr-2">In Progress</strong>
+      </div>
+      <div class="mb-3 align-middle">
+        <span class="badge badge-pill badge-danger text-larger mr-3"
+          style="background-color: #ff1a1a; font-size: 100%;"
+          [textContent]="returnedCount">
+        </span>
+        <strong class="mr-2">Reviewed and Returned</strong>
+      </div>
+      <div class="mb-3 align-middle">
+        <span class="badge badge-pill badge-danger text-larger mr-3"
+          style="background-color: #ffb90f; font-size: 100%;"
+          [textContent]="submittedCount">
+        </span>
+        <strong class="mr-2">Pending Review</strong>
+      </div>
+      <div class="mb-3 align-middle">
+        <span class="badge badge-pill badge-danger text-larger mr-3"
+          style="background-color: #ffb90f; font-size: 100%;"
+          [textContent]="advancedQACount">
+        </span>
+        <strong class="mr-2">Advanced QA</strong>
+      </div>
+      <div class="mb-3 align-middle">
+        <span class="badge badge-pill badge-danger text-larger mr-3"
+          style="background-color: #209c98; font-size: 100%;"
+          [textContent]="approvedCount">
+        </span>
+        <strong class="mr-2">Approved</strong>
+      </div>
+    </div>
+
+	<div *ngIf="currentUser?.isNeiCertifier() || currentUser?.isPreparer()">
+		<div *ngFor="let item of announcementMap | keyvalue">
+      		<p class="slt-announcement-header">{{item.key}} Announcement:</p>
+			<p [innerHTML]="item.value"></p>
+			<hr style="background-color: #9a0000;">
+  		</div>
+    </div>
+  </div>
+</div>

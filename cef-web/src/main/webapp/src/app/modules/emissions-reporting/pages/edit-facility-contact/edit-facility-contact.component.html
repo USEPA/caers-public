@@ -1,0 +1,243 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div>
+  <div class="card mb-3">
+    <div class="card-header text-center">
+        <strong>Facility Information</strong>
+    </div>
+    <div *ngIf="facilitySite" class="card-body">
+      <div class="row pb-2">
+        <div class="col-sm-6 col-md-2"><strong>Agency Facility ID:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.agencyFacilityIdentifier}}</div>
+        <div class="col-sm-6 col-md-2"><strong>Latitude:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.latitude}}</div>
+        <div class="col-sm-6 col-md-2"><strong>Operating Status:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.operatingStatusCode?.description}}</div>
+      </div>
+
+      <div class="row  pb-2">
+        <div class="col-sm-6 col-md-2"><strong>Facility Name:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.name}}</div>
+        <div class="col-sm-6 col-md-2"><strong>Longitude:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.longitude}}</div>
+        <div class="col-sm-6 col-md-2"><strong>Year Op Status Changed:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.statusYear}}</div>
+      </div>
+
+      <div class="row pb-2">
+          <div class="col-sm-6 col-md-2"><strong>Facility Source Type:</strong></div>
+          <div class="col-sm-6 col-md-2">{{facilitySite.facilitySourceTypeCode?.description}}</div>
+          <div class="col-sm-6 col-md-2"><strong>Facility Category Code:</strong></div>
+          <div class="col-sm-6 col-md-2">{{facilitySite.facilityCategoryCode?.name}}</div>
+      </div>
+
+      <div class="row  pb-2">
+        <div class="col-sm-6 col-md-2"><strong>Facility Address:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.streetAddress}}<br/>{{facilitySite.city}}, {{facilitySite?.stateCode.uspsCode}}&nbsp;{{facilitySite.postalCode}}</div>
+        <div class="col-sm-6 col-md-2"><strong>Mailing Address:</strong></div>
+        <div class="col-sm-6 col-md-2">
+          <span *ngIf="facilitySite.mailingStreetAddress">
+              {{facilitySite.mailingStreetAddress}}<br/>{{facilitySite.mailingCity}}, {{facilitySite?.mailingStateCode.uspsCode}}&nbsp;{{facilitySite.mailingPostalCode}}
+          </span>
+        </div>
+        <div class="col-sm-6 col-md-2"><strong>County:</strong></div>
+        <div class="col-sm-6 col-md-2">{{facilitySite.countyCode?.name}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6 col-md-2"><strong>BIA Code:</strong></div>
+        <div class="col-sm-6 col-md-6">{{facilitySite.tribalCode?.description}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6 col-md-2"><strong>Description:</strong></div>
+        <div class="col-sm-6 col-md-10">{{facilitySite.description}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6 col-md-2"><strong>Comments:</strong></div>
+        <div class="col-sm-6 col-md-10">{{facilitySite.comments}}</div>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+    <div class="card mb-3">
+      <div class="card-header text-center">
+        <strong>Contact Information</strong>
+      </div>
+      <div class="card-body">
+
+        <div *ngIf="!readOnlyMode">
+          <div class="row pb-2">
+            <label for="prefix" class="col-sm-4 col-lg-2 col-form-label"><strong>Prefix:</strong></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="prefix" formControlName="prefix" [value]="contactForm.value.contact?.prefix" maxlength="15">
+              <app-validation-message [control]="contactForm.controls.prefix"></app-validation-message>
+            </div>
+            <label for="type" class="col-sm-4 col-lg-2 col-form-label"><strong>Contact Type:</strong>
+            <app-required-asterisk [control]="contactForm.controls.type"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <select type="text" class="form-control" id="type" formControlName="type" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of facilityContactType" [ngValue]="opt">{{opt.description}}</option>
+              </select>
+              <app-validation-message [control]="contactForm.controls.type"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-2">
+            <label for="firstName" class="col-sm-4 col-lg-2 col-form-label"><strong>First Name:</strong>
+            <app-required-asterisk [control]="contactForm.controls.firstName"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="firstName" formControlName="firstName" [value]="contactForm.value.contact?.firstName" maxlength="20">
+              <app-validation-message [control]="contactForm.controls.firstName"></app-validation-message>
+            </div>
+            <label for="lastName" class="col-sm-4 col-lg-2 col-form-label"><strong>Last Name:</strong>
+            <app-required-asterisk [control]="contactForm.controls.lastName"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="lastName" formControlName="lastName" [value]="contactForm.value.contact?.lastName" maxlength="20">
+              <app-validation-message [control]="contactForm.controls.lastName"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-2">
+            <label for="phone" class="col-sm-4 col-lg-2 col-form-label"><strong>Phone Number:</strong>
+            <app-required-asterisk [control]="contactForm.controls.phone"></app-required-asterisk></label>
+              <div class="col-sm-8 col-lg-4">
+                <input type="text" class="form-control" id="phone" formControlName="phone" [value]="contactForm.value.contact?.phone" maxlength="10">
+                <app-validation-message [control]="contactForm.controls.phone"></app-validation-message>
+              </div>
+              <label for="phoneExt" class="col-sm-4 col-lg-2 col-form-label"><strong>Ext.:</strong></label>
+              <div class="col-sm-8 col-lg-2">
+                <input type="text" class="form-control" id="phoneExt" formControlName="phoneExt" [value]="contactForm.value.contact?.phoneExt" maxlength="5">
+                <app-validation-message [control]="contactForm.controls.phoneExt"></app-validation-message>
+              </div>
+          </div>
+
+          <div class="row pb-5">
+            <label for="email" class="col-sm-4 col-lg-2 col-form-label"><strong>Email Address:</strong>
+            <app-required-asterisk [control]="contactForm.controls.email"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="email" formControlName="email" [value]="contactForm.value.contact?.email" maxlength="255">
+              <app-validation-message [control]="contactForm.controls.email"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-2">
+            <label for="streetAddress" class="col-sm-4 col-lg-2 col-form-label"><strong>Contact Street Address:</strong>
+            <app-required-asterisk [control]="contactForm.controls.streetAddress"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-10">
+              <input type="text" class="form-control" id="streetAddress" formControlName="streetAddress" [value]="contactForm.value.contact?.streetAddress" maxlength="100">
+              <app-validation-message [control]="contactForm.controls.streetAddress"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-2">
+            <label for="city" class="col-sm-4 col-lg-2 col-form-label"><strong>City:</strong>
+            <app-required-asterisk [control]="contactForm.controls.city"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="city" formControlName="city" [value]="contactForm.value.contact?.city" maxlength="60">
+              <app-validation-message [control]="contactForm.controls.city"></app-validation-message>
+            </div>
+            <label for="stateCode" class="col-sm-4 col-lg-2 col-form-label"><strong>State:</strong>
+            <app-required-asterisk [control]="contactForm.controls.stateCode"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-2">
+              <select type="text" class="form-control" id="stateCode" formControlName="stateCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fipsStateCode" [ngValue]="opt">{{opt.uspsCode}}</option>
+              </select>
+              <app-validation-message [control]="contactForm.controls.stateCode"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-5">
+            <label for="countySelect" class="col-sm-4 col-lg-2 col-form-label"><strong>County:</strong>
+			<app-required-asterisk [control]="contactForm.controls.countyCode"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-4">
+              <select class="form-control" id="countySelect" formControlName="countyCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of counties" [ngValue]="opt">{{opt?.name}}</option>
+              </select>
+              <app-validation-message [control]="contactForm.get('countyCode')"></app-validation-message>
+            </div>
+            <label for="postalCode" class="col-sm-4 col-lg-2 col-form-label"><strong>ZIP code:</strong>
+            <app-required-asterisk [control]="contactForm.controls.postalCode"></app-required-asterisk></label>
+            <div class="col-sm-8 col-lg-2">
+              <input type="text" class="form-control" id="postalCode" formControlName="postalCode" [value]="contactForm.value.contact?.postalCode" maxlength="10">
+              <app-validation-message [control]="contactForm.controls.postalCode"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="float-left form-group form-check">
+                  <input type="checkbox" class="form-check-input" id="mailingSameAsContactAddress" [checked]="sameAddress" (change)="setMailAddress()">
+                  <label for="mailingSameAsContactAddress" class="form-check-label"><strong>Make mailing address the same as contact address.</strong></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row pb-2" *ngIf="!sameAddress">
+            <label for="mailingStreetAddress" class="col-sm-4 col-lg-2 col-form-label"><strong>Mailing Street Address:</strong></label>
+            <div class="col-sm-8 col-lg-10">
+              <input type="text" class="form-control" id="mailingStreetAddress" formControlName="mailingStreetAddress"
+              [value]="contactForm.value.mailingStreetAddress" maxlength="100">
+              <app-validation-message [control]="contactForm.controls.mailingStreetAddress"></app-validation-message>
+            </div>
+          </div>
+
+          <div class="row pb-2" *ngIf="!sameAddress">
+            <label for="mailingCity" class="col-sm-4 col-lg-2 col-form-label"><strong>City:</strong></label>
+            <div class="col-sm-8 col-lg-4">
+              <input type="text" class="form-control" id="mailingCity" formControlName="mailingCity" [value]="contactForm.value.mailingCity" maxlength="60">
+              <app-validation-message [control]="contactForm.controls.mailingCity"></app-validation-message>
+              <div class="validation-message" *ngIf="contactForm.getError('mailingStreetAddress')">
+                  This field is required for mailing address.
+              </div>
+            </div>
+            <label for="mailingStateCode" class="col-sm-4 col-lg-2 col-form-label"><strong>State:</strong></label>
+            <div class="col-sm-8 col-lg-2">
+              <select type="text" class="form-control" id="mailingStateCode" formControlName="mailingStateCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fipsStateCode" [ngValue]="opt">{{opt.uspsCode}}</option>
+              </select>
+              <app-validation-message [control]="contactForm.controls.mailingStateCode"></app-validation-message>
+              <div class="validation-message" *ngIf="contactForm.getError('mailingStreetAddress')">
+                  This field is required for mailing address.
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!sameAddress">
+            <label for="mailingPostalCode" class="col-sm-4 col-lg-2 col-form-label"><strong>ZIP code:</strong></label>
+            <div class="col-sm-8 col-lg-2">
+              <input type="text" class="form-control" id="mailingPostalCode" formControlName="mailingPostalCode" [value]="contactForm.value.mailingPostalCode" maxlength="10">
+              <app-validation-message [control]="contactForm.controls.mailingPostalCode"></app-validation-message>
+              <div class="validation-message" *ngIf="contactForm.getError('mailingStreetAddress')">
+                  This field is required for mailing address.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="float-right pb-3 pr-3" *ngIf="!readOnlyMode">
+    <button type="button" class="btn btn-primary mr-2" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="btn btn-success" (click)="onSubmit()" [disabled]="contactForm.disabled">Save</button>
+  </div>
+  <div class="float-right pb-3 pr-3" *ngIf="readOnlyMode">
+    <button type="button" class="btn btn-primary mr-2" [routerLink]="[facilityUrl]">Back</button>
+  </div>
+</div>

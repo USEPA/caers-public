@@ -1,0 +1,155 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="emissionUnitForm" >
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="An identifier for the unit in the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitIdentifierInput" class="ml-1 col-form-label"><strong>Unit ID:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('unitIdentifier')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input [readonly]="emissionUnit" type="text" class="form-control" maxlength="20" id="unitIdentifierInput" formControlName="unitIdentifier">
+            <app-validation-message [control]="emissionUnitForm.get('unitIdentifier')"></app-validation-message>
+            <div class="validation-message" *ngIf="emissionUnitForm.errors?.duplicateEmissionUnitIdentifier">
+                Emission Unit Identifier must be unique within the facility.
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Code that identifies the operating status of the emissions unit." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitStatusCodeSelect" class="ml-1 col-form-label"><strong>Operating Status:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('operatingStatusCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" (ngModelChange)="onChange($event)" id="unitStatusCodeSelect" formControlName="operatingStatusCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of subFacilityOperatingStatusValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <div class="validation-message" *ngIf="emissionUnitForm.errors?.invalidStatusCodeTS">
+                If the facility site operating status is Temporarily Shutdown then each sub-facility component must also be either Permanently Shutdown or Temporarily Shutdown.
+            </div>
+            <div class="validation-message" *ngIf="emissionUnitForm.errors?.invalidStatusCodePS">
+                If the facility site operating status is Permanently Shutdown then each sub-facility component must also be Permanently Shutdown.
+            </div>
+			<div class="validation-message" *ngIf="emissionUnitForm.errors?.midYearReportSubmitted">
+                There is Monthly Reporting data reported for Process(es) {{processWithMonthlyData}}. Operating Status cannot be temporarily or permanently shutdown.
+            </div>
+            <app-validation-message [control]="emissionUnitForm.get('operatingStatusCode')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Code that identifies the type of emissions unit activity." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitTypeCodeSelect" class="ml-1 col-form-label"><strong>Unit Type Code:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('unitTypeCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="unitTypeCodeSelect" formControlName="unitTypeCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let unit of unitTypeValues" [ngValue]="unit">{{unit.description}}</option>
+            </select>
+            <app-validation-message [control]="emissionUnitForm.get('unitTypeCode')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The year the current unit operating status came into effect (i.e. changed status).  Required if Unit Status Code is anything other than &quot;Operating&quot;.  A unit that operated at any time during the year is considered &quot;Operating&quot;, even if it was shut down for some of that year.  Must be between 1900 - 2050.  Cannot be a future year to the reporting year." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitStatusYearInput" class="ml-1 col-form-label"><strong>Year Op Status Changed:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('statusYear')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="4" id="unitStatusYearInput" formControlName="statusYear">
+            <app-validation-message [control]="emissionUnitForm.get('statusYear')"></app-validation-message>
+            <div class="validation-message" *ngIf="emissionUnitForm.get('statusYear').errors?.statusYearRequiredFailed && (emissionUnitForm.dirty || emissionUnitForm.touched)">
+                Year Op Status Changed must be entered when creating a new unit or updating the unit's operating status. If shutdown (temporary or permanent), enter a year greater than the last year of reported emissions for this unit.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Text description of the emissions unit, given by the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="descriptionInput" class="ml-1 col-form-label"><strong>Unit Description:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="100" id="descriptionInput" formControlName="description">
+            <app-validation-message [control]="emissionUnitForm.get('description')"></app-validation-message>
+        </div>
+        <div class="col-sm-3" *ngIf="monthlyReportingEnabled">
+            <fa-icon class="mt-2 ml-2" title="Indicate the month during which the element first operated and for which monthly reporting is first required. Carried forward elements' month will be fixed to January." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitInitialMonthlyReportingPeriodSelect" class="ml-1 col-form-label"><strong>Initial Reporting Month for {{facilitySite.emissionsReport.year}}:</strong></label>
+        </div>
+        <div class="col-sm-3" *ngIf="monthlyReportingEnabled && this.emissionUnit?.previousUnit == null">
+            <select type="text" class="form-control" id="unitInitialMonthlyReportingPeriodSelect" formControlName="initialMonthlyReportingPeriod">
+                <option *ngFor="let month of allMonths" [value]="month">{{month}}</option>
+            </select>
+            <div class="validation-message" *ngIf="emissionUnitForm.get('initialMonthlyReportingPeriod').errors?.invalidMonthSemiAnnualSubmitted">
+                Selected month must be after June if a semi-annual report has been submitted.
+            </div>
+        </div>
+        <div class="col-sm-3" *ngIf="monthlyReportingEnabled && this.emissionUnit?.previousUnit != null">
+            <input type="text" class="form-control" id="unitInitialMonthlyReportingPeriodSelect" formControlName="initialMonthlyReportingPeriod" readonly>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The measure of the size of the unit based on the maximum continuous throughput capacity of the unit." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitDesignCapacityInput" class="ml-1 col-form-label"><strong>Unit Design Capacity:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('designCapacity')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="20" id="unitDesignCapacityInput" formControlName="designCapacity">
+            <app-validation-message [control]="emissionUnitForm.get('designCapacity')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Unit of measure for the design capacity of the emissions unit. Required if reporting Design Capacity." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitOfMeasureCodeSelect" class="ml-1 col-form-label"><strong>Unit Design Capacity UoM:</strong></label>
+            <app-required-asterisk [control]="emissionUnitForm.get('unitOfMeasureCode')"></app-required-asterisk>
+        </div>
+         <div class="col-sm-3">
+            <select type="text" class="form-control" id="unitOfMeasureCodeSelect" formControlName="unitOfMeasureCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let uom of designCapacityUomValues" [ngValue]="uom">{{uom.description}}</option>
+            </select>
+            <app-validation-message [control]="emissionUnitForm.get('unitOfMeasureCode')"></app-validation-message>
+            <div class="validation-message" *ngIf="emissionUnitForm.errors?.eisUomInvalid">
+                The Unit of Measure {{emissionUnitForm.controls?.unitOfMeasureCode?.value.description}} is no longer a valid UoM. Please select a different UoM.
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="emissionUnitForm.errors?.invalidUom">
+        <div class="col-sm-6">
+            <div class="validation-message" style="padding-left: 10px;">
+                Design Capacity and Design Capacity UoM are optional fields. If either field is reported, then both must be reported together.
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="designCapacityWarning?.invalidDesignCapacity">
+        <div class="col-sm-6">
+            <div class="validation-warning" style="padding-left: 10px;">
+                Warning: The design capacity should be reported for unit type code: {{emissionUnitForm.get('unitTypeCode').value.description}}.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="unitCommentsInput" class="ml-1 col-form-label"><strong>Comments:</strong></label>
+        </div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="form-control"  maxlength="2000" style="height:100%;" id="unitCommentsInput" formControlName="comments"></textarea>
+            <app-validation-message [control]="emissionUnitForm.get('comments')"></app-validation-message>
+        </div>
+    </div>
+</form>

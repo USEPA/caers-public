@@ -1,0 +1,134 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!--TODO: are checks for threshold and user necessary if in neither case, they can get to the page?-->
+<ng-container *ngIf="!facilitySite?.emissionsReport?.thresholdStatus
+    || facilitySite?.emissionsReport?.thresholdStatus === 'OPERATING_ABOVE_THRESHOLD'">
+        <div class="container justify-content-center text-center my-4">
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary btn-md"
+                            aria-label="run quality checks"
+                            (click)="validate()"
+                            *ngIf="isValidationButtonEnabled; else elseButtonWrapper">
+                        Run Quality Checks
+                    </button>
+                    <ng-template #elseButtonWrapper>
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <button class="btn btn-primary btn-md"
+                                    aria-label="run quality checks"
+                                    disabled>
+                                Run Quality Checks
+                            </button>
+                            <fa-icon class="ml-2"
+                                     [icon]="['fas', 'question-circle']"
+                                     title="Cannot run quality checks when they're already in-progress.">
+                            </fa-icon>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div *ngIf="qaResults" class="row small">
+                <div class="col">
+                    <p>QA Checks were last run {{qaResults.lastModifiedDate | date: 'short'}}</p>
+                </div>
+            </div>
+        </div>
+
+</ng-container>
+<ng-container *ngIf="validationComplete === false && statusMessage.length > 0">
+    <div class="d-flex flex-row justify-content-center text-large my-4">
+        <ng-container *ngIf="statusMessage === runningQAMessage || statusMessage === slowQAMessage">
+            <div class="spinner-border text-dark mt-2 mb-1 mx-1" role="status"></div>
+            <div class="ml-2 w-75">{{statusMessage}}</div>
+        </ng-container>
+        <ng-container *ngIf="statusMessage === incompleteQAMessage || statusMessage === nonexistentQAMessage">
+            <div class="mt-2 w-75 text-center">{{statusMessage}}</div>
+        </ng-container>
+        <ng-container *ngIf="statusMessage === loadingQAMessage">
+            <div class="spinner-border text-dark m-1" role="status"></div>
+            <div class="mt-2 ml-2">{{statusMessage}}</div>
+        </ng-container>
+    </div>
+</ng-container>
+<div *ngIf="validationComplete">
+    <div class="text-success" *ngIf="(!hasErrors() && hasWarnings()) ">
+        Quality checks were completed with warnings. Please review the following warnings and make any necessary updates before submitting your report from the Report Summary screen.
+    </div>
+    <div class="text-success" *ngIf="!(hasErrors() || hasWarnings())">
+        Quality checks were completed successfully with no warnings or errors. You can now certify and submit your report from the Report Summary screen.
+    </div>
+    <div *ngIf="!hasErrors() && this.validationType === this.periods?.ANNUAL"><button id="proceedToReportSummaryBtn" routerLink="{{baseUrl}}/summary"  class="btn btn-success btn-md my-3">Proceed to Report Summary</button></div>
+
+    <div class="validation-item-error" *ngIf="validationResult?.federalErrors?.length > 0 || validationResult?.stateErrors?.length > 0">
+        <div class="h3 font-weight-bolder">Errors</div>
+        <ol class="pl-3">
+            <li *ngFor="let item of validationResult.federalErrors">
+                    <span *ngIf="item.invalidValue && item.url?.length == 1">
+                        {{item.invalidValue?.description}} -
+                    </span>
+                    <span *ngIf="item.invalidValue && item.url?.length > 1">
+                        <a [routerLink]="[item.url]" class="text-danger"><u>{{item.invalidValue?.description}}</u></a> -
+                    </span>
+                {{ item.errorMsg }}
+            </li>
+            <li *ngFor="let item of validationResult.stateErrors">
+                        <span *ngIf="item.invalidValue">
+                            <a [routerLink]="[item.url]" class="text-danger"><u>{{item.invalidValue?.description}}</u></a> -
+                        </span>
+                {{ item.errorMsg }}
+            </li>
+        </ol>
+    </div>
+
+    <div class="validation-item-warning" *ngIf="reviewerComments?.length > 0">
+        <div class="h3 font-weight-bolder">Reviewer Comments</div>
+        <ol class="pl-3">
+            <li *ngFor="let item of reviewerComments">
+                        <span *ngIf="item.details">
+                            <a [routerLink]="[item.url]" class="validation-item-warning"><u>{{item.details?.description}}</u></a> -
+                        </span>
+                {{ item.message }}
+            </li>
+        </ol>
+    </div>
+
+    <div class="validation-item-warning" *ngIf="validationResult?.federalWarnings?.length > 0 || validationResult?.stateWarnings?.length > 0">
+        <div class="h3 font-weight-bolder">Warnings</div>
+        <ol class="pl-3">
+            <li *ngFor="let item of validationResult.federalWarnings">
+                        <span *ngIf="item.invalidValue">
+                            <a [routerLink]="[item.url]" class="text-info"><u class="validation-warning-link">{{item.invalidValue?.description}}</u></a> -
+                        </span>
+                {{ item.errorMsg }}
+            </li>
+            <li *ngFor="let item of validationResult.stateWarnings">
+                        <span *ngIf="item.invalidValue">
+                            <a [routerLink]="[item.url]" class="text-info"><u class="validation-warning-link">{{item.invalidValue?.description}}</u></a> -
+                        </span>
+                {{ item.errorMsg }}
+            </li>
+        </ol>
+    </div>
+
+    <div class="validation-item-warning" *ngIf="validationResult?.facilityInventoryChanges?.length > 0">
+        <div class="h3 font-weight-bolder">Facility Inventory Changes</div>
+        <ol class="pl-3">
+            <li *ngFor="let item of validationResult.facilityInventoryChanges">
+                        <span *ngIf="item.invalidValue">
+                            <a [routerLink]="[item.url]" class="text-info"><u class="validation-warning-link">{{item.invalidValue?.description}}</u></a> -
+                        </span>
+                {{ item.errorMsg }}
+            </li>
+        </ol>
+    </div>
+
+</div>

@@ -1,0 +1,146 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div>
+    <div class="row">
+        <div class="col-sm-12 col-md-9">
+            <div class="card">
+                <div class="card-header text-center">
+                    <strong>User Feedback Report</strong>
+                </div>
+
+                <div class="card-body">
+                    <div class="d-flex flex-row pl-2 py-3">
+                        <label for="cbo-filter-agency" class="col-form-label col-form-label-sm mr-2">
+                            <strong>Agency Code:</strong>
+                        </label>
+                        <select id="cbo-filter-agency" class="mr-3 form-control form-control-sm" style="width: 150px"
+                                [formControl]="cboFilterAgency">
+                            <option value="ALL_AGENCIES">All Agencies</option>
+                            <option *ngFor="let item of (availableAgencies | sortBy:'':'asc')"
+                                    [value]="item">{{item}}</option>
+                        </select>
+                        <label for="cbo-filter-year" class="col-form-label col-form-label-sm mr-2">
+                            <strong>Reporting Year:</strong>
+                        </label>
+                        <select id="cbo-filter-year" class="mr-3 form-control form-control-sm" style="width: 150px"
+                                [formControl]="cboFilterYear">
+                            <option *ngFor="let item of (availableYears | sortBy:'':'desc')"
+                                    [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mh-100 overflow-auto" *ngIf="tableData">
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead class="thead-cef-medium">
+                            <tr>
+                                <th scope="col" sortable="facilityName" (sort)="onSort($event)">Facility Name</th>
+                                <th scope="col" sortable="userName" (sort)="onSort($event)">User Name</th>
+                                <th scope="col" sortable="year" (sort)="onSort($event)">Reporting Year</th>
+                                <th scope="col" sortable="createdDate" (sort)="onSort($event)">Date/Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngIf="tableItems.length === 0">
+                                <td colspan="4" class="text-center">
+                                    <strong class="text-larger">No data available.</strong>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of tableItems">
+                                <td><a routerLink="." (click)="openFeedbackModal(item)">
+                                    {{item.facilityName}}
+                                </a></td>
+                                <td>{{item.userName}}</td>
+                                <td>{{item.year}}</td>
+                                <td>{{item.createdDate | date: 'long'}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination-bottom-bar">
+                            <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize"
+                                            [collectionSize]="controller.total$ | async"></ngb-pagination>
+                            <button
+                                class="btn btn-success btn-default h-50"
+                                (click)="exportTable()"
+                                [disabled]="tableData?.length === 0"
+                            >
+                                Export Feedback Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+            <div style="flex: 0 0 250px">
+
+                <div class="card">
+                    <div class="card-header text-center">
+                        <strong>{{cboFilterYear.value}} Rating Averages</strong>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.intuitiveRateAvg ? stats.intuitiveRateAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Intuitive System Navigation</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.dataEntryScreensAvg ? stats.dataEntryScreensAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Application Data Entry</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.dataEntryBulkUploadAvg ? stats.dataEntryBulkUploadAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Bulk Upload Template Data Entry</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.calculationScreensAvg ? stats.calculationScreensAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Emissions Calculations</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.controlsAndControlPathAssignAvg ? stats.controlsAndControlPathAssignAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Controls Approach</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.qualityAssuranceChecksAvg ? stats.qualityAssuranceChecksAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">QA Checks</strong>
+                        </div>
+                        <div class="mb-3 align-middle">
+              <span class="badge badge-pill badge-warning text-larger mr-3"
+                    style="background-color: #ffb90f; font-size: 100%;"
+                    [textContent]="stats?.overallReportingTimeAvg ? stats.overallReportingTimeAvg : 'N/A'">
+              </span>
+                            <strong class="mr-2">Overall Reporting Time</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

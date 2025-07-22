@@ -1,0 +1,264 @@
+//
+// © Copyright 2019 EPA CAERS Project Team
+//
+// This file is part of the Common Air Emissions Reporting System (CAERS).
+//
+// CAERS is free software: you can redistribute it and/or modify it under the
+// terms of the GNU General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
+//
+// CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with CAERS.  If
+// not, see <https://www.gnu.org/licenses/>.
+//
+@import "variables";
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootswatch/dist/flatly/bootswatch";
+
+/* You can add global styles to this file, and also import other style files */
+#navbarToggleFooter .nav-item .nav-link::after {
+    content: " | ";
+}
+
+#navbarToggleFooter .nav-item:last-child .nav-link::after {
+    content: "";
+}
+
+#navbarToggleFooter .nav-item .nav-link:hover::after {
+    color: $yellow;
+}
+
+#navbarToggleFooter .nav-item .nav-link:hover {
+    color: $yellow !important;
+    text-decoration: underline;
+}
+
+#nb-reviewer-component .nav-item,
+#navbarSupportedContent .nav-item {
+    margin-right: 0.25rem;
+}
+
+#navbarSupportedContent .nav-link-custom,
+#nb-reviewer-component .nav-link-custom {
+// Removes default styling, changes color
+    color: $gray-900;
+    background-color: transparent;
+    border: none;
+    outline: 0;
+}
+
+#nb-reviewer-component .nav-link-custom:hover,
+#navbarSupportedContent .nav-link-custom:hover {
+    text-decoration: underline;
+}
+
+// navbarSupportedContent & nb-reviewer-component need to be separate here
+#navbarSupportedContent .nav-link-custom:focus {
+    border-radius: 5px;
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.5) !important;
+}
+
+#nb-reviewer-component .nav-link-custom:focus {
+    border-radius: 5px;
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.5) !important;
+}
+
+#nb-reviewer-component .nav-link-custom:active,
+#navbarSupportedContent .nav-link-custom:active {
+    font-weight: 600;
+}
+
+.nav-item-custom {
+    background-color: $gray-100 !important;
+    border-radius: 5px;
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.5) !important;
+    font-weight: 600;
+}
+
+.nav-item-custom .nav-link-custom {
+    font-weight: 600;
+}
+
+.nav-item-custom .nav-link-custom:focus {
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.1) !important;
+}
+
+.bg-primary .navbar-nav .nav-item:hover .nav-link{
+	color: $yellow !important;
+}
+
+.button-list-horizontal > a {
+    margin-left: 5px;
+}
+
+.button-list-horizontal button {
+    margin-left: 5px;
+}
+
+th[sortable] {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    padding-right: 15px;
+}
+
+th[sortable].desc:after, th[sortable].asc:after {
+    content: '';
+    display: block;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAmxJREFUeAHtmksrRVEUx72fH8CIGQNJkpGUUmakDEiZSJRIZsRQmCkTJRmZmJgQE0kpX0D5DJKJgff7v+ru2u3O3vvc67TOvsdatdrnnP1Y///v7HvvubdbUiIhBISAEBACQkAICAEhIAQ4CXSh2DnyDfmCPEG2Iv9F9MPlM/LHyAecdyMzHYNwR3fdNK/OH9HXl1UCozD24TCvILxizEDWIEzA0FcM8woCgRrJCoS5PIwrANQSMAJX1LEI9bqpQo4JYNFFKRSvIgsxHDVnqZgIkPnNBM0rIGtYk9YOOsqgbgepRCfdbmFtqhFkVEDVPjJp0+Z6e6hRHhqBKgg6ZDCvYBygVmUoEGoh5JTRvIJwhJo1aUOoh4CLPMyvxxi7EWOMgnCGsXXI1GIXlZUYX7ucU+kbR8NW8lh3O7cue0Pk32MKndfUxQFAwxdirk3fHappAnc0oqDPzDfGTBrCfHP04dM4oTV8cxr0SVzH9FF07xD3ib6xCDE+M+aUcVygtWzzbtGX2rPBrEUYfecfQkaFzYi6HjVnGBdtL7epqAlc1+jRdAap74RrnPc4BCijttY2tRcdN0g17w7HqZrXhdJTYAuS3hd8z+vKgK3V1zWPae0mZDMykadBn1hTQBLnZNwVrJpSe/NwEeDsEwCctEOsJTsgxLvCqUl2ACftEGvJDgjxrnBqkh3ASTvEWrIDQrwrnJpkB3DSDrGW7IAQ7wqnJtkBnLRztejXXVu4+mxz/nQ9jR1w5VB86ejLTFcnnDwhzV+F6T+CHZlx6THSjn76eyyBIOPHyDakhBAQAkJACAgBISAEhIAQYCLwC8JxpAmsEGt6AAAAAElFTkSuQmCC') no-repeat;
+    background-size: 15px;
+    width: 15px;
+    height: 15px;
+    float: right;
+}
+
+th[sortable].desc:after {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+}
+
+thead.thead-cef-medium {
+    background-color: $gray-500;
+    color: $black;
+    border-color: $gray-300;
+}
+
+tr.striped {
+    background-color: #ecf0f1;
+}
+
+.text-bs-orange {
+    color: $orange;
+}
+
+.text-bs-teal {
+    color: $teal;
+}
+
+.ng-touched.ng-invalid {
+  border-color: #dc3545;
+}
+
+.validation-message {
+  color: #dc3545;
+  font-size: 80%;
+}
+
+.validation-message-large {
+  color: #dc3545;
+}
+
+.validation-warning {
+    color: #333399;
+    font-size: 80%;
+}
+
+.validation-item-error {
+    color: #C40233;
+}
+
+.validation-item-warning {
+    color: #333399;
+}
+
+.validation-warning-link {
+    color: #333399 !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.45;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.underline-on-hover:hover {
+    text-decoration: $link-hover-decoration;
+}
+
+.announcement-bar {
+    color: $black;
+    background: $yellow;
+    padding: 20px;
+}
+
+.slt-announcement-header {
+    color: $white;
+    text-align: center;
+    vertical-align: middle;
+    background: #9a0000;
+    padding: 2% 25% 2% 25%;
+}
+
+.pagination-bottom-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.selected-filter-highlight {
+	background-color: aqua;
+}
+
+.required-asterisk {
+    color: #d00;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+.monthly-tabs {
+	width: 145px;
+	white-space:nowrap;
+	text-align: center;
+}
+
+.us-tag {
+	font-size: .93rem;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: #5c5c5c;
+    border-radius: 2px;
+    padding: 1px 0.5rem;
+}
+
+.font-size-96-percent {
+    font-size: 96%;
+}
+
+.font-size-91-percent {
+    font-size: 91%;
+}
+
+.file-upload-error {
+    color: #BF211E;
+}
+
+.height-40-px {
+    height: 40px;
+}
+
+.text-large {
+    font-size: large;
+}
+
+.scrollable-modal {
+    height: 75vh;
+    overflow-y: auto;
+}
+
+.help-table-header-background {
+    background-color: $gray-200;
+}
+
+.billing-exempt-checkbox {
+    position:absolute;
+    margin-top:.8rem;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

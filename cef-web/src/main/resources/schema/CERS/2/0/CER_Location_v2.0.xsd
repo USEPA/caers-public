@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_Location_v2.0.xsd
+		        Current Version Available At :  http://www.exchangenetwork.net/schema/cer/2/0/CER_Location_v2.0.xsd
+		        Description   : Information on the location of an emissions source.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: April 3, 2020		
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Process_v2.0.xsd"/>
+	<xsd:complexType name="LocationDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:StateAndCountyFIPSCode" minOccurs="0"/>
+			<xsd:element ref="cer:TribalCode" minOccurs="0"/>
+			<xsd:element ref="cer:StateAndCountryFIPSCode" minOccurs="0"/>
+			<xsd:element ref="cer:CensusBlockIdentifier" minOccurs="0"/>
+			<xsd:element ref="cer:CensusTractIdentifier" minOccurs="0"/>
+			<xsd:element ref="cer:ShapeIdentifier" minOccurs="0"/>
+			<xsd:element ref="cer:LocationComment" minOccurs="0"/>
+			<xsd:element ref="cer:LocationEmissionsProcess" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Location" type="cer:LocationDataType"/>
+</xsd:schema>

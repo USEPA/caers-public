@@ -1,0 +1,89 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div>
+    <div class="row">
+        <div class="col-sm-12 col-md-5">
+            <div class="row  pb-2">
+                <div class="col-sm-12 col-md-4" ><strong>Agency Facility ID:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.agencyFacilityIdentifier}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Facility Name:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.name}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Operating Status:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.operatingStatusCode?.description}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Status Year:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.statusYear}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Facility Category Code:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.facilityCategoryCode?.name}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Facility Address:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.streetAddress}}<br/>{{facility.city}}, {{facility?.stateCode?.uspsCode}}&nbsp;{{facility.postalCode}}</div>
+                <div class="col-sm-12 col-md-4"><strong>County:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.countyCode?.name}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Mailing Address:</strong></div>
+                <div class="col-sm-12 col-md-8">
+                    <span *ngIf="facility.mailingStreetAddress">
+                        {{facility.mailingStreetAddress}}<br/>{{facility.mailingCity}}, {{facility?.mailingStateCode?.uspsCode}}&nbsp;{{facility.mailingPostalCode}}
+                    </span>
+                </div>
+                <div class="col-sm-12 col-md-4"><strong>BIA Code:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.tribalCode?.description}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Latitude:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.latitude}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Longitude:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.longitude}}</div>
+                <div class="col-sm-12 col-md-4"><strong>Description:</strong></div>
+                <div class="col-sm-12 col-md-8">{{facility.description}}</div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-7">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <strong>Facility Users</strong>
+                        </div>
+                        <div class="card-body">
+                            <app-user-facility-association-table [tableData]="userFacilityAssociations" [facility]="facility"></app-user-facility-association-table>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Facility NAICS Codes</strong>
+                </div>
+                <div class="card-body">
+                    <app-master-facility-naics-table [facility]="facility" [tableData]="facility.masterFacilityNAICS"></app-master-facility-naics-table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Facility Permit</strong>
+                </div>
+                <div class="card-body">
+                    <app-master-facility-permit-table [facility]="facility" [tableData]="facility.masterFacilityPermits"></app-master-facility-permit-table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

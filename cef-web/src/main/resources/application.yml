@@ -1,0 +1,82 @@
+#
+# © Copyright 2019 EPA CAERS Project Team
+#
+# This file is part of the Common Air Emissions Reporting System (CAERS).
+#
+# CAERS is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with CAERS.  If
+# not, see <https://www.gnu.org/licenses/>.
+#
+server:
+  servlet:
+    context-path: /cef-web
+    session:
+      cookie:
+        http-only: true
+        secure: true
+    forward-headers-strategy: native
+  error.include-message: always
+spring:
+  profiles:
+    active: #spring.profiles.active#
+  servlet.multipart.max-file-size: 100MB
+  servlet.multipart.max-request-size: 105MB
+  jmx.enabled: false
+  hazelcast:
+    config: classpath:cef-hazelcast-cache.xml
+  thymeleaf:
+    mode: HTML
+  mvc:
+    async:
+      request-timeout: 180000
+  jpa:
+      # 14:48:39.624-05 WARN  [...JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration]
+      # spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering.
+      # Explicitly configure spring.jpa.open-in-view to disable this warning
+      # TODO: Remove anti-pattern by switching to DTO and adding to *all* ServiceImpl using a Repository a @Transactional
+    #open-in-view: false
+    show-sql: false
+    generate-ddl: false
+    properties.hibernate:
+      # disables annoying non-error in logs from hibernate
+      jdbc.lob.non_contextual_creation: true
+      # register custom PostgreSQL dialect that supports jsonb
+      dialect: gov.epa.cef.web.hibernate.PostgreSQLDialectWithJsonSupport
+      current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+      cache:
+        use_second_level_cache: true
+        use_query_cache: true
+        use_minimal_puts: true
+        region:
+          factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+        hazelcast:
+          use_lite_member: true
+          instance_name: cef-hazelcast-cache
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+      WRITE_DATES_AS_TIMESTAMPS: false
+    generator:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+hazelcast.phone.home.enabled: false
+jwt:
+    public-key-text: -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtqrTpfrnj/E5Vmd91xkY
+        zYLRk0fsZvRmfZgI0dnWlhVKV/4FhH1DsIJAsx1fvoz4LqrhXDMCCITPGxX2TayO
+        1qx0Q8oHHTaXRXVNDAFZEEMNtGDs+hY0BU1qJZ/mZJZZrUPbS1aDn8GYivV5bhby
+        IIW0AQS/9KYGxAQUXp0bjZZmKYhHoEChNJik1bNf3w2vCdXnp3ZJu6QDCgTsndUA
+        /Lu3P2urluWsYHUtGyDRsNWqGdmXjN4BPhtnMfCje5LsQf6hRgNiapI8sLyLebjQ
+        VxfmBFmWTSO4GQJQ7WtCQex3zZS+VelT34EgcI9Yyhrth5NktAfJvzirSZqO5tn5
+        KwIDAQAB
+        -----END PUBLIC KEY-----
+springdoc.swagger-ui.syntaxHighlight.activated: false
+springdoc.swagger-ui.api-docs.path: /v3/api-docs
+springdoc.swagger-ui.operationsSorter: method
+springdoc.paths-to-match: /api/**

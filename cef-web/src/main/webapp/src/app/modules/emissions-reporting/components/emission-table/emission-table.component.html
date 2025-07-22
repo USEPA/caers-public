@@ -1,0 +1,76 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<div class="mh-100 overflow-auto">
+  <table id="emissionTable" class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+      <th scope="col" sortable="pollutant.pollutantName" (sort)="onSort($event)">Pollutant Name</th>
+      <th scope="col" sortable="pollutant.pollutantCode" (sort)="onSort($event)">Code</th>
+      <th scope="col" sortable="pollutant.pollutantType" (sort)="onSort($event)">Pollutant Category</th>
+      <th scope="col" sortable="previousEmissionsFactor" (sort)="onSort($event)">Previous Year Reported Em. Fac.</th>
+      <th scope="col" sortable="emissionFactor" (sort)="onSort($event)">{{process.year}} Reported Em. Fac.</th>
+      <th scope="col" sortable="emissionsFactorFormula" (sort)="onSort($event)">Calculation Method</th>
+      <th scope="col" sortable="previousYearTotalEmissions" (sort)="onSort($event)">Previous Year Reported Emissions</th>
+      <th scope="col" sortable="totalEmissions" (sort)="onSort($event)">{{process.year}} Reported Emissions</th>
+      <ng-container *ngIf="!readOnlyMode">
+        <th scope="col"></th>
+      </ng-container>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of tableItems">
+        <td>
+            <a [routerLink]="[baseUrl, item.id]" [attr.aria-label]="'emission pollutant' + item?.pollutant?.pollutantName">
+                {{item.pollutant.pollutantName}}
+            </a>
+        </td>
+      <td>{{item.pollutant.pollutantCode}}</td>
+      <td>{{item.pollutant.pollutantType}}</td>
+      <td>
+        {{item.previousEmissionsFactor}}
+        <span *ngIf="item.previousEmissionsNumeratorUomCode && item.previousEmissionsDenominatorUomCode">
+          {{item.previousEmissionsNumeratorUomCode}}/{{item.previousEmissionsDenominatorUomCode}}
+        </span>
+      </td>
+      <td>
+        {{item.emissionsFactor}}
+        <span *ngIf="item.emissionsNumeratorUom && item.emissionsDenominatorUom">
+          {{item.emissionsNumeratorUom.description}}/{{item.emissionsDenominatorUom.description}}
+        </span>
+      </td>
+      <td>{{item?.emissionsCalcMethodCode.description}}</td>
+      <td>
+        {{item.previousYearTotalEmissions}}
+        <span>{{item.previousEmissionsUomCode}}</span>
+      </td>
+      <td>
+        {{item.totalEmissions}}
+        <span>{{item.emissionsUomCode?.description}}</span>
+      </td>
+      <ng-container *ngIf="!readOnlyMode">
+        <td><a routerLink="." (click)="openDeleteModal(item.pollutant.pollutantName, item.id)" [attr.aria-label]="'delete emission pollutant' + item?.pollutant?.pollutantName"
+               *ngIf="!monthlyReportingProcess || !semiannualSubmitted || emissionsCreatedAfterSemiannualSubmission.includes(item.pollutant.pollutantCode)">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </a></td>
+      </ng-container>
+    </tr>
+    <ng-container *ngIf="!readOnlyMode">
+      <tr>
+        <td colspan="9"></td>
+        <td><a [routerLink]="[baseUrl]" aria-label="add emission pollutant" id="tblAddEmissionBtn"><fa-icon [icon]="faPlus"></fa-icon></a></td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>

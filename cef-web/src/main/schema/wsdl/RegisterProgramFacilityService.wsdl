@@ -1,0 +1,799 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/program-facility/1" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="RegisterProgramFacilityService" targetNamespace="http://www.exchangenetwork.net/wsdl/register/program-facility/1">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/program-facility/1" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.exchangenetwork.net/wsdl/register/program-facility/1">
+  <xs:element name="Authenticate" type="tns:Authenticate"/>
+  <xs:element name="AuthenticateResponse" type="tns:AuthenticateResponse"/>
+  <xs:element name="CreateOrUpdateFacility" type="tns:CreateOrUpdateFacility"/>
+  <xs:element name="CreateOrUpdateFacilityResponse" type="tns:CreateOrUpdateFacilityResponse"/>
+  <xs:element name="CreateUserFacilityAssociations" type="tns:CreateUserFacilityAssociations"/>
+  <xs:element name="CreateUserFacilityAssociationsResponse" type="tns:CreateUserFacilityAssociationsResponse"/>
+  <xs:element name="DeleteUserFacilityAssociations" type="tns:DeleteUserFacilityAssociations"/>
+  <xs:element name="DeleteUserFacilityAssociationsResponse" type="tns:DeleteUserFacilityAssociationsResponse"/>
+  <xs:element name="RetrieveAllBiaCodesFromFrs" type="tns:RetrieveAllBiaCodesFromFrs"/>
+  <xs:element name="RetrieveAllBiaCodesFromFrsResponse" type="tns:RetrieveAllBiaCodesFromFrsResponse"/>
+  <xs:element name="RetrieveFacilities" type="tns:RetrieveFacilities"/>
+  <xs:element name="RetrieveFacilitiesByUserRoleId" type="tns:RetrieveFacilitiesByUserRoleId"/>
+  <xs:element name="RetrieveFacilitiesByUserRoleIdResponse" type="tns:RetrieveFacilitiesByUserRoleIdResponse"/>
+  <xs:element name="RetrieveFacilitiesFromFrs" type="tns:RetrieveFacilitiesFromFrs"/>
+  <xs:element name="RetrieveFacilitiesFromFrsResponse" type="tns:RetrieveFacilitiesFromFrsResponse"/>
+  <xs:element name="RetrieveFacilitiesResponse" type="tns:RetrieveFacilitiesResponse"/>
+  <xs:element name="RetrieveFacilityByCdxFacilityId" type="tns:RetrieveFacilityByCdxFacilityId"/>
+  <xs:element name="RetrieveFacilityByCdxFacilityIdResponse" type="tns:RetrieveFacilityByCdxFacilityIdResponse"/>
+  <xs:element name="RetrieveNaicsCodesFromFrs" type="tns:RetrieveNaicsCodesFromFrs"/>
+  <xs:element name="RetrieveNaicsCodesFromFrsResponse" type="tns:RetrieveNaicsCodesFromFrsResponse"/>
+  <xs:element name="RetrieveProgramFacilitiesByProgramIds" type="tns:RetrieveProgramFacilitiesByProgramIds"/>
+  <xs:element name="RetrieveProgramFacilitiesByProgramIdsResponse" type="tns:RetrieveProgramFacilitiesByProgramIdsResponse"/>
+  <xs:element name="RetrieveUsersByProgramIdAndRole" type="tns:RetrieveUsersByProgramIdAndRole"/>
+  <xs:element name="RetrieveUsersByProgramIdAndRoleResponse" type="tns:RetrieveUsersByProgramIdAndRoleResponse"/>
+  <xs:complexType name="RetrieveFacilitiesFromFrs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="criteria" type="tns:ProgramFacilityCriteria"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramFacilityCriteria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProgramAcronym" type="xs:string"/>
+      <xs:element minOccurs="0" name="ReturnMailingAddresses" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="Limit" type="xs:long"/>
+      <xs:element minOccurs="0" name="EpaRegistryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="FacilityName" type="xs:string"/>
+      <xs:element minOccurs="0" name="StreetAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="City" type="xs:string"/>
+      <xs:element minOccurs="0" name="State" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="County" type="xs:string"/>
+      <xs:element minOccurs="0" name="StateName" type="xs:string"/>
+      <xs:element minOccurs="0" name="CountyName" type="xs:string"/>
+      <xs:element minOccurs="0" name="ReturnNaicsCodes" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="ExcludeDuplicates" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilitiesFromFrsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ProgramFacility" type="tns:ProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramFacility">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CdxFacilityId" type="xs:long"/>
+      <xs:element minOccurs="0" name="EpaRegistryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="FacilityName" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address2" type="xs:string"/>
+      <xs:element minOccurs="0" name="City" type="xs:string"/>
+      <xs:element minOccurs="0" name="State" type="xs:string"/>
+      <xs:element minOccurs="0" name="County" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="StateName" type="xs:string"/>
+      <xs:element minOccurs="0" name="CountryName" type="xs:string"/>
+      <xs:element minOccurs="0" name="Latitude" type="xs:double"/>
+      <xs:element minOccurs="0" name="Longitude" type="xs:double"/>
+      <xs:element minOccurs="0" name="Type" type="tns:ProgramFacilityType"/>
+      <xs:element minOccurs="0" name="ProgramAcronym" type="xs:string"/>
+      <xs:element minOccurs="0" name="ProgramId" type="xs:string"/>
+      <xs:element minOccurs="0" name="StateFacilityId" type="xs:string"/>
+      <xs:element minOccurs="0" name="ResponsibleAgency" type="xs:string"/>
+      <xs:element minOccurs="0" name="BiaCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="IsFederal" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="MailingAddresses">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="MailingAddress" type="tns:ProgramFacilityMailingAddress"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="AdditionalProgramList" type="xs:string"/>
+      <xs:element minOccurs="0" name="AlternateRegistryIdList" type="xs:string"/>
+      <xs:element minOccurs="0" name="CollectionMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="ReferencePoint" type="xs:string"/>
+      <xs:element minOccurs="0" name="Accuracy" type="xs:int"/>
+      <xs:element minOccurs="0" name="Scale" type="xs:int"/>
+      <xs:element minOccurs="0" name="Fips" type="xs:string"/>
+      <xs:element minOccurs="0" name="FacilityType" type="xs:string"/>
+      <xs:element minOccurs="0" name="NaicsCodes">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="NaicsCode" type="tns:registrationProgramFacilityNaicsCode"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="NpdesList" type="xs:string"/>
+      <xs:element minOccurs="0" name="CountryCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramFacilityMailingAddress">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CdxMailingAddressId" type="xs:long"/>
+      <xs:element minOccurs="0" name="CdxFacilityId" type="xs:long"/>
+      <xs:element minOccurs="0" name="Address1" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address2" type="xs:string"/>
+      <xs:element minOccurs="0" name="City" type="xs:string"/>
+      <xs:element minOccurs="0" name="StateCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="County" type="xs:string"/>
+      <xs:element minOccurs="0" name="Zip" type="xs:string"/>
+      <xs:element minOccurs="0" name="FacilityName" type="xs:string"/>
+      <xs:element minOccurs="0" name="StateName" type="xs:string"/>
+      <xs:element minOccurs="0" name="CountryName" type="xs:string"/>
+      <xs:element minOccurs="0" name="CountryCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="AffiliationType" type="xs:string"/>
+      <xs:element minOccurs="0" name="ProgramAcronym" type="xs:string"/>
+      <xs:element minOccurs="0" name="ProgramId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationProgramFacilityNaicsCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CdxNaicsCodeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="CdxFacilityId" type="xs:long"/>
+      <xs:element minOccurs="0" name="CdxNaicsCodeValue" type="xs:string"/>
+      <xs:element minOccurs="0" name="CdxNaicsCodeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="CdxNaicsCodePrimaryIndicator" type="tns:NaicsPrimaryIndicator"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilityByCdxFacilityId">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="cdxFacilityId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilityByCdxFacilityIdResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProgramFacility" type="tns:ProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateOrUpdateFacility">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="programFacility" type="tns:ProgramFacility"/>
+      <xs:element minOccurs="0" name="userRoleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="performFrsValidationFlag" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateOrUpdateFacilityResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProgramFacility" type="tns:ProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveUsersByProgramIdAndRole">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="facilityProgramId" type="xs:string"/>
+      <xs:element minOccurs="0" name="roleType" type="tns:registrationRoleType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationRoleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:long"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="esaRequirement" type="xs:string"/>
+      <xs:element minOccurs="0" name="signatureQuestionsRequired" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveUsersByProgramIdAndRoleResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserList" type="tns:registrationUser"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="governmentPartner" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="lastLogin" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="legacySecretAnswer" type="xs:string"/>
+      <xs:element minOccurs="0" name="legacySecretQuestion" type="xs:string"/>
+      <xs:element minOccurs="0" name="lexisNexisAttempts" type="xs:long"/>
+      <xs:element minOccurs="0" name="middleInitial" type="xs:string"/>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
+      <xs:element minOccurs="0" name="passwordResetAttempts" type="xs:long"/>
+      <xs:element minOccurs="0" name="registrationDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="suffix" type="tns:registrationUserSuffix"/>
+      <xs:element minOccurs="0" name="title" type="tns:registrationUserTitle"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="verificationIndexElectronic" type="xs:long"/>
+      <xs:element minOccurs="0" name="verificationIndexPaper" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationUserSuffix">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationUserTitle">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteUserFacilityAssociations">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="roleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="userOrganizationId" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="facilityProgramIds" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteUserFacilityAssociationsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DeletionResult" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilitiesByUserRoleId">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="userRoleId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilitiesByUserRoleIdResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ProgramFacility" type="tns:ProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Authenticate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="credential" type="xs:string"/>
+      <xs:element minOccurs="0" name="domain" type="xs:string"/>
+      <xs:element minOccurs="0" name="authenticationMethod" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AuthenticateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveNaicsCodesFromFrs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="programAcronym" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveNaicsCodesFromFrsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="NaicsCode" type="tns:registrationProgramFacilityNaicsCode"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveProgramFacilitiesByProgramIds">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="facilityProgramIds" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveProgramFacilitiesByProgramIdsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ProgramFacilityList" type="tns:ProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateUserFacilityAssociations">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="roleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="userOrganizationId" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="facilityProgramIds" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateUserFacilityAssociationsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="UserRoleAssociationList" type="tns:registrationUserRoleProgramFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationUserRoleProgramFacility">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cdxFacilityId" type="xs:long"/>
+      <xs:element minOccurs="0" name="epaRegistryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="userFacilityId" type="xs:long"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="userRoleId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilities">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="user" type="tns:registrationUser"/>
+      <xs:element minOccurs="0" name="organization" type="tns:registrationOrganization"/>
+      <xs:element minOccurs="0" name="roleType" type="tns:registrationRoleType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationOrganization">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cdxEsaStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="tns:registrationCountry"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+      <xs:element minOccurs="0" name="fax" type="xs:string"/>
+      <xs:element minOccurs="0" name="mailingAddress1" type="xs:string"/>
+      <xs:element minOccurs="0" name="mailingAddress2" type="xs:string"/>
+      <xs:element minOccurs="0" name="mailingAddress3" type="xs:string"/>
+      <xs:element minOccurs="0" name="mailingAddress4" type="xs:string"/>
+      <xs:element minOccurs="0" name="organizationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="organizationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="phone" type="xs:string"/>
+      <xs:element minOccurs="0" name="phoneExtension" type="xs:string"/>
+      <xs:element minOccurs="0" name="primaryOrg" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="state" type="tns:registrationState"/>
+      <xs:element minOccurs="0" name="userOrganizationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="zip" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationCountry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationState">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="countryCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="region" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveFacilitiesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ProgramFacility" type="tns:registrationFacility"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationFacility">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="address2" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="county" type="xs:string"/>
+      <xs:element minOccurs="0" name="epaRegistryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="latitude" type="xs:double"/>
+      <xs:element minOccurs="0" name="longitude" type="xs:double"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="mailingAddresses" nillable="true" type="tns:registrationFacilityMailingAddress"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="number" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="programs" nillable="true" type="tns:registrationFacilityProgram"/>
+      <xs:element minOccurs="0" name="state" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationFacilityMailingAddress">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="address2" type="xs:string"/>
+      <xs:element minOccurs="0" name="affiliationType" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataflow" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataflowFacilityId" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataflowFacilityName" type="xs:string"/>
+      <xs:element minOccurs="0" name="state" type="xs:string"/>
+      <xs:element minOccurs="0" name="zip" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationFacilityProgram">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveAllBiaCodesFromFrs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveAllBiaCodesFromFrsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="BiaCode" type="tns:registrationProgramFacilityBiaCode"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationProgramFacilityBiaCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="biaCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="epaId" type="xs:string"/>
+      <xs:element minOccurs="0" name="tribeName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="ProgramFacilityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Master"/>
+      <xs:enumeration value="Program"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NaicsPrimaryIndicator">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PRIMARY"/>
+      <xs:enumeration value="SECONDARY"/>
+      <xs:enumeration value="UNKNOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RegisterErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E_UnknownUser"/>
+      <xs:enumeration value="E_InvalidCredential"/>
+      <xs:enumeration value="E_AccessDenied"/>
+      <xs:enumeration value="E_InvalidToken"/>
+      <xs:enumeration value="E_TokenExpired"/>
+      <xs:enumeration value="E_AuthMethod"/>
+      <xs:enumeration value="E_UserAlreadyExists"/>
+      <xs:enumeration value="E_InsufficientPrivileges"/>
+      <xs:enumeration value="E_WeakPassword"/>
+      <xs:enumeration value="E_InvalidArgument"/>
+      <xs:enumeration value="E_InvalidAnswerResetCode"/>
+      <xs:enumeration value="E_MaxNumberOfResetAttemptsReached"/>
+      <xs:enumeration value="E_AnswersAlreadyExist"/>
+      <xs:enumeration value="E_RoleAlreadyExists"/>
+      <xs:enumeration value="E_WrongUserId"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfAttempts"/>
+      <xs:enumeration value="E_WrongAnswer"/>
+      <xs:enumeration value="E_WrongIdPassword"/>
+      <xs:enumeration value="E_AccountLocked"/>
+      <xs:enumeration value="E_AccountExpired"/>
+      <xs:enumeration value="E_DuplicateAssociation"/>
+      <xs:enumeration value="E_InvalidSignature"/>
+      <xs:enumeration value="E_InternalError"/>
+      <xs:enumeration value="E_Validation"/>
+      <xs:enumeration value="E_MissingMobile"/>
+      <xs:enumeration value="E_MissingMobilePrimary"/>
+      <xs:enumeration value="E_DuplicateMobile"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfMobile"/>
+      <xs:enumeration value="E_MobileNotRegistered"/>
+      <xs:enumeration value="E_MobileStatusIncorrect"/>
+      <xs:enumeration value="E_MobileNoVerificationCode"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RegisterFault" type="tns:RegisterFault"/>
+  <xs:complexType name="RegisterFault">
+    <xs:sequence>
+      <xs:element name="description" nillable="true" type="xs:string"/>
+      <xs:element name="errorCode" nillable="true" type="tns:RegisterErrorCode"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="RetrieveUsersByProgramIdAndRoleResponse">
+    <wsdl:part element="tns:RetrieveUsersByProgramIdAndRoleResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilityByCdxFacilityId">
+    <wsdl:part element="tns:RetrieveFacilityByCdxFacilityId" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateOrUpdateFacility">
+    <wsdl:part element="tns:CreateOrUpdateFacility" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilitiesFromFrsResponse">
+    <wsdl:part element="tns:RetrieveFacilitiesFromFrsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveUsersByProgramIdAndRole">
+    <wsdl:part element="tns:RetrieveUsersByProgramIdAndRole" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilityByCdxFacilityIdResponse">
+    <wsdl:part element="tns:RetrieveFacilityByCdxFacilityIdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveNaicsCodesFromFrs">
+    <wsdl:part element="tns:RetrieveNaicsCodesFromFrs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveProgramFacilitiesByProgramIds">
+    <wsdl:part element="tns:RetrieveProgramFacilitiesByProgramIds" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilitiesByUserRoleIdResponse">
+    <wsdl:part element="tns:RetrieveFacilitiesByUserRoleIdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveAllBiaCodesFromFrs">
+    <wsdl:part element="tns:RetrieveAllBiaCodesFromFrs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveAllBiaCodesFromFrsResponse">
+    <wsdl:part element="tns:RetrieveAllBiaCodesFromFrsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateUserFacilityAssociationsResponse">
+    <wsdl:part element="tns:CreateUserFacilityAssociationsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AuthenticateResponse">
+    <wsdl:part element="tns:AuthenticateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteUserFacilityAssociationsResponse">
+    <wsdl:part element="tns:DeleteUserFacilityAssociationsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilitiesFromFrs">
+    <wsdl:part element="tns:RetrieveFacilitiesFromFrs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RegisterException">
+    <wsdl:part element="tns:RegisterFault" name="RegisterException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveProgramFacilitiesByProgramIdsResponse">
+    <wsdl:part element="tns:RetrieveProgramFacilitiesByProgramIdsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateOrUpdateFacilityResponse">
+    <wsdl:part element="tns:CreateOrUpdateFacilityResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteUserFacilityAssociations">
+    <wsdl:part element="tns:DeleteUserFacilityAssociations" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveNaicsCodesFromFrsResponse">
+    <wsdl:part element="tns:RetrieveNaicsCodesFromFrsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilitiesByUserRoleId">
+    <wsdl:part element="tns:RetrieveFacilitiesByUserRoleId" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Authenticate">
+    <wsdl:part element="tns:Authenticate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilitiesResponse">
+    <wsdl:part element="tns:RetrieveFacilitiesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateUserFacilityAssociations">
+    <wsdl:part element="tns:CreateUserFacilityAssociations" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFacilities">
+    <wsdl:part element="tns:RetrieveFacilities" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RegisterProgramFacilityService">
+    <wsdl:operation name="RetrieveFacilitiesFromFrs">
+      <wsdl:input message="tns:RetrieveFacilitiesFromFrs" name="RetrieveFacilitiesFromFrs">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveFacilitiesFromFrsResponse" name="RetrieveFacilitiesFromFrsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilityByCdxFacilityId">
+      <wsdl:input message="tns:RetrieveFacilityByCdxFacilityId" name="RetrieveFacilityByCdxFacilityId">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveFacilityByCdxFacilityIdResponse" name="RetrieveFacilityByCdxFacilityIdResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrUpdateFacility">
+      <wsdl:input message="tns:CreateOrUpdateFacility" name="CreateOrUpdateFacility">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateOrUpdateFacilityResponse" name="CreateOrUpdateFacilityResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUsersByProgramIdAndRole">
+      <wsdl:input message="tns:RetrieveUsersByProgramIdAndRole" name="RetrieveUsersByProgramIdAndRole">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveUsersByProgramIdAndRoleResponse" name="RetrieveUsersByProgramIdAndRoleResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUserFacilityAssociations">
+      <wsdl:input message="tns:DeleteUserFacilityAssociations" name="DeleteUserFacilityAssociations">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteUserFacilityAssociationsResponse" name="DeleteUserFacilityAssociationsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilitiesByUserRoleId">
+      <wsdl:input message="tns:RetrieveFacilitiesByUserRoleId" name="RetrieveFacilitiesByUserRoleId">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveFacilitiesByUserRoleIdResponse" name="RetrieveFacilitiesByUserRoleIdResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:Authenticate" name="Authenticate">
+    </wsdl:input>
+      <wsdl:output message="tns:AuthenticateResponse" name="AuthenticateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveNaicsCodesFromFrs">
+      <wsdl:input message="tns:RetrieveNaicsCodesFromFrs" name="RetrieveNaicsCodesFromFrs">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveNaicsCodesFromFrsResponse" name="RetrieveNaicsCodesFromFrsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveProgramFacilitiesByProgramIds">
+      <wsdl:input message="tns:RetrieveProgramFacilitiesByProgramIds" name="RetrieveProgramFacilitiesByProgramIds">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveProgramFacilitiesByProgramIdsResponse" name="RetrieveProgramFacilitiesByProgramIdsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserFacilityAssociations">
+      <wsdl:input message="tns:CreateUserFacilityAssociations" name="CreateUserFacilityAssociations">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateUserFacilityAssociationsResponse" name="CreateUserFacilityAssociationsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilities">
+      <wsdl:input message="tns:RetrieveFacilities" name="RetrieveFacilities">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveFacilitiesResponse" name="RetrieveFacilitiesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveAllBiaCodesFromFrs">
+      <wsdl:input message="tns:RetrieveAllBiaCodesFromFrs" name="RetrieveAllBiaCodesFromFrs">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveAllBiaCodesFromFrsResponse" name="RetrieveAllBiaCodesFromFrsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegisterProgramFacilityServiceSoapBinding" type="tns:RegisterProgramFacilityService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="RetrieveFacilitiesFromFrs">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveFacilitiesFromFrs">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveFacilitiesFromFrsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrUpdateFacility">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateOrUpdateFacility">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateOrUpdateFacilityResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilityByCdxFacilityId">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveFacilityByCdxFacilityId">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveFacilityByCdxFacilityIdResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUsersByProgramIdAndRole">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveUsersByProgramIdAndRole">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveUsersByProgramIdAndRoleResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUserFacilityAssociations">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="DeleteUserFacilityAssociations">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteUserFacilityAssociationsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilitiesByUserRoleId">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveFacilitiesByUserRoleId">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveFacilitiesByUserRoleIdResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="Authenticate">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AuthenticateResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveNaicsCodesFromFrs">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveNaicsCodesFromFrs">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveNaicsCodesFromFrsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveProgramFacilitiesByProgramIds">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveProgramFacilitiesByProgramIds">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveProgramFacilitiesByProgramIdsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserFacilityAssociations">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateUserFacilityAssociations">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateUserFacilityAssociationsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFacilities">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveFacilities">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveFacilitiesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveAllBiaCodesFromFrs">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveAllBiaCodesFromFrs">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveAllBiaCodesFromFrsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegisterProgramFacilityService">
+    <wsdl:port binding="tns:RegisterProgramFacilityServiceSoapBinding" name="RegisterProgramFacilityServicePort">
+      <soap12:address location="https://devngn.epacdxnode.net/cdx-register-II/services/RegisterProgramFacilityService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/pdf/1" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="RegisterPdfService" targetNamespace="http://www.exchangenetwork.net/wsdl/register/pdf/1">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/pdf/1" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.exchangenetwork.net/wsdl/register/pdf/1" version="1.0">
+  <xs:import namespace="http://www.w3.org/2005/05/xmlmime"/>
+  <xs:element name="Authenticate" type="tns:Authenticate"/>
+  <xs:element name="AuthenticateResponse" type="tns:AuthenticateResponse"/>
+  <xs:element name="RenderUrlAsPdf" type="tns:RenderUrlAsPdf"/>
+  <xs:element name="RenderUrlAsPdfResponse" type="tns:RenderUrlAsPdfResponse"/>
+  <xs:complexType name="Authenticate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="credential" type="xs:string"/>
+      <xs:element minOccurs="0" name="domain" type="xs:string"/>
+      <xs:element minOccurs="0" name="authenticationMethod" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AuthenticateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RenderUrlAsPdf">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="url" type="xs:string"/>
+      <xs:element minOccurs="0" name="handoffType" type="tns:HandoffType"/>
+      <xs:element minOccurs="0" name="handoffUser" type="tns:HandoffUserType"/>
+      <xs:element minOccurs="0" name="renderingEngine" type="tns:pdfRenderingEngine"/>
+      <xs:element minOccurs="0" name="timeout" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HandoffUserType">
+    <xs:sequence>
+      <xs:element name="UserId" type="xs:string"/>
+      <xs:element minOccurs="0" name="Email" type="xs:string"/>
+      <xs:element minOccurs="0" name="Title" type="xs:string"/>
+      <xs:element minOccurs="0" name="FirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="LastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="MiddleInitial" type="xs:string"/>
+      <xs:element minOccurs="0" name="Suffix" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address1" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address2" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address3" type="xs:string"/>
+      <xs:element minOccurs="0" name="Address4" type="xs:string"/>
+      <xs:element minOccurs="0" name="City" type="xs:string"/>
+      <xs:element minOccurs="0" name="State" type="xs:string"/>
+      <xs:element minOccurs="0" name="Country" type="xs:string"/>
+      <xs:element minOccurs="0" name="PostalCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="Organization" type="xs:string"/>
+      <xs:element minOccurs="0" name="PhoneNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="PhoneExtension" type="xs:string"/>
+      <xs:element minOccurs="0" name="UserOrganizationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="OrganizationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="DataflowName" type="xs:string"/>
+      <xs:element minOccurs="0" name="IdTypeCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="IdTypeText" type="xs:string"/>
+      <xs:element minOccurs="0" name="UserRoleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="RoleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="ClientId" type="xs:string"/>
+      <xs:element minOccurs="0" name="ClientNumber" type="xs:long"/>
+      <xs:element minOccurs="0" name="RoleStatus" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RenderUrlAsPdfResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:PdfDocumentType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PdfDocumentType">
+    <xs:sequence>
+      <xs:element name="Content" type="xs:base64Binary" xmime:expectedContentTypes="*/*"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="RegisterErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E_UnknownUser"/>
+      <xs:enumeration value="E_InvalidCredential"/>
+      <xs:enumeration value="E_AccessDenied"/>
+      <xs:enumeration value="E_InvalidToken"/>
+      <xs:enumeration value="E_TokenExpired"/>
+      <xs:enumeration value="E_AuthMethod"/>
+      <xs:enumeration value="E_UserAlreadyExists"/>
+      <xs:enumeration value="E_InsufficientPrivileges"/>
+      <xs:enumeration value="E_WeakPassword"/>
+      <xs:enumeration value="E_InvalidPassword"/>
+      <xs:enumeration value="E_InvalidArgument"/>
+      <xs:enumeration value="E_InvalidAnswerResetCode"/>
+      <xs:enumeration value="E_MaxNumberOfResetAttemptsReached"/>
+      <xs:enumeration value="E_AnswersAlreadyExist"/>
+      <xs:enumeration value="E_RoleAlreadyExists"/>
+      <xs:enumeration value="E_WrongUserId"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfAttempts"/>
+      <xs:enumeration value="E_WrongAnswer"/>
+      <xs:enumeration value="E_WrongIdPassword"/>
+      <xs:enumeration value="E_AccountLocked"/>
+      <xs:enumeration value="E_AccountExpired"/>
+      <xs:enumeration value="E_DuplicateAssociation"/>
+      <xs:enumeration value="E_InvalidSignature"/>
+      <xs:enumeration value="E_InternalError"/>
+      <xs:enumeration value="E_Validation"/>
+      <xs:enumeration value="E_MissingMobile"/>
+      <xs:enumeration value="E_MissingMobilePrimary"/>
+      <xs:enumeration value="E_DuplicateMobile"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfMobile"/>
+      <xs:enumeration value="E_MobileNotRegistered"/>
+      <xs:enumeration value="E_MobileStatusIncorrect"/>
+      <xs:enumeration value="E_MobileNoVerificationCode"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="HandoffType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NONE"/>
+      <xs:enumeration value="LEGACY"/>
+      <xs:enumeration value="RSO"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pdfRenderingEngine">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PHANTOM_JS"/>
+      <xs:enumeration value="PHANTOM_JS_2"/>
+      <xs:enumeration value="HEADLESS_CHROME"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RegisterFault" type="tns:RegisterFault"/>
+  <xs:complexType name="RegisterFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="errorCode" type="tns:RegisterErrorCode"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="Authenticate">
+    <wsdl:part element="tns:Authenticate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RenderUrlAsPdfResponse">
+    <wsdl:part element="tns:RenderUrlAsPdfResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AuthenticateResponse">
+    <wsdl:part element="tns:AuthenticateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RegisterException">
+    <wsdl:part element="tns:RegisterFault" name="RegisterException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RenderUrlAsPdf">
+    <wsdl:part element="tns:RenderUrlAsPdf" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RegisterPdfService">
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:Authenticate" name="Authenticate">
+    </wsdl:input>
+      <wsdl:output message="tns:AuthenticateResponse" name="AuthenticateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RenderUrlAsPdf">
+      <wsdl:input message="tns:RenderUrlAsPdf" name="RenderUrlAsPdf">
+    </wsdl:input>
+      <wsdl:output message="tns:RenderUrlAsPdfResponse" name="RenderUrlAsPdfResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegisterPdfServiceSoapBinding" type="tns:RegisterPdfService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="Authenticate">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AuthenticateResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RenderUrlAsPdf">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RenderUrlAsPdf">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RenderUrlAsPdfResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegisterPdfService">
+    <wsdl:port binding="tns:RegisterPdfServiceSoapBinding" name="RegisterPdfServicePort">
+      <soap12:address location="https://devngn.epacdxnode.net/cdx-register-II/services/RegisterPdfServiceConditionalMTOM"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

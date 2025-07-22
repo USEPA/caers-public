@@ -1,0 +1,50 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="controlPathForm">
+	<div class="row pb-1">
+		<div class="col-sm-2">
+			<fa-icon class="mt-2 ml-2" title="An identifier for the path." [icon]="['fas', 'question-circle']"></fa-icon>
+			<label for="controlPathIdInput" class="ml-1 col-form-label"><strong>Path ID:</strong></label>
+            <app-required-asterisk [control]="controlPathForm.get('pathId')"></app-required-asterisk>
+		</div>
+        <div class="col-sm-3">
+            <input class="form-control" maxlength="20" id="controlPathIdInput" formControlName="pathId">
+            <app-validation-message [control]="controlPathForm.get('pathId')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The combined effectiveness of all controls in that path.  It is the same as the control device effectiveness if there is only one control in that path." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="percentControlInput" class="ml-1 col-form-label"><strong>Percent Path Effectiveness:</strong></label>
+        </div>       
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="7" id="percentControlInput" formControlName="percentControl">
+            <app-validation-message [control]="controlPathForm.get('percentControl')"></app-validation-message>
+        </div>
+	</div>
+    <div class="row pb-1">
+        <div class="col-sm-2" aria-hidden="true"></div>
+        <div class="col-sm-3" *ngIf="controlPathForm.errors?.duplicatePathId">
+            <div class="validation-message" >
+                The Path Identifier must be unique within a facility.
+            </div>
+        </div>
+    </div>
+	<div class="row pb-1">
+		<div class="col-sm-2">
+			<fa-icon class="mt-2 ml-2" title="A text description of the path, given by/for the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+			<label for="descriptionInput" class="ml-1 col-form-label"><strong>Path Description:</strong></label>
+		</div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="form-control" maxlength="200" id="descriptionInput" formControlName="description"></textarea>
+            <app-validation-message [control]="controlPathForm.get('description')"></app-validation-message>
+		</div>
+	</div>
+</form>

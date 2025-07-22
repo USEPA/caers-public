@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/inbox/1" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="RegisterInboxService" targetNamespace="http://www.exchangenetwork.net/wsdl/register/inbox/1">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:tns="http://www.exchangenetwork.net/wsdl/register/inbox/1" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.exchangenetwork.net/wsdl/register/inbox/1" version="1.0">
+  <xs:import namespace="http://www.w3.org/2005/05/xmlmime"/>
+  <xs:element name="Authenticate" type="tns:Authenticate"/>
+  <xs:element name="AuthenticateResponse" type="tns:AuthenticateResponse"/>
+  <xs:element name="CreateInboxMessage" type="tns:CreateInboxMessage"/>
+  <xs:element name="CreateInboxMessageResponse" type="tns:CreateInboxMessageResponse"/>
+  <xs:element name="CreateInboxMessageWithAttachments" type="tns:CreateInboxMessageWithAttachments"/>
+  <xs:element name="CreateInboxMessageWithAttachmentsResponse" type="tns:CreateInboxMessageWithAttachmentsResponse"/>
+  <xs:element name="InboxAttachments" type="tns:inboxAttachments"/>
+  <xs:element name="RetrieveBouncebackEmails" type="tns:RetrieveBouncebackEmails"/>
+  <xs:element name="RetrieveBouncebackEmailsResponse" type="tns:RetrieveBouncebackEmailsResponse"/>
+  <xs:complexType name="CreateInboxMessageWithAttachments">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="from" type="xs:string"/>
+      <xs:element minOccurs="0" name="subject" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataflow" type="xs:string"/>
+      <xs:element minOccurs="0" name="attachments" type="tns:inboxAttachments"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="inboxAttachments">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="InboxAttachment" type="tns:InboxAttachmentType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InboxAttachmentType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Content" type="xs:base64Binary" xmime:expectedContentTypes="*/*"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateInboxMessageWithAttachmentsResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="RetrieveBouncebackEmails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="criteria" type="tns:RegisterBouncebackSearchCriteriaType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RegisterBouncebackSearchCriteriaType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Dataflow" type="xs:string"/>
+      <xs:element minOccurs="0" name="RoleId" type="xs:long"/>
+      <xs:element minOccurs="0" name="Mailbox" type="xs:string"/>
+      <xs:element minOccurs="0" name="BadEmailAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="CustomHeaders">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="CustomHeader" type="tns:BouncebackHeader"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BouncebackHeader">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RetrieveBouncebackEmailsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:Bounceback"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Bounceback">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:long"/>
+      <xs:element minOccurs="0" name="Dataflow" type="xs:string"/>
+      <xs:element minOccurs="0" name="Role" type="tns:registrationRoleType"/>
+      <xs:element minOccurs="0" name="Mailbox" type="xs:string"/>
+      <xs:element minOccurs="0" name="BadEmailAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="Subject" type="xs:string"/>
+      <xs:element minOccurs="0" name="Reason" type="xs:string"/>
+      <xs:element minOccurs="0" name="StatusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="StatusDetail" type="xs:string"/>
+      <xs:element minOccurs="0" name="CustomHeaders">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="CustomHeader" type="tns:BouncebackHeader"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registrationRoleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:long"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="esaRequirement" type="xs:string"/>
+      <xs:element minOccurs="0" name="signatureQuestionsRequired" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="manageFacilities" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Authenticate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="credential" type="xs:string"/>
+      <xs:element minOccurs="0" name="domain" type="xs:string"/>
+      <xs:element minOccurs="0" name="authenticationMethod" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AuthenticateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateInboxMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="securityToken" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="from" type="xs:string"/>
+      <xs:element minOccurs="0" name="subject" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreateInboxMessageResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:simpleType name="RegisterErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E_UnknownUser"/>
+      <xs:enumeration value="E_InvalidCredential"/>
+      <xs:enumeration value="E_AccessDenied"/>
+      <xs:enumeration value="E_InvalidToken"/>
+      <xs:enumeration value="E_TokenExpired"/>
+      <xs:enumeration value="E_AuthMethod"/>
+      <xs:enumeration value="E_UserAlreadyExists"/>
+      <xs:enumeration value="E_InsufficientPrivileges"/>
+      <xs:enumeration value="E_WeakPassword"/>
+      <xs:enumeration value="E_InvalidPassword"/>
+      <xs:enumeration value="E_InvalidArgument"/>
+      <xs:enumeration value="E_InvalidAnswerResetCode"/>
+      <xs:enumeration value="E_MaxNumberOfResetAttemptsReached"/>
+      <xs:enumeration value="E_AnswersAlreadyExist"/>
+      <xs:enumeration value="E_RoleAlreadyExists"/>
+      <xs:enumeration value="E_WrongUserId"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfAttempts"/>
+      <xs:enumeration value="E_WrongAnswer"/>
+      <xs:enumeration value="E_WrongIdPassword"/>
+      <xs:enumeration value="E_AccountLocked"/>
+      <xs:enumeration value="E_AccountExpired"/>
+      <xs:enumeration value="E_DuplicateAssociation"/>
+      <xs:enumeration value="E_InvalidSignature"/>
+      <xs:enumeration value="E_InternalError"/>
+      <xs:enumeration value="E_Validation"/>
+      <xs:enumeration value="E_MissingMobile"/>
+      <xs:enumeration value="E_MissingMobilePrimary"/>
+      <xs:enumeration value="E_DuplicateMobile"/>
+      <xs:enumeration value="E_ReachedMaxNumberOfMobile"/>
+      <xs:enumeration value="E_MobileNotRegistered"/>
+      <xs:enumeration value="E_MobileStatusIncorrect"/>
+      <xs:enumeration value="E_MobileNoVerificationCode"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RegisterFault" type="tns:RegisterFault"/>
+  <xs:complexType name="RegisterFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="errorCode" type="tns:RegisterErrorCode"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthenticateResponse">
+    <wsdl:part element="tns:AuthenticateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Authenticate">
+    <wsdl:part element="tns:Authenticate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateInboxMessage">
+    <wsdl:part element="tns:CreateInboxMessage" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateInboxMessageWithAttachmentsResponse">
+    <wsdl:part element="tns:CreateInboxMessageWithAttachmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBouncebackEmailsResponse">
+    <wsdl:part element="tns:RetrieveBouncebackEmailsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateInboxMessageResponse">
+    <wsdl:part element="tns:CreateInboxMessageResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateInboxMessageWithAttachments">
+    <wsdl:part element="tns:CreateInboxMessageWithAttachments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBouncebackEmails">
+    <wsdl:part element="tns:RetrieveBouncebackEmails" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RegisterException">
+    <wsdl:part element="tns:RegisterFault" name="RegisterException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RegisterInboxService">
+    <wsdl:operation name="CreateInboxMessageWithAttachments">
+      <wsdl:input message="tns:CreateInboxMessageWithAttachments" name="CreateInboxMessageWithAttachments">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateInboxMessageWithAttachmentsResponse" name="CreateInboxMessageWithAttachmentsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveBouncebackEmails">
+      <wsdl:input message="tns:RetrieveBouncebackEmails" name="RetrieveBouncebackEmails">
+    </wsdl:input>
+      <wsdl:output message="tns:RetrieveBouncebackEmailsResponse" name="RetrieveBouncebackEmailsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:Authenticate" name="Authenticate">
+    </wsdl:input>
+      <wsdl:output message="tns:AuthenticateResponse" name="AuthenticateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateInboxMessage">
+      <wsdl:input message="tns:CreateInboxMessage" name="CreateInboxMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateInboxMessageResponse" name="CreateInboxMessageResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegisterException" name="RegisterException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegisterInboxServiceSoapBinding" type="tns:RegisterInboxService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CreateInboxMessageWithAttachments">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateInboxMessageWithAttachments">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateInboxMessageWithAttachmentsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveBouncebackEmails">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="RetrieveBouncebackEmails">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="RetrieveBouncebackEmailsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="Authenticate">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AuthenticateResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateInboxMessage">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateInboxMessage">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateInboxMessageResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegisterException">
+        <soap12:fault name="RegisterException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegisterInboxService">
+    <wsdl:port binding="tns:RegisterInboxServiceSoapBinding" name="RegisterInboxServicePort">
+      <soap12:address location="https://devngn.epacdxnode.net/cdx-register-II/services/RegisterInboxServiceConditionalMTOM"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

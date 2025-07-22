@@ -1,0 +1,121 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <strong>Request Access to Facility</strong>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-4">
+                  <label for="pscSelect" class="ml-1 col-form-label"><strong>Agency:</strong></label>
+                </div>
+                <div class="col-8">
+                  <select type="text" class="form-control" id="pscSelect" formControlName="programSystemCode">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let opt of programSystemCodeValues" [ngValue]="opt">{{opt?.description}}</option>
+                  </select>
+                  <app-validation-message [control]="searchForm.get('programSystemCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="row">
+                <div class="col-3">
+                  <label for="nameInput" class="ml-1 col-form-label"><strong>Facility Name:</strong></label>
+                </div>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="nameInput" formControlName="name">
+                  <app-validation-message [control]="searchForm.get('name')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-7">
+                  <label for="agencyFacilityIdentifierInput" class="ml-1 col-form-label"><strong>Agency Facility ID:</strong></label>
+                </div>
+                <div class="col-5">
+                  <input type="text" class="form-control" id="agencyFacilityIdentifierInput" formControlName="agencyFacilityIdentifier">
+                  <app-validation-message [control]="searchForm.get('agencyFacilityIdentifier')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-4">
+                  <label for="cityInput" class="ml-1 col-form-label"><strong>City:</strong></label>
+                </div>
+                <div class="col-8">
+                  <input type="text" class="form-control" id="cityInput" formControlName="city">
+                  <app-validation-message [control]="searchForm.get('city')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-6">
+                  <label for="stateSelect" class="ml-1 col-form-label"><strong>State:</strong></label>
+                </div>
+                <div class="col-6">
+                  <select type="text" class="form-control" id="stateSelect" formControlName="stateCode">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let opt of stateValues" [ngValue]="opt">{{opt?.uspsCode}}</option>
+                  </select>
+                  <app-validation-message [control]="searchForm.get('stateCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-6 text-right">
+                  <label for="postalCodeInput" class="ml-1 col-form-label"><strong>Postal Code:</strong></label>
+                </div>
+                <div class="col-6">
+                  <input type="text" class="form-control" id="postalCodeInput" formControlName="postalCode">
+                  <app-validation-message [control]="searchForm.get('postalCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="float-right py-3">
+                <button type="submit" class="btn btn-success mr-2">Search</button>
+                <button type="reset" class="btn btn-primary mr-2">Reset</button>
+                <a class="btn btn-secondary" routerLink="/facility">Back to My Facilities</a>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="row" *ngIf="searchResults">
+          <div class="col-12">
+            <hr>
+            <app-master-facility-search-table [tableData]="searchResults" (accessRequested)="onAccessRequested($event)"></app-master-facility-search-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

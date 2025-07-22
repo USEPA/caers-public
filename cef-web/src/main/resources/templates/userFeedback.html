@@ -1,0 +1,33 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<p>User feedback for <span th:text="${facilityName}" /> <span th:text="${reportingYear}" /> report has been submitted by - User: <span th:text="${userName}" /> - User Id: 
+	<span th:text="${userId}" /> - User Role: <span th:text="${userRole}" /> </p>
+	<p><strong>Ratings are given on a scale of 1-5.</strong></p>
+	<p>1. Easy and intuitive navigation through the system: <span th:text="${intuitiveRating}" /> </p>
+	<p>2. Data entry via screens: <span th:text="${dataEntryScreens}" /> </p>
+	<p>3. Data entry via bulk upload template: <span th:text="${dataEntryBulkUpload}" /> </p>
+	<p>4. Calculation screens and features: <span th:text="${calculationScreens}" /> </p>
+	<p>5. Controls and control path assignments: <span th:text="${controlsAndControlPathAssignments}" /> </p>
+	<p>6. Quality assurance checks: <span th:text="${qualityAssurance}" /> </p>
+	<p>7. Overall reporting time: <span th:text="${overallReportingTime}" /> </p>
+	<p>What application functionality did you find to be beneficial to your reporting experience?</p>
+	<p><span th:text="${openQuestion1}" /></p>
+	<p>Was there any particular application functionality you found to be difficult to use or understand?</p>
+	<p><span th:text="${openQuestion2}" /></p>
+	<p>What additional features or enhancements would improve your experience in the future?</p>
+	<p><span th:text="${openQuestion3}" /></p>
+</body>
+</html>

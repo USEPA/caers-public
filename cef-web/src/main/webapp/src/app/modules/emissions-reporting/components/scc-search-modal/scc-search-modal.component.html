@@ -1,0 +1,65 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="modal-header">
+  <h4 class="modal-title w-100">Select a Source Classification Code</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <p>
+    Search for an SCC Code by any of the SCC Levels: 1, 2, 3, or 4, Text, Code Number, Short Name, or Description.
+    You can do a more extensive search at:
+    <a [href]='sccSearchUrl' target="blank">{{sccSearchUrl}}</a>
+  </p>
+
+  <div class="row pb-3">
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="pollutantNameInput" [formControl]="searchControl" aria-label="search SCC Codes">
+      <app-validation-message [control]="searchControl"></app-validation-message>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-success mr-2" (click)="onSearch()" id="sccSearchButton">Search</button>
+    </div>
+  </div>
+    <div *ngIf="tableData && tableData.length">
+      <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-cef-medium">
+          <tr>
+            <th scope="col" sortable="code" (sort)="onSort($event)">SCC Code</th>
+            <th scope="col" sortable="description" (sort)="onSort($event)">Description</th>
+            <th scope="col" sortable="sector" (sort)="onSort($event)">Sector</th>
+            <th scope="col" sortable="category" (sort)="onSort($event)">Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of tableItems">
+            <td><button type="button" class="btn btn-link" (click)="onSubmit(item)" [id]="'selectScc' + item?.code">{{item.code}}</button></td>
+            <td>{{item.description}}</td>
+            <td>{{item.sector}}</td>
+            <td>{{item.category}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="!tableData || !tableData.length">
+      No results could be found for this criteria.
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="validation-message" *ngIf="searchControl.errors?.invalidNewScc">
+        This SCC code is not allowed to be used for this Emissions Process.
+    </div>
+  <button type="button" class="btn btn-primary" (click)="onClose()">Cancel</button>
+</div>

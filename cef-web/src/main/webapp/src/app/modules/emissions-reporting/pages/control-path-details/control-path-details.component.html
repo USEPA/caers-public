@@ -1,0 +1,73 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div *ngIf="controlPath">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Control Path Information</strong>
+                        <div class="float-right" *ngIf="!editInfo && !readOnlyMode">
+                            <button type="button" class="btn btn-success" aria-label="edit control path information" (click)="setEditInfo(true)">Edit</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="!editInfo">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-3"><strong>Path ID:</strong></div>
+                                <div class="col-sm-6 col-md-2" style="margin-bottom: 10px;">{{controlPath.pathId}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Percent Path Effectiveness:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{controlPath.percentControl}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 col-md-3"><strong>Path Description:</strong></div>
+                                <div class="col-sm-6 col-md-6">{{controlPath.description}}</div>
+                            </div>
+                        </div>
+
+                        <app-reviewer-comment [entityId]="controlPath.id" [entityType]="entityType.CONTROL_PATH"></app-reviewer-comment>
+
+                        <div *ngIf="editInfo">
+                            <app-edit-control-path-info-panel [controlPath]="controlPath"></app-edit-control-path-info-panel>
+                            <div class="float-right pb-3 pr-3" *ngIf="controlPathComponent">
+                                <button type="button" class="btn btn-primary mr-2" (click)="setEditInfo(false)">Cancel</button>
+                                <button type="submit" class="btn btn-success" (click)="updateControlPath()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Path Assignment</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-path-assignment-table [tableData]="controlPathAssignments" [facilitySiteId]="facilitySite.id" [controlPath]="controlPath" [readOnlyMode]="readOnlyMode"></app-control-path-assignment-table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Path Pollutants</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-path-pollutant-table [facilitySiteId]="facilitySite.id" [year]="facilitySite.emissionsReport.year"
+                            [controlPathId]="controlPath.id" [tableData]="controlPath.pollutants" [readOnlyMode]="readOnlyMode"></app-control-path-pollutant-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,133 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="validation-message" *ngIf="control.errors && (control.dirty || control.touched)">
+  <div *ngIf="control.errors?.required && !disableRequired">
+      This field is required.
+  </div>
+
+  <div *ngIf="control.errors?.min">
+      Value cannot be lower than {{control.errors.min.min}}.
+  </div>
+
+  <div *ngIf="control.errors?.max">
+      Value cannot be higher than {{control.errors.max.max}}.
+  </div>
+
+  <div *ngIf="control.errors?.maxlength">
+      Value cannot exceed {{control.errors.maxlength.requiredLength}} characters.
+  </div>
+
+  <div *ngIf="control.errors?.pattern">
+    Value is not in the correct format.
+
+    <div *ngIf="control.errors?.pattern.requiredPattern == '^[0-9]*$'">
+      Value can only be numeric.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern == '^[a-zA-Z ]*$'">
+      Value can only be alphabetical characters.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{1,4}([\.][0-9]{1})?$'">
+      Maximum precision of 1 decimal place.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{1,3}([\.][0-9]{1,2})?$'">
+      Maximum precision of 2 decimal places.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{1,3}([\.][0-9]{1,3})?$'">
+      Maximum precision of 3 decimal places.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{0,5}([\.][0-9]{1,3})?$'">
+      Maximum precision of 3 decimal places.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{0,8}([\.][0-9]{0,8})?([eE]{1}[-+]?[0-9]+)?$'">
+      Maximum precision of 8 decimal places.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^-?[0-9]{1,3}([\.][0-9]{1,6})?$'">
+      Value must be in decimal degrees up to the sixth decimal place.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[0-9]{10}$'">
+      Enter area code and phone number without spaces or dashes with a maximum of 10 digits.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^\\d{5}(-\\d{4})?$'">
+      Enter 5 digit (XXXXX) or 9 digit (XXXXX-XXXX) Zip Code.
+    </div>
+
+    <div *ngIf="control.errors?.pattern.requiredPattern === '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[\.][A-Za-z]{2,}$'">
+      Email Address must be valid (ex: name@domain.com).
+    </div>
+  </div>
+
+  <div *ngIf="control.errors?.wholeNumber">
+      Value must be a whole number.
+  </div>
+
+  <div *ngIf="control.errors?.number">
+      Value must be a number.
+  </div>
+
+</div>
+
+<div class="validation-message" *ngIf="control.errors">
+  <div *ngIf="control.errors?.significantFiguresInvalid">
+    Please enter a maximum of 6 significant figures.
+  </div>
+
+  <div *ngIf="control.errors?.legacyUom">
+      The Unit of Measure {{control.errors.legacyUom.value}} is no longer a valid UoM. Please select a different UoM.
+  </div>
+
+  <div *ngIf="control.errors?.legacyItem && control.errors?.legacyItem.value.mapTo">
+      The {{control.errors.legacyItem.type}} {{control.errors.legacyItem.value[control.errors.legacyItem.displayField]}} is no longer valid.
+      Try using {{control.errors.legacyItem.value.mapTo}} instead.
+  </div>
+
+  <div *ngIf="control.errors?.legacyItem && !control.errors?.legacyItem.value.mapTo">
+      The {{control.errors.legacyItem.type}} {{control.errors.legacyItem.value[control.errors.legacyItem.displayField]}} is no longer valid.
+      Please select a different {{control.errors.legacyItem.type}}.
+  </div>
+
+  <div *ngIf="control.errors?.newSfcOperating">
+      New facility components added in the current year report must have a status of "Operating".
+  </div>
+
+    <div *ngIf="control.errors?.percentControlRequired">
+        This field is required when Control Device is Operating.
+    </div>
+
+  <div *ngIf="control.errors?.processExistingMonthlyReportingData">
+      There is Monthly Reporting data reported for this Process. Operating Status cannot be temporarily or permanently shutdown.
+  </div>
+
+  <div *ngIf="control.errors?.unitExistingMonthlyReportingData">
+      There is Monthly Reporting data reported for Process(es) {{control.errors.unitExistingMonthlyReportingData.value}}. Operating Status cannot be temporarily or permanently shutdown.
+  </div>
+
+  <div *ngIf="control.errors?.longitude">
+      Longitude values must be between -180 and -64 or 140 and 180.
+  </div>
+
+  <div *ngIf="control.errors?.invalidPollutant">
+    The pollutant you entered is invalid. Please select a valid pollutant from the list.
+  </div>
+
+    <div *ngIf="control.errors?.billingExemptCommentRequired">
+        Explain basis of billing exemption in comments.
+    </div>
+</div>

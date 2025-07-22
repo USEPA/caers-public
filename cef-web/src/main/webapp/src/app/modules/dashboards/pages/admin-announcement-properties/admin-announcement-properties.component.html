@@ -1,0 +1,60 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div *ngIf="announcementEnabled && announcementText">
+  <div class="container">
+      <div class="card  mb-3">
+        <div class="card-header text-center">
+          <strong>Announcement Banner</strong>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="propertyForm" class="px-3">
+            <div class="row pb-2">
+              Announcement Banner will be displayed for all NEI Certifiers and Preparers based on the criteria entered below.
+            </div>
+            <div class="row pb-2">
+              <div class="float-right form-group form-check">
+                  <input type="checkbox" class="form-check-input" id="enabledCb" formControlName="enabled" >
+                  <label for="enabledCb" class="form-check-label"><strong>Display announcement</strong></label>
+              </div>
+            </div>
+            <div class="row pb-2">
+              <div class="form-group w-100">
+                <label for="announcementTextTa"><strong>Announcement:</strong></label>
+                <editor
+	                  [init]="{
+					     height: 200,
+					     menubar: false,
+					     plugins: [
+					       'advlist autolink lists link charmap print preview anchor',
+					       'searchreplace visualblocks fullscreen',
+					       'insertdatetime table paste help wordcount'
+					     ],
+					     toolbar:
+					       'undo redo | formatselect | bold italic underline backcolor | ' +
+					       'alignleft aligncenter alignright alignjustify | ' +
+					       'bullist numlist outdent indent | removeformat | help'
+					   }"
+					   id="announcementTextTa" formControlName="text">
+					 </editor>
+                <app-validation-message [control]="propertyForm.get('text')"></app-validation-message>
+              </div>
+            </div>
+
+            <div class="float-right mt-3">
+              <button type="button" class="btn btn-success" (click)="onSubmit()">Update Properties</button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+</div>

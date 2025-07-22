@@ -1,0 +1,69 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+        [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive">
+
+    <div class="nav-link p-0">
+        <button class="btn btn-link text-primary font-weight-bold text-left small p-0" type="button"
+                (click)="toggleCollapsedMapEntry()"
+                [attr.aria-expanded]="getCollapsedMapEntry()"
+                [attr.aria-controls]="targetId" *ngIf="navItem?.children?.length"
+                [attr.aria-label]="'unit ' + navItem?.identifier + ' list of ' + navItem?.children?.length + ' processes'">
+            <app-collapse-icon [collapsed]='!getCollapsedMapEntry()'></app-collapse-icon>
+        </button>
+        <a class="text-primary font-weight-bold small" [routerLinkActive]="'active text-success'"
+                [attr.aria-label]="'select ' + navItem?.baseUrl + ' ' + navItem?.identifier"
+                [attr.aria-description]="navItem?.identifier + ': ' + navItem?.description"
+                [routerLinkActiveOptions]="{exact: true}" routerLink="{{itemUrl}}"
+                [attr.data-cy]="'select ' + navItem?.baseUrl + ' ' + navItem?.identifier"
+                title="{{ (navItem?.description && navItem?.description.length > 0) ? navItem?.description : navItem?.identifier }}">
+            <span>
+                {{navItem?.identifier.length > 30 ? (navItem?.identifier | slice:0:25) + '...' : navItem?.identifier}}
+                <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !rla.isActive}" size="lg"></fa-icon>
+            </span>
+        </a>
+    </div>
+
+</div>
+
+<ng-container *ngIf="navItem.children?.length">
+
+  <div class="ml-2" [attr.id]="targetId" [ngbCollapse]="!getCollapsedMapEntry()"
+       *ngFor="let childItem of navItem.children">
+
+    <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+         [routerLinkActiveOptions]="{exact: true}" #rlaChild="routerLinkActive">
+
+      <div class="nav-link p-0">
+        <a [attr.aria-label]="'select ' + childItem?.baseUrl + ' ' + childItem?.identifier
+              + (activeParentProcessId === childItem?.id ? activeEmissionLabel : '')"
+           [attr.aria-description]="childItem?.identifier + ': ' + childItem?.description"
+           class="text-primary font-weight-bold small"
+           [routerLinkActive]="'active text-success'"
+           [routerLinkActiveOptions]="{exact: true}"
+           routerLink="{{baseUrl + childItem?.url}}"
+           [attr.data-cy]="'select ' + childItem?.baseUrl + ' ' + childItem?.identifier
+              + (activeParentProcessId === childItem?.id ? activeEmissionLabel : '')"
+           title="{{ (childItem?.description && childItem?.description.length > 0) ? childItem?.description : childItem?.identifier }}">
+          <span>
+                {{childItem?.identifier.length > 30 ? (childItem?.identifier | slice:0:25) + '...' : childItem?.identifier}}
+            <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{
+              'd-none': (activeParentProcessId !== childItem?.id) && !rlaChild.isActive}" size="lg"></fa-icon>
+          </span>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-container>

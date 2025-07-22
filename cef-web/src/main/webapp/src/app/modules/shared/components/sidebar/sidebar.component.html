@@ -1,0 +1,130 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="m-3" *ngIf="facility">
+    <div class="pb-2 border-bottom border-dark">
+        <div class="container">
+            <app-facility-info *ngIf="!facilitySite" [facility]="facility"></app-facility-info>
+            <div *ngIf="facilitySite">
+                <div class="row small">
+                    <strong>Agency ID: {{facilitySite?.agencyFacilityIdentifier}}</strong>
+                </div>
+                <div class="row small">
+                    <strong>{{facilitySite?.name}}</strong>
+                </div>
+                <div class="row small">
+                    <span>{{facilitySite?.streetAddress}}</span>
+                </div>
+                <div class="row small">
+                    <span>{{facilitySite?.city}}, {{facilitySite?.stateCode.uspsCode}} {{facilitySite?.postalCode}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="container" *ngIf="facilitySite && facilitySite.emissionsReport">
+            <div class="row small">
+                <strong>{{facilitySite.emissionsReport.year}} Emissions Report</strong>
+            </div>
+            <div class="row small">
+                <strong>Agency: {{facilitySite.emissionsReport.programSystemCode?.code}}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2" *ngIf="facilityNavItems && !hideSideBar">
+        <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                [routerLinkActiveOptions]="{exact: true}" #summaryRla="routerLinkActive">
+            <div class="nav-link pl-0 pr-0">
+                <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                        [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/summary"
+                        >
+                    <span>Report Summary
+                          <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !summaryRla.isActive}" size="lg"></fa-icon>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                [routerLinkActiveOptions]="{exact: true}" #historyRla="routerLinkActive">
+            <div class="nav-link pl-0 pr-0">
+                <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                        [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/history"
+                        >
+                    <span>Report History
+                          <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !historyRla.isActive}" size="lg"></fa-icon>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!facilitySite.emissionsReport.thresholdStatus || facilitySite.emissionsReport?.thresholdStatus === 'OPERATING_ABOVE_THRESHOLD'">
+
+            <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                    [routerLinkActiveOptions]="{exact: true}" #validationRla="routerLinkActive"
+                    *ngIf="facilitySite.emissionsReport.status !== 'APPROVED' && !hideSideBar">
+                <div class="nav-link pl-0 pr-0">
+                    <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                            [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/validation"
+                            >
+                        <span>Annual Report Quality Checks
+                              <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !validationRla.isActive}" size="lg"></fa-icon>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                    [routerLinkActiveOptions]="{exact: true}" #validationRla="routerLinkActive">
+                <div class="nav-link pl-0 pr-0">
+                    <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                            [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/changes"
+                            >
+                        <span>Report Creation Log
+                              <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !validationRla.isActive}" size="lg"></fa-icon>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                    [routerLinkActiveOptions]="{exact: true}" #moFuelRptRla="routerLinkActive"
+                    *ngIf="monthlyReportingEnabled">
+                <div class="nav-link pl-0 pr-0">
+                    <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                            [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/monthlyReporting"
+                            >
+                        <span>Monthly Reporting
+                              <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !moFuelRptRla.isActive}" size="lg"></fa-icon>
+                        </span>
+                    </a>
+                </div>
+	          </div>
+
+            <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+                    [routerLinkActiveOptions]="{exact: true}" #bulkEntryRla="routerLinkActive"
+                    *ngIf="bulkEntryEnabled">
+                <div class="nav-link pl-0 pr-0">
+                    <a class="text-primary font-weight-bold text-left" [routerLinkActive]="'active text-success'"
+                            [routerLinkActiveOptions]="{exact: true}" routerLink="{{facilitySite.emissionsReport.id}}/bulkEntry"
+                            >
+                        <span>Data Bulk Entry
+                              <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !bulkEntryRla.isActive}" size="lg"></fa-icon>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <app-collapse-nav [desc]="'Facility Inventory'"  [facilityId]="facilitySite.id" [targetId]="'facilityInventoryCollapse'" [linkUrl]="facilitySite.emissionsReport.id" [navItems]="facilityNavItems"></app-collapse-nav>
+
+            <app-collapse-nav [desc]="'Emissions Inventory'" [isUnits]="true" [facilityId]="facilitySite.id" [targetId]="'emissionUnitCollapse'" [linkUrl]="facilitySite.emissionsReport.id"></app-collapse-nav>
+
+        </ng-container>
+    </div>
+</div>

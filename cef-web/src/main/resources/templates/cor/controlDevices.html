@@ -1,0 +1,85 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<div class="container print-page-break">
+    <h2 class="pl-3 child-header">Control Devices</h2>
+    <div class="col">
+        <div class="pb-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Control ID</th>
+                        <th>Control Description</th>
+                        <th>Operating Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+				<tr th:unless="${fs.controls ne null and !fs.controls.isEmpty()}">
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+                <tr th:each="control : ${T(gov.epa.cef.web.controller.CorController).getSortedControlList(fs.controls)}">
+                    <th th:text="${control.identifier}"></th>
+                    <td th:text="${control.description}"></td>
+                    <td th:if="${control.operatingStatusCode ne null}" th:text="${control.operatingStatusCode.description}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:each="control : ${T(gov.epa.cef.web.controller.CorController).getSortedControlList(fs.controls)}">
+            <div class="pb-5">
+				<h3 class="pb-3"><strong>Control Device Information</strong></h3>
+                <div><strong>Control ID:</strong> <span th:text="${control.identifier}"></span></div>
+                <div><strong>Control Measure:</strong> <span th:text="${control.controlMeasureCode?.description}"></span></div>
+                <div><strong>Control Description:</strong> <span th:text="${control.description}"></span></div>
+                <div><strong>Operating Status:</strong> <span th:text="${control.operatingStatusCode?.description}"></span></div>
+                <div><strong>Year Op Status Changed:</strong> <span th:text="${control.statusYear}"></span></div>
+                <div><strong>Number of Operating Months:</strong> <span th:text="${control.numberOperatingMonths}"></span></div>
+                <div><strong>% Control Effectiveness:</strong> <span th:text="${control.percentControl}"></span></div>
+                <div><strong>Start Date:</strong> <span th:text="${control.startDate}"></span></div>
+                <div><strong>End Date:</strong> <span th:text="${control.endDate}"></span></div>
+                <div><strong>Upgrade Date:</strong> <span th:text="${control.upgradeDate}"></span></div>
+                <div><strong>Upgrade Description:</strong> <span th:text="${control.upgradeDescription}"></span></div>
+                <div><strong>Comments:</strong> <span th:text="${control.comments}"></span></div>
+            </div>
+            <div class="pb-5">
+                <div class="pl-5">
+					<h3 class="pb-3"><strong>Control Device Pollutants</strong></h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pollutant Name</th>
+                                <th>Code</th>
+                                <th>CAS ID</th>
+                                <th>% Reduction Efficiency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+						<tr th:unless="${control.pollutants ne null and !control.pollutants.isEmpty()}">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+                        <tr th:each="pollutant : ${T(gov.epa.cef.web.controller.CorController).getSortedControlPollutantList(control.pollutants)}">
+                            <th th:text="${pollutant.pollutant.pollutantName}"></th>
+                            <td th:text="${pollutant.pollutant.pollutantCode}"></td>
+                            <td th:text="${pollutant.pollutant.pollutantCasId}"></td>
+                            <td th:text="${pollutant.percentReduction}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

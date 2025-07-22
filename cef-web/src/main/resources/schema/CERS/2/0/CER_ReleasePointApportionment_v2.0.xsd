@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_ReleasePointApportionment_v2.0.xsd
+        		Current Version Available At :  http://www.exchangenetwork.net/schema/cer/2/0/CER_ReleasePointApportionment_v2.0.xsd
+		        Description   : The percent of emissions for an emissions process that are vented through the emissions release point.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020	
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Identification_v2.0.xsd"/>
+	<xsd:complexType name="ReleasePointApportionmentDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:AveragePercentEmissions"/>
+			<xsd:element ref="cer:ReleasePointApportionmentIsUncontrolled" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointApportionmentComment" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointApportionmentIdentification" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:ReleasePointApportionmentPathIdentification" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ReleasePointApportionment" type="cer:ReleasePointApportionmentDataType"/>
+</xsd:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_ReleasePoint_v2.0.xsd
+        		Current Version Available At : http://www.exchangenetwork.net/schema/cer/2/0/CER_ReleasePoint_v2.0.xsd
+		        Description   : Identifies the point at which emissions are released into the environment, via a stack or fugitive release.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020		
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Identification_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_GeographicCoordinates_v2.0.xsd"/>
+	<xsd:complexType name="ReleasePointDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:ReleasePointTypeCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointDescription" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStackHeightMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStackHeightUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStackDiameterMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStackDiameterUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointWidthMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointWidthUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointLengthMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointLengthUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointExitGasVelocityMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointExitGasVelocityUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointExitGasFlowRateMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointExitGasFlowRateUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointExitGasTemperatureMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointFenceLineDistanceMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointFenceLineDistanceUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointFugitiveHeightMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointFugitiveHeightUnitofMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointFugitiveAngleMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointComment" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStatusCode" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointStatusCodeYear" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:StackHeightIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:StackDiameterIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:WidthIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:LengthIsReadOnly" minOccurs="0"/>	
+			<xsd:element ref="cer:ExitGasVelocityIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:ExitGasFlowRateIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:ExitGasTemperatureIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:ReleasePointIdentification" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:ReleasePointGeographicCoordinates" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ReleasePoint" type="cer:ReleasePointDataType"/>
+</xsd:schema>

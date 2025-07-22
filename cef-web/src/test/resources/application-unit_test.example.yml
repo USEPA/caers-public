@@ -1,0 +1,80 @@
+#
+# © Copyright 2019 EPA CAERS Project Team
+#
+# This file is part of the Common Air Emissions Reporting System (CAERS).
+#
+# CAERS is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with CAERS.  If
+# not, see <https://www.gnu.org/licenses/>.
+#
+cef:
+  default-email-address: no-reply-cef-unit-test@epa.gov
+  emissions-total-warning-tolerance: .01
+  emissions-total-error-tolerance: .05
+spring:
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource # overriding default hikari
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:15432/CEF"
+    username: _REMOVED_
+    password: _REMOVED_
+    tomcat:
+      fairQueue: true
+      jmx-enabled: false
+      initialSize: 5
+      maxActive: 10
+      maxIdle: 10
+      testOnBorrow: true
+      testWhileIdle: true
+      timeBetweenEvictionRunsMillis: 60000
+      validationQuery: "select 1"
+      validationQueryTimeout: 10
+      maxWait: 30000
+  mail:
+      host: CDXDMAIL01.cloud.epacdx
+      port: 25
+      properties:
+        mail:
+          smtp:
+            auth: false
+  hazelcast:
+    config: classpath:cef-hazelcast-cache-test.xml
+cdx:
+  registerEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterService
+  registerProgramFacilityEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterProgramFacilityService
+  registerSignEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterSignService
+  streamlinedRegistrationEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/StreamlinedRegistrationService
+  inboxClientConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterInboxServiceConditionalMTOM
+  pdfClientConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterPdfServiceConditionalMTOM
+  naas-token-url: https://naasdev.epacdxnode.net/xml/SecurityToken_v30.wsdl
+  naas-user: _REMOVED_
+  naas-password: _REMOVED_
+  naas-ip: 127.0.0.1
+  cdx-base-url: https://dev.epacdx.net
+  app-base-url: https://cdxappsdev.epacdx.net/cef-web
+zonky.test.database:
+  provider: zonky
+  initdb.properties.encoding: UTF-8
+excel-parser:
+    base-url: https://cdxappsdev.epacdx.net/excel-json-parser/api/v2
+virus-scanner:
+  endpoint: https://tools.epacdxnode.net/xml/validator_v30.wsdl
+network-nodes:
+  eis:
+    serviceUrl: https://devngn.epacdxnode.net/ngn-enws20/services/NetworkNode2Service
+    dataflow: CERS_v2
+scc:
+  sccwebservices-endpoint: https://sor-scc-api.epa.gov/sccwebservices/v1

@@ -1,0 +1,36 @@
+HELP.md
+/.run/
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+src/test/resources/application-unit_test.yml
+src/main/resources/application-dev.yml
+
+src/test/resources/cdxWebUser/cdxWebUser*.properties
+!src/test/resources/cdxWebUser/cdxWebUser.example.properties
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### VS Code ###
+.vscode/

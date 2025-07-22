@@ -1,0 +1,79 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="permitForm" >
+    <div class="modal-header">
+        <h4 class="modal-title">Create Permit</h4>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="permitNumberInput">Permit Number:</label>
+                    <app-required-asterisk [control]="permitForm.get('permitNumber')"></app-required-asterisk>
+                    <input id="permitNumberInput" formControlName="permitNumber" class="form-control">
+                    <app-validation-message [control]="permitForm.get('permitNumber')"></app-validation-message>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="permitTypeSelect">Permit Type:</label>
+                    <app-required-asterisk [control]="permitForm.get('permitType')"></app-required-asterisk>
+                    <select type="text" class="form-control" id="permitTypeSelect" formControlName="permitType" [compareWith]="formUtils.compareCode">
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let pt of permitTypeValues" [ngValue]="pt">{{pt.description}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="selectedtype().value.type === 'Other'">
+                <div class="form-group">
+                    <label for="otherDescriptionInput">Description:</label>
+                    <app-required-asterisk [control]="permitForm.get('otherDescription')"></app-required-asterisk>
+                    <input id="otherDescriptionInput" formControlName="otherDescription" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="startDateInput">Start/Renewal Date:</label>
+                    <app-required-asterisk [control]="permitForm.get('startDate')"></app-required-asterisk>
+                    <input type="date" id="startDateInput" formControlName="startDate" class="form-control">
+                    <app-validation-message [control]="permitForm.get('startDate')"></app-validation-message>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="endDateInput">End Date:</label>
+                    <app-required-asterisk [control]="permitForm.get('endDate')"></app-required-asterisk>
+                    <input type="date" id="endDateInput" formControlName="endDate" class="form-control">
+                    <app-validation-message [control]="permitForm.get('endDate')"></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="commentTextArea">Comment:</label>
+                    <textarea rows="3" class="form-control" maxlength="2000" id="commentTextArea" formControlName="comments"></textarea>
+                    <app-validation-message [control]="permitForm.get('comments')"></app-validation-message>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="onClose()" class="btn btn-success">Cancel</button>
+        <button type="button" (click)="onSubmit()" class="btn btn-primary">OK</button>
+    </div>
+</form>

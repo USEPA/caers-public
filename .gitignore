@@ -1,0 +1,8 @@
+
+/web-app
+/web-ui
+/cdx.profile
+/cef-web/cdx.profile
+
+/cef-web/src/main/resources/logback-test.xml
+.idea/

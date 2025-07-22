@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name : CER_FacilitySitePathv2.0.xsd Current Version Available At : http://www.exchangenetwork.net/schema/cer/2/0/CER_FacilitySitePath_v2.0.xsd 
+			Description : Identifies a collection of control devices at a facility that work in conjunction with each other to reduce emissions from a release point.
+			Developed by  : 	 Jonathan Miller, National Air Data Group (NADG)
+			Point of Contact :  NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+			Last Edited: March 18, 2020.			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Identification_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_ControlPathDefinition_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_ControlPollutant_v2.0.xsd"/>
+	<xsd:complexType name="SitePathDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:PathName" minOccurs="0"/>
+			<xsd:element ref="cer:PercentPathEffectiveness" minOccurs="0"/>			
+			<xsd:element ref="cer:PathDescription" minOccurs="0"/>
+			<xsd:element ref="cer:PathIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:ControlPathIdentification" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:ControlPathDefinition" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:ControlPathControlPollutant" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="FacilitySitePath" type="cer:SitePathDataType"/>
+</xsd:schema>

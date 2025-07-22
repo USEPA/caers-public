@@ -1,0 +1,47 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="naicsForm">
+  <div class="modal-header">
+    <h4 class="modal-title w-100">Search a NAICS Code to add to the facility</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <fa-icon class="mt-2 ml-2 mr-1" title="North American Industry Classification System code. The NAICS codes are U.S. Department of Commerce's codes for categorizing businesses by products or services. See: https://www.census.gov/eos/www/naics/." [icon]="['fas', 'question-circle']"></fa-icon>
+    Search NAICS Code: 
+    <input [attr.aria-multiline]="null" id="facilityNAICS" type="text" class="form-control" formControlName="selectedNaics" aria-label="search NAICS"
+    [ngbTypeahead]="searchNAICS" [inputFormatter]="naicsFormatter" [editable]="false" [resultFormatter]="naicsFormatter"/>
+    <app-validation-message [control]="naicsForm.get('selectedNaics')"></app-validation-message>
+    <div class="validation-message" *ngIf="naicsForm.errors?.invalidNaics">
+      Selected NAICS Code is invalid. 
+    </div>
+  
+    Is this the Primary NAICS for facility?
+      <select id="cbo-code-type" style="width: 150px"
+              class="form-control form-control-sm mr-3"
+              [(ngModel)]="selectedNaicsCodeType"
+              aria-label="select naics code type"
+              [ngModelOptions]="{standalone: true}">
+        <option value="PRIMARY">Primary</option>
+        <option value="SECONDARY">Secondary</option>
+        <option value="TERTIARY">Tertiary</option>
+      </select>
+      <span class="validation-message" *ngIf="existingPrimaryCode && selectedNaicsCodeType === naicsCodeType.PRIMARY" >Each facility must have only one NAICS code assigned as primary.</span>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onClose()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="onSubmit()">Submit</button>
+  </div>
+</form>

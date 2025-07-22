@@ -1,0 +1,68 @@
+<definitions xmlns:tns="http://www.exchangenetwork.net/wsdl/virusscan/1"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:typens="http://www.exchangenetwork.net/wsdl/virusscan/1"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             name="VirusScan" targetNamespace="http://www.exchangenetwork.net/wsdl/virusscan/1">
+    <types>
+        <schema xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="http://www.exchangenetwork.net/wsdl/virusscan/1" elementFormDefault="qualified">
+            <import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="https://www.w3.org/2005/05/xmlmime"/>
+            <simpleType name="PasswordType">
+                <xsd:restriction base="xsd:string"/>
+            </simpleType>
+            <element name="ScanFile">
+                <complexType>
+                    <sequence>
+                        <element name="userId" type="xsd:string"/>
+                        <element name="credential" type="typens:PasswordType"/>
+                        <element name="domain" type="xsd:string"/>
+                        <element name="transactionId" type="xsd:string"/>
+                        <!-- (JIM 2020-04-28) change to use MTOM -->
+                        <element xmlns:ns1="http://www.w3.org/2005/05/xmlmime" name="document"
+                                 ns1:expectedContentTypes="*/*"
+                                 type="xsd:base64Binary"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="ScanFileResponse">
+                <complexType>
+                    <sequence>
+                        <element name="return" type="xsd:string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+    <message name="ScanFile">
+        <part name="parameter" element="typens:ScanFile"/>
+    </message>
+    <message name="ScanFileResponse">
+        <part name="return" element="typens:ScanFileResponse"/>
+    </message>
+    <portType name="ScanFilePortType">
+        <operation name="ScanFile">
+            <documentation>Scan a document for potential viruses</documentation>
+            <input message="tns:ScanFile"/>
+            <output message="tns:ScanFileResponse"/>
+        </operation>
+    </portType>
+    <binding name="ScanFileBinding" type="tns:ScanFilePortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ScanFile">
+            <soap12:operation soapAction=""/>
+            <input>
+                <soap12:body use="literal" namespace="http://www.exchangenetwork.net/wsdl/virusscan/1"/>
+            </input>
+            <output>
+                <soap12:body use="literal" namespace="http://www.exchangenetwork.net/wsdl/virusscan/1"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="ScanFileService">
+        <documentation>Virus detection service</documentation>
+        <port name="ScanFilePortType" binding="tns:ScanFileBinding">
+            <soap12:address location="https://tools.epacdxnode.net/xml/VirusScan.wsdl"/>
+        </port>
+    </service>
+</definitions>

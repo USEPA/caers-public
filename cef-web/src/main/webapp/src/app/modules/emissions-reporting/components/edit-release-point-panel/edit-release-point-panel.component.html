@@ -1,0 +1,535 @@
+<!--
+ MIT License
+
+Copyright (c) 2025 EPA CAERS Project Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<form [formGroup]="releasePointForm">
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2" title="An identifier for the release point."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="releasePointIdentifier" class="ml-1 col-form-label"><strong>Release Point ID:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('releasePointIdentifier')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input [readonly]="releasePoint" type="text" class="form-control" id="releasePointIdentifier"
+                   formControlName="releasePointIdentifier" maxlength="20">
+            <app-validation-message [control]="releasePointForm.get('releasePointIdentifier')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.duplicateReleasePointIdentifier">
+                Release Point Identifier must be unique within the facility.
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2" title="Code that identifies the operating status of the control measure."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="releaseStatusCodeSelect" class="ml-1 col-form-label"><strong>Operating Status:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('operatingStatusCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" (ngModelChange)="onChange($event)" id="releaseStatusCodeSelect"
+                    formControlName="operatingStatusCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of operatingSubFacilityStatusValues"
+                        [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="releasePointForm.get('operatingStatusCode')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidStatusCodeTS">
+                If the facility site operating status is Temporarily Shutdown then each sub-facility component must also be either
+                Permanently Shutdown or Temporarily Shutdown.
+            </div>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidStatusCodePS">
+                If the facility site operating status is Permanently Shutdown then each sub-facility component must also be
+                Permanently Shutdown.
+            </div>
+        </div>
+    </div>
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2" title="Text description of release point, given by the facility."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="description" class="ml-1 col-form-label"><strong>Release Point Description:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <textarea rows="1" class="form-control" id="description" formControlName="description"
+                      maxlength="200"></textarea>
+            <app-validation-message [control]="releasePointForm.get('description')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The year the current release point operating status came into effect (i.e. changed status).  Required if Release Point Operating Status Code is anything other than &quot;Operating&quot;.  A control that operated at any time during the year is considered &quot;Operating&quot;, even if it was shut down for some of that year.  Must be between 1900 - 2050.  Cannot be a future year to the reporting year."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="statusYear" class="ml-1 col-form-label"><strong>Year Op Status Changed:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('statusYear')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="statusYear" formControlName="statusYear" maxlength="4">
+            <app-validation-message [control]="releasePointForm.get('statusYear')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2" title="Code that identifies the type of release point."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="releaseTypeCodeSelect" class="ml-1 col-form-label"><strong>Release Point Type:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('typeCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="releaseTypeCodeSelect" formControlName="typeCode"
+                    (change)="setFormValidationByReleasePointType()" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of releasePointTypeCode" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="releasePointForm.get('typeCode')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The measure of the horizontal distance to the nearest fence line of a property within which the release point is located.   Must be in a unit of measure of feet."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="fenceLineDistance" class="ml-1 col-form-label"><strong>Fence Line Distance
+                Measure:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input type="text" class="form-control" id="fenceLineDistance" formControlName="fenceLineDistance"
+                       maxlength="6">
+                <div class="input-group-append">
+                    <div class="input-group-text">FT</div>
+                </div>
+            </div>
+            <app-validation-message [control]="releasePointForm.get('fenceLineDistance')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3" *ngIf="releaseType !== releasePointType.FUGITIVE">
+            <fa-icon class="mt-2"
+                     title="Release point location latitude.  The measure of the angular distance on a parallel North or south of the equator."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="latitude" class="ml-1 col-form-label"><strong>Latitude Measure:</strong></label>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_AREA_TYPE">
+            <fa-icon class="mt-2"
+                     title="Fugitive Area only. Latitude from the South West corner of the facility blueprint.  Required if release point coordinates are reported.  The measure of the angular distance on a paralell North or south of the equator."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="latitude" class="ml-1 col-form-label"><strong>SW Corner Latitude Measure:</strong></label>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_3D_TYPE">
+            <fa-icon class="mt-2"
+                     title="Latitude of a point that represents the center of the facility footproint.  The 3-D fugitive is assumed to be a cube."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="latitude" class="ml-1 col-form-label"><strong>Center Latitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('latitude')"></app-required-asterisk>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_2D_TYPE">
+            <fa-icon class="mt-2"
+                     title="For 2-D fugitives, the latitude of the first set of two coordinates for the midpoints of opposing sides of the fugitive source."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="latitude" class="ml-1 col-form-label"><strong>Mid Point 1 Latitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('latitude')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="latitude" formControlName="latitude" maxlength="10">
+            <app-validation-message [control]="releasePointForm.get('latitude')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.get('latitude').errors?.invalidLatitude">
+                Release Point latitude must be within the {{tolerance}} tolerance range of Facility latitude
+                coordinate {{facilitySite.latitude}}.
+            </div>
+        </div>
+        <div class="col-sm-3" *ngIf="releaseType !== releasePointType.FUGITIVE">
+            <fa-icon class="mt-2"
+                     title="Release point location longitude.  The measure of the angular distance on a meridian east or west of the prime meridian."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="longitude" class="ml-1 col-form-label"><strong>Longitude Measure:</strong></label>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_AREA_TYPE">
+            <fa-icon class="mt-2"
+                     title="Fugitive Area only.  Longitude from the South West corner of the facility blueprint.  Required if release point coordinates are reported.  The measure of the angular distance on a meridian east or west of the prime meridian."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="longitude" class="ml-1 col-form-label"><strong>SW Corner Longitude Measure:</strong></label>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_3D_TYPE">
+            <fa-icon class="mt-2"
+                     title="Longitude of a point that represents the center of the facility footproint.  The 3-D fugitive is assumed to be a cube."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="longitude" class="ml-1 col-form-label"><strong>Center Longitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('longitude')"></app-required-asterisk>
+        </div>
+		<div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_2D_TYPE">
+            <fa-icon class="mt-2"
+                     title="For 2-D fugitives, the longitude of the first set of two coordinates for the midpoints of opposing sides of the fugitive source."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="longitude" class="ml-1 col-form-label"><strong>Mid Point 1 Longitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('longitude')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="longitude" formControlName="longitude" maxlength="11">
+            <app-validation-message [control]="releasePointForm.get('longitude')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.get('longitude').errors?.invalidLongitude">
+                Release Point longitude must be within the {{tolerance}} tolerance range of Facility longitude
+                coordinate {{facilitySite.longitude}}.
+            </div>
+        </div>
+    </div>
+
+	<div class="row pb-1" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_2D_TYPE">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="For 2-D fugitives, the latitude of the second set of two coordinates for the midpoints of opposing sides of the fugitive source."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="fugitiveMidPt2Latitude" class="ml-1 col-form-label"><strong>Mid Point 2 Latitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('fugitiveMidPt2Latitude')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="fugitiveMidPt2Latitude" formControlName="fugitiveMidPt2Latitude" maxlength="10">
+            <app-validation-message [control]="releasePointForm.get('fugitiveMidPt2Latitude')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.get('fugitiveMidPt2Latitude').errors?.invalidLatitude">
+                Release Point latitude must be within the {{tolerance}} tolerance range of Facility latitude
+                coordinate {{facilitySite.latitude}}.
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="For 2-D fugitives, the longitude of the second set of two coordinates for the midpoints of opposing sides of the fugitive source."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="fugitiveMidPt2Longitude" class="ml-1 col-form-label"><strong>Mid Point 2 Longitude Measure:</strong></label>
+			<app-required-asterisk [control]="releasePointForm.get('fugitiveMidPt2Longitude')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="fugitiveMidPt2Longitude" formControlName="fugitiveMidPt2Longitude" maxlength="11">
+            <app-validation-message [control]="releasePointForm.get('fugitiveMidPt2Longitude')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.get('fugitiveMidPt2Longitude').errors?.invalidLongitude">
+                Release Point longitude must be within the {{tolerance}} tolerance range of Facility longitude
+                coordinate {{facilitySite.longitude}}.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-10">
+			<div class="validation-message" *ngIf="releasePointForm.errors?.requiredCoordinate">
+                Latitude and Longitude must both, or neither, contain values in order to save.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-3" aria-hidden="true"></div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The velocity of an exit gas stream. If it is a stack release point then either Exit Gas Velocity Measure or Exit Gas Flow Rate is required. Must be between 0.001 ft/s and 1000 ft/s."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="exitGasVelocity" class="ml-1 col-form-label"><strong>Exit Gas Velocity Measure:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="exitGasVelocity" formControlName="exitGasVelocity"
+                   maxlength="9">
+            <app-validation-message [control]="releasePointForm.get('exitGasVelocity')"></app-validation-message>
+        </div>
+
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The unit of measure for the velocity of an exit gas stream value. Required if ExitGasVelocityMeasure is reported."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="exitGasVelocityUomCodeSelect" class="ml-1 col-form-label"><strong>Exit Gas Velocity
+                UoM:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="exitGasVelocityUomCodeSelect"
+                    formControlName="exitGasVelocityUomCode" (ngModelChange)="setGasVelocityRangeValidation()"
+                    [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of velocityUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="releasePointForm.get('exitGasVelocityUomCode')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidExitGasVelocityUomCode">
+                Exit Gas Velocity and Exit Gas Velocity UoM must both be reported for either to be accepted.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidComputedVelocity">
+                Calculated exit gas velocity is {{calculatedVelocity}} {{calculatedVelocityUom}}.
+                If {{stackVelocityDimensions}} reported, calculated exit gas velocity must be {{minVelocity}}-{{maxVelocity}} {{calculatedVelocityUom}}
+                using the formula Exit Gas Velocity = Exit Gas Flow Rate / {{stackVelocityFormula}}.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The value of the stack gas flow rate. If a stack release point then either Exit Gas Velocity Measure or Exit Gas Flow Rate is required. Flow rate must be consistent with velocity and not cause velocity to be out of range."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="exitGasFlowRate" class="ml-1 col-form-label"><strong>Exit Gas Flow Rate
+                Measure:</strong></label>
+         </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="exitGasFlowRate" formControlName="exitGasFlowRate"
+                   maxlength="17">
+            <app-validation-message [control]="releasePointForm.get('exitGasFlowRate')"></app-validation-message>
+        </div>
+
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The unit of measure for the stack gas flow rate value. Required if Release Point Exit Gas Flow Rate Measure is reported."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="exitGasFlowUomCodeSelect" class="ml-1 col-form-label"><strong>Exit Gas Flow Rate
+                UoM:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="exitGasFlowUomCodeSelect" formControlName="exitGasFlowUomCode"
+                    (ngModelChange)="setGasFlowRangeValidation()" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of flowUomValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="releasePointForm.get('exitGasFlowUomCode')"></app-validation-message>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidExitGasFlowUomCode">
+                Exit Gas Flow Rate and Exit Gas Flow Rate UoM must both be reported for either to be accepted.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidFlowRate">
+                Calculated exit gas flow rate is {{calculatedFlowRate}} {{calculatedFlowRateUom}}.
+                If {{stackDimension}} reported, Exit Gas Flow Rate reported must be within
+                5% of calculated exit gas flow rate using the formula Exit Gas Flow Rate =
+                Exit Gas Velocity * {{stackAreaDescription}}.
+            </div>
+            <div class="validation-message" *ngIf="releasePointForm.errors?.exitGasRateRequired">
+                Either Gas Velocity or Gas Flow Rate must be reported.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2"
+                     title="The temperature of an exit gas stream (measured in degrees Fahrenheit).  If it is a stack release point then Release Point Exit Gas Temperature Measure is required.  Must be between 30&#176; and 4000&#176;.  Must be in degrees Farenheit."
+                     [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="exitGasTemperature" class="ml-1 col-form-label"><strong>Exit Gas Temperature
+                Measure:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('exitGasTemperature')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input type="text" class="form-control" id="exitGasTemperature" formControlName="exitGasTemperature"
+                       maxlength="4">
+                <div class="input-group-append">
+                    <div class="input-group-text">&#8457;</div>
+                </div>
+            </div>
+            <app-validation-message [control]="releasePointForm.get('exitGasTemperature')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-3"></div>
+
+    <div *ngIf="releaseType !== releasePointType.FUGITIVE">
+
+        <div class="row pb-1">
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The height of the stack from the ground.  Required if Release Point Type Code is &quot;Stack&quot;  Must be between 1 and 1300.  Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="stackHeight" class="ml-1 col-form-label"><strong>Stack Height Measure:</strong></label>
+    		<app-required-asterisk [control]="releasePointForm.get('stackHeight')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="stackHeight" formControlName="stackHeight"
+                           maxlength="6">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+
+                </div>
+                <app-validation-message [control]="releasePointForm.get('stackHeight')"></app-validation-message>
+            </div>
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The internal diameter of the stack (measured in feet) at the release height. Required if Release Point Type Code is &quot;Stack&quot; and the stack shape is cylindrical.  Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="stackDiameter" class="ml-1 col-form-label"><strong>Stack Diameter Measure:</strong></label>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="stackDiameter" formControlName="stackDiameter"
+                           maxlength="7">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+
+                </div>
+                <app-validation-message [control]="releasePointForm.get('stackDiameter')"></app-validation-message>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-10">
+                <div class="validation-warning" *ngIf="diameterCheckHeightWarning?.length > 0">
+                    {{diameterCheckHeightWarning}}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row pb-1" aria-hidden="true">
+
+        </div>
+
+
+    </div>
+
+    <div *ngIf="releaseType === releasePointType.FUGITIVE; else isStack">
+        <div class="row pb-1">
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The fugitive release height above terrain of fugitive emissions.  Should be between 0 and 500.  Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="fugitiveHeight" class="ml-1 col-form-label"><strong>Fugitive Height Measure:</strong></label>
+				<app-required-asterisk [control]="releasePointForm.get('fugitiveHeight')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fugitiveHeight" formControlName="fugitiveHeight"
+                           maxlength="3">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+                </div>
+				<app-validation-message [control]="releasePointForm.get('fugitiveHeight')"></app-validation-message>
+            </div>
+            <div class="col-sm-3" *ngIf="!(releasePointForm.get('typeCode').value?.code === this.releasePointType.FUGITIVE_3D_TYPE || releasePointForm.get('typeCode').value?.code === this.releasePointType.FUGITIVE_2D_TYPE)">
+                <fa-icon class="mt-2"
+                         title="The orientation angle for the area in degrees from North, measured positive in the clockwise direction.  Should be between 0&#176; and 89&#176; inclusive."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="fugitiveAngle" style="font-size:90%;" class="ml-1 col-form-label"><strong>Fugitive Angle
+                    Measure (degrees azimuth):</strong></label>
+            </div>
+            <div class="col-sm-3" *ngIf="!(releasePointForm.get('typeCode').value?.code === this.releasePointType.FUGITIVE_3D_TYPE || releasePointForm.get('typeCode').value?.code === this.releasePointType.FUGITIVE_2D_TYPE)">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fugitiveAngle" formControlName="fugitiveAngle"
+                           maxlength="3">
+                </div>
+				<app-validation-message [control]="releasePointForm.get('fugitiveAngle')"></app-validation-message>
+            </div>
+        </div>
+
+        <div class="row pb-3">
+            <div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_AREA_TYPE">
+                <fa-icon class="mt-2"
+                         title="Fugitive Area only.  The length (measured in feet) of the fugitive release in the North-South direction as if the angle is zero degrees.  Should be between 1 and 10,000.  Must have a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="fugitiveLength" class="ml-1 col-form-label"><strong>Fugitive Length
+                    Measure:</strong></label>
+            </div>
+            <div class="col-sm-3" *ngIf="releasePointForm.get('typeCode').value?.code === releasePointType.FUGITIVE_AREA_TYPE">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fugitiveLength" formControlName="fugitiveLength"
+                           maxlength="8">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+                </div>
+                <app-validation-message
+                    [control]="releasePointForm.get('fugitiveLength')"></app-validation-message>
+            </div>
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The width of the fugitive release in the East-West direction as if the angle is zero degrees.  Should be between 1 and 10,000.  Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']">
+                </fa-icon>
+                <label for="fugitiveWidth" class="ml-1 col-form-label"><strong>Fugitive Width Measure:</strong></label>
+				<app-required-asterisk [control]="releasePointForm.get('fugitiveWidth')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fugitiveWidth" formControlName="fugitiveWidth"
+                           maxlength="8">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+                </div>
+                <app-validation-message
+                    [control]="releasePointForm.get('fugitiveWidth')"></app-validation-message>
+            </div>
+        </div>
+
+    </div>
+
+
+    <ng-template #isStack>
+        <div class="row pb-3">
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The stack length of the release in the North-South direction as if the angle is zero degrees.  Should be between 0.1 and 100.  Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="stackLength" class="ml-1 col-form-label"><strong>Stack Length Measure:</strong></label>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="stackLength" formControlName="stackLength" maxlength="6">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+                </div>
+                <app-validation-message [control]="releasePointForm.get('stackLength')"></app-validation-message>
+            </div>
+            <div class="col-sm-3">
+                <fa-icon class="mt-2"
+                         title="The stack widthe of the release in the East-West direction as if the angle is zero degrees.  Should be between 0.1 and 100.  Required if the release point type is &quot;Stack&quot; and the stack shape is cubelike or cuboidlike. Must be in a unit of measure of feet."
+                         [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="stackWidth" class="ml-1 col-form-label"><strong>Stack Width Measure:</strong></label>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="stackWidth" formControlName="stackWidth" maxlength="6">
+                    <div class="input-group-append">
+                        <div class="input-group-text">FT</div>
+                    </div>
+                </div>
+                <app-validation-message [control]="releasePointForm.get('stackWidth')"></app-validation-message>
+            </div>
+        </div>
+    </ng-template>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-10">
+            <div class="validation-message" *ngIf="releasePointForm.errors?.invalidDimensions">
+                {{ diameterOrLengthAndWidthMessage }}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row pb-6">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2" style="visibility: hidden;" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="releaseCommentsInput" class="ml-1 col-form-label"><strong>Comments:</strong></label>
+        </div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="form-control" style="height:100%;" id="releaseCommentsInput"
+                      formControlName="comments" maxlength="400"></textarea>
+            <app-validation-message [control]="releasePointForm.get('comments')"></app-validation-message>
+        </div>
+    </div>
+</form>
