@@ -1,0 +1,140 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="fileUploadForm">
+    <div class="card">
+        <div class="card-header">
+            <div class="font-weight-bold text-center">Excel Workbook Report Upload</div>
+        </div>
+        <div class="card-body">
+
+            <p>
+                Search for a Combined Air Emissions Reporting System upload file that
+                you would like to use for the
+                {{reportingYear}} Emissions Report for {{facility.name | stripPeriodEnding}}.
+                Please be aware that uploading a new report will remove any existing inventory data
+                for this reporting year and replace it with the file contents.
+            </p>
+
+            <div class="form-group">
+                <label for="file-excel-workbook" class="font-weight-bold" title="Excel Workbook is required.">
+                    <span>Excel Workbook</span>
+                    <span style="color: red">*</span>
+                </label>
+                <div class="custom-file">
+                    <input #workbookFile id="file-excel-workbook" type="file" formControlName="excelFileUpload"
+                        class="custom-file-input" (change)="onFileChanged($event.target.files)">
+                    <label for="file-excel-workbook" class="custom-file-label">Click to browse...</label>
+                    <app-validation-message [control]="fileUploadForm.controls.excelFileUpload"></app-validation-message>
+                    <div class="validation-message" *ngIf="fileUploadForm.errors?.invalidFileName">
+                        File name is not valid.  Please rename the file to include only letters, numbers, dots, dashes, underscores, parentheses, and spaces.  The file extension can only be 'xls' or 'xlsx'.
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="uploadFailed">
+                <div class="alert alert-danger" role="alert">
+                    <div class="h4 alert-heading">Workbook Upload Error</div>
+                    <p>The data in your workbook was not uploaded into the CAER application. Below is a list of data error(s) found after parsing the workbook "{{uploadFile}}".</p>
+                    <p class="mb-0">Please correct all data errors in the workbook and try again.</p>
+                </div>
+                <div class="text-validation-error">
+                    <div class="validation-user-errors"
+                        *ngIf="uploadUserErrors.length">
+                        <div class="h5 font-weight-bolder">
+                            <span>Data Error(s)</span>
+                            <button type="button" class="ml-2 btn btn-sm btn-link text-validation-error"
+                                    (click)="bsflags.showUserErrors = !bsflags.showUserErrors"
+                                    [attr.aria-expanded]="bsflags.showUserErrors" aria-controls="id-user-errors">
+                                <span *ngIf="bsflags.showUserErrors === false">Show List</span>
+                                <span *ngIf="bsflags.showUserErrors">Hide List</span>
+                            </button>
+                        </div>
+                        <div id="id-user-errors" [ngbCollapse]="bsflags.showUserErrors === false">
+                            <ol>
+                                <li *ngFor="let error of uploadUserErrors">
+                                    <span class="font-weight-bold mr-1">Sheet:</span>
+                                    <span [textContent]="error.worksheet"></span>
+                                    <span class="font-weight-bold ml-2 mr-1">Row:</span>
+                                    <span [textContent]="error.row"></span>
+                                    <span class="font-weight-bold ml-2 mr-1">Message:</span>
+                                    <span [textContent]="error.message"></span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="validation-system-errors"
+                        *ngIf="uploadSystemErrors.length">
+                        <div class="h5 font-weight-bolder">
+                            <span>Additional Diagnostic Error(s)</span>
+                            <button type="button" class="ml-2 btn btn-sm btn-link text-validation-error"
+                                    (click)="bsflags.showSystemErrors = !bsflags.showSystemErrors"
+                                    [attr.aria-expanded]="bsflags.showSystemErrors" aria-controls="id-system-errors">
+                                <span *ngIf="bsflags.showSystemErrors === false">Show List</span>
+                                <span *ngIf="bsflags.showSystemErrors">Hide List</span>
+                            </button>
+                        </div>
+                        <div id="id-system-errors" [ngbCollapse]="bsflags.showSystemErrors === false">
+                            <ol>
+                                <li *ngFor="let error of uploadSystemErrors">
+                                    <span class="font-weight-bold ml-2 mr-1">Message:</span>
+                                    <span [textContent]="error.message"></span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <div class="d-flex flex-row justify-content-end">
+                <a href="javascript:void(0);"
+                class="btn btn-primary mr-2"
+                [routerLink]="['/facility', facility.id, 'report']">
+                    <span>Cancel</span>
+                </a>
+                <button type="button" class="btn btn-success"
+                        [ngClass]="{'disable-click' : selectedFile === null}"
+                        [disabled]="selectedFile === null"
+                        (click)="onUploadClick()">
+                    <span>Upload</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<ng-template #PleaseWaitModal>
+    <div class="modal-header bg-info text-white">
+        <div class="modal-title h4"><strong>Bulk Upload</strong></div>
+    </div>
+    <div class="modal-body">
+        <div class="mb-2">Please wait this could take a minute or two.</div>
+        <div class="mb-2 font-weight-bold">
+            <span [textContent]="pleaseWait.message"></span>
+            <span class="ml-2" [textContent]="pleaseWait.progress + '%'"></span>
+        </div>
+        <div class="progress" style="height: 40px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                 role="progressbar" [style.width]="pleaseWait.progress + '%'"
+                 [attr.aria-valuenow]="pleaseWait.progress" aria-valuemin="0" aria-valuemax="100">
+            </div>
+        </div>
+    </div>
+</ng-template>

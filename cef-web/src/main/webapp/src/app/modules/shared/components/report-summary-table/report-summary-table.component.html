@@ -1,0 +1,90 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="mh-100 overflow-auto" style="overflow-y: auto;" tabindex="0">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-cef-medium">
+            <tr>
+                <th scope="col" sortable="pollutantName" (sort)="onSort($event)">Pollutant</th>
+                <th scope="col" sortable="pollutantType" (sort)="onSort($event)">Type</th>
+                <th scope="col" sortable="fugitiveTonsTotal" (sort)="onSort($event)">Fugitive Amount</th>
+                <th scope="col" sortable="stackTonsTotal" (sort)="onSort($event)">Stack Amount</th>
+                <th scope="col" >Units of Measure</th>
+                <th scope="col" sortable="emissionsTonsTotal" (sort)="onSort($event)">{{emissionsReportYear}} Reported Emissions</th>
+                <th scope="col" sortable="previousYearTonsTotal" (sort)="onSort($event)">Previous Year Reported Emissions</th>
+                <th scope="col" sortable="reportYear" (sort)="onSort($event)">Previous Submittal Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let report of nonDormantData">
+                <td>{{ report.pollutantName }}</td>
+                <td>{{ report.pollutantType }}</td>
+                <td>{{ report.fugitiveTonsTotal}}</td>
+                <td>{{ report.stackTonsTotal}}</td>
+                <td>Tons</td>
+                <td>{{ report.emissionsTonsTotal}}</td>
+                <td *ngIf="report.previousYear; else nullPreviousYear">{{ report.previousYearTonsTotal }}</td>
+                <td>{{ report.previousYear}}</td>
+            </tr>
+            <tr *ngFor="let report of radiationData">
+                <td>{{ report.pollutantName }}</td>
+                <td>{{ report.pollutantType }}</td>
+                <td>{{ report.fugitiveTotal}}</td>
+                <td>{{ report.stackTotal}}</td>
+                <td>Curies</td>
+                <td>{{ report.emissionsTotal}}</td>
+                <td *ngIf="report.previousYear; else nullPreviousYear">{{ report.previousYearTonsTotal }}</td>
+                <td>{{ report.previousYear}}</td>
+            </tr>
+            <tr class="font-weight-bold" data-cy="reportSummaryTotals">
+                <td>Total Emissions (Tons)<span class="note" *ngIf="radiationData && radiationData.length > 0"><br/>Total Emissions do not include Radionuclides (Radioactivity -including Radon)</span></td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>{{ getPollutantTonsTotal() }}</td>
+                <td>{{ getPreviousPollutantTonsTotal() }}</td>
+                <td>--</td>
+            </tr>
+            <tr>
+                <td colspan="8" style="background-color: #b4bcc2;">
+                  <div
+                    (click)="toggleDormants()" style="cursor: pointer; font-size: 0.9rem; font-weight: bold;">
+                    <span [ngClass]="{ rotated: showDormants }"><fa-icon class="mt-2" [icon]="['fas', 'caret-right']"></fa-icon></span>
+                    <!-- {{ showDormants ? "Hide " : "Show " }} -->
+                    Dormant Pollutants
+                  </div>
+                </td>
+              </tr>
+            <ng-container *ngIf="showDormants">
+                <tr *ngFor="let report of dormantData">
+                    <td>{{ report.pollutantName }}</td>
+                    <td>{{ report.pollutantType }}</td>
+                    <td>{{ report.fugitiveTonsTotal}}</td>
+                    <td>{{ report.stackTonsTotal}}</td>
+                    <td>Tons</td>
+                    <td>{{ report.emissionsTonsTotal}}</td>
+                    <td *ngIf="report.previousYear; else nullPreviousYear">{{ report.previousYearTonsTotal }}</td>
+                    <td>{{ report.previousYear}}</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+    <ng-template #nullPreviousYear>
+        <td>None Reported</td>
+    </ng-template>
+
+</div>

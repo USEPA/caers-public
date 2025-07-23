@@ -1,0 +1,38 @@
+[
+	{
+		"id" : 1,
+		"unitId" : "001",
+		"description" : "Boiler 001",
+		"unitType" : {
+			"code" : "100",
+			"description" : "Boiler"
+		},
+		"processes" : [
+			{
+				"id" : 1,
+				"description" : "Process 007",
+				"sourceClassificationCode" : "10320587",
+				"releasePoints" : [
+					{
+						"id" : 1,
+						"percent" : 100,
+						"releasePoint" : {
+							"id": 1,
+							"description": "Release Point 002",
+							"typeCode": "Vertical"
+						}
+					}
+				]
+			}
+		]
+	}, {
+		"id" : 2,
+		"unitId" : "001",
+		"description" : "Turbine 001",
+		"unitType" : {
+			"code" : "120",
+			"description" : "Turbine"
+		},
+		"processes" : []
+	}
+]

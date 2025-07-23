@@ -1,0 +1,135 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+
+  <div class="card mb-3">
+    <div class="card-header text-center">
+      <strong>EIS Transaction Information</strong>
+    </div>
+    <div class="card-body">
+      <div class="form-inline">
+
+      <label for="id-filter-status" class="col-form-label mr-2">
+         <strong>Submission Status:</strong>
+      </label>
+      <select id="id-filter-status"
+              class="mr-3 form-control form-control-sm"
+              style="width: 150px"
+              [formControl]="statusFilter">
+         <option value=""></option>
+         <option *ngFor="let item of (availableStatuses | sortBy:'':'asc')"
+                 [value]="item">{{ item }}</option>
+      </select>
+
+      <label for="id-filter-text" class="col-form-label mr-2">
+         <strong>Filter Table:</strong>
+      </label>
+      <div class="input-group">
+         <input id="id-filter-text" type="text" placeholder="Search"
+                class="form-control form-control-sm"
+                [formControl]="txtFilter"/>
+         <div class="input-group-append">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Clear filter"
+                    (click)="onClearFilterClick()">
+               <fa-icon icon="times"></fa-icon>
+            </button>
+         </div>
+      </div>
+   </div>
+      <div class="mh-100 overflow-auto" *ngIf="tableData">
+        <table class="table table-sm table-striped table-bordered">
+          <thead class="thead-cef-medium">
+            <tr>
+              <th scope="col">Select</th>
+              <th scope="col" sortable="createdDate" (sort)="onSort($event)">Date</th>
+              <th scope="col" sortable="transactionId" (sort)="onSort($event)">Transaction ID</th>
+              <th scope="col" sortable="eisSubmissionStatus" (sort)="onSort($event)">Transaction Type</th>
+              <th scope="col" sortable="submitterName" (sort)="onSort($event)">User</th>
+              <th scope="col">Attach Report</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of tableItems">
+              <td class="text-center">
+                <input type="checkbox"
+                       [attr.aria-label]="item.transactionId"
+                       class="form-check-inline mr-0"
+                       [(ngModel)]="item.checked" />
+              </td>
+              <td>
+                {{item.createdDate | date:'short'}}
+              </td>
+              <td>
+                
+                <ng-container *ngIf="item.attachment && item.attachment.id">
+                  <a routerLink="." (click)="download(item.attachment)">{{item.transactionId}}</a>
+                </ng-container>
+                <ng-container *ngIf="!(item.attachment && item.attachment.id)">
+                  {{item.transactionId}}
+                </ng-container>
+              </td>
+              <td>{{item.eisSubmissionStatus}}</td>
+              <td>{{item.submitterName}}</td>
+              <td>
+                <div class="d-flex flex-row justify-content-between">
+                  <div>
+                    <ng-container *ngIf="item.attachment && item.attachment.id">
+                      {{ item.attachment.fileName }}
+                    </ng-container>
+                  </div>
+                  <div>
+                    <ng-container *ngIf="item.attachment && item.attachment.id">
+                      <button type="button" class="btn btn-link"
+                              (click)="openDeleteModal(item.attachment.id, item.attachment.fileName)"
+                              [attr.title]="'delete attachment' + item.attachment.fileName">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                      </button>
+                      <span title="You must delete the existing attachment to upload another">
+                        <button type="button" class="btn btn-link" disabled>
+                          <fa-icon icon="upload"></fa-icon>
+                        </button>
+                      </span>
+                    </ng-container>
+                    <ng-container *ngIf="!(item.attachment && item.attachment.id)">
+                      <button type="button" class="btn btn-link" (click)="openAttachmentModal(item.id)"
+                              title="Attach Feedback Report">
+                        <fa-icon icon="upload"></fa-icon>
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col text-right">
+            <button type="button" class="btn btn-success" (click)="openTransactionDeleteModal()" [disabled]="!selectedTransactions()?.length">
+               Delete transactions
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

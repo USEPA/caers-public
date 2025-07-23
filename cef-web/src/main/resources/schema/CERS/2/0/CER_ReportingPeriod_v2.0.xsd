@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_ReportingPeriod_v2.0.xsd
+		        Current Version Available At : http://www.exchangenetwork.net/schema/cer/2/0/CER_ReportingPeriod_v2.0.xsd
+		        Description   : Identifies the reporting period for which emissions and related activity data are submitted.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_OperatingDetails_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_SupplementalCalculationParameter_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Emissions_v2.0.xsd"/>
+	<xsd:complexType name="ReportingPeriodDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:ReportingPeriodTypeCode"/>
+			<xsd:element ref="cer:EmissionOperatingTypeCode" minOccurs="0"/>
+			<xsd:element ref="cer:StartDate" minOccurs="0"/>
+			<xsd:element ref="cer:EndDate" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationParameterTypeCode" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationParameterValue" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationParameterUnitofMeasure" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationMaterialCode" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationDataYear" minOccurs="0"/>
+			<xsd:element ref="cer:CalculationDataSource" minOccurs="0"/>
+			<xsd:element ref="cer:ReportingPeriodComment" minOccurs="0"/>
+			<xsd:element ref="cer:OperatingDetails" minOccurs="0"/>
+			<xsd:element ref="cer:SupplementalCalculationParameter" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:ReportingPeriodEmissions" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ReportingPeriod" type="cer:ReportingPeriodDataType"/>
+</xsd:schema>

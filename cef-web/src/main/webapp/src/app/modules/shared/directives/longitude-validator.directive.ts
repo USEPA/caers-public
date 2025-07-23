@@ -1,0 +1,40 @@
+/*
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+*/
+import { Directive } from '@angular/core';
+import { ValidatorFn, AbstractControl, Validator, NG_VALIDATORS } from '@angular/forms';
+
+export function longitudeValidator(): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    if (!control.value) {
+      return null;
+    }
+    const result = ((control.value >= -180 && control.value <= -64) || (control.value >= 140 && control.value <= 180));
+    return result ? null : {longitude: {value: control.value}};
+  };
+}
+
+@Directive({
+  selector: '[appLegacyUomValidator]',
+  providers: [{provide: NG_VALIDATORS, useExisting: LongitudeValidatorDirective, multi: true}]
+})
+export class LongitudeValidatorDirective implements Validator {
+
+  validate(control: AbstractControl): {[key: string]: any} | null {
+    return longitudeValidator()(control);
+  }
+
+}

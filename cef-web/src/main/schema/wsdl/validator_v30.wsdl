@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<definitions  name ='validator'   targetNamespace = 'http://www.exchangenetwork.net/wsdl/validator/3'
+     xmlns:tns='http://www.exchangenetwork.net/wsdl/validator/3'
+     xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+     xmlns:typens="http://www.exchangenetwork.net/schema/validator/3"
+     xmlns='http://schemas.xmlsoap.org/wsdl/' >
+  <types>
+    <schema targetNamespace='http://www.exchangenetwork.net/schema/validator/3'
+      xmlns='http://www.w3.org/2001/XMLSchema'
+      xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+      elementFormDefault='qualified'>
+      <simpleType name="SchemaType">
+        <xsd:restriction base='xsd:string'>
+            <enumeration value="ACE_EV_CERTFD_MPRT_RGSTRTN_REF_v1_0"/>
+            <enumeration value="ACE_EV_XMPT_MPRT_RGSTRTN_REF_v1_0"/>
+            <enumeration value="ACE_NDSTRY_MODL_YR_AVLBLT_REF_v1_0"/>
+            <enumeration value="ACE_ODS_IOR_REF_v1_0"/>
+            <enumeration value="ACE_PSTCD_PRDCR_REF_v1_0"/>
+            <enumeration value="ACE_PSTCD_REF_v1_0"/>
+            <enumeration value="ACE_WEITS_REF_v1_0"/>
+            <enumeration value="ACE_EXPORT_REPORT_v1_0"/>
+            <enumeration value="AQS_Publishing_v1_0"/>
+            <enumeration value="AQS_Submission_v1_0"/>
+            <enumeration value="AQS_Submission_v2_0"/>
+            <enumeration value="AQS_Submission_v2_2"/>
+            <enumeration value="AQS_Submission_v2_2_header2"/>
+            <enumeration value="AQS_Submission_v3_0"/>
+            <enumeration value="AQS_Submission_v3_0_header2"/>
+            <enumeration value="Beaches_v2_0"/>
+            <enumeration value="Beaches_v2_1"/>
+            <enumeration value="Beaches_v2_2"/>
+            <enumeration value="Beaches_v2_3"/>
+            <enumeration value="Beaches_v2_4"/>
+            <enumeration value="CAFO_v1_0"/>
+            <enumeration value="EIS_v1_0"/>
+            <enumeration value="EMTS_v1_0"/>
+            <enumeration value="ENDS"/>
+            <enumeration value="FRS_v2_2"/>
+            <enumeration value="FRS_v2_3"/>
+            <enumeration value="FacID_v3.0"/>
+            <enumeration value="GEO_v1_0"/>
+            <enumeration value="ICIS_v2_0"/>
+            <enumeration value="ICIS_v3_0"/>
+            <enumeration value="ICIS_v4_0"/>
+            <enumeration value="ICIS_v5_0"/>
+            <enumeration value="ICIS_v5_7"/>
+            <enumeration value="ICIS_v5_8"/>
+            <enumeration value="ICIS_v5_9"/>
+            <enumeration value="IR_ATTAINS_v0_4"/>
+            <enumeration value="IR_ATTAINS_v1_0"/>
+            <enumeration value="NEI_AreaNonroad_v3_0"/>
+            <enumeration value="NEI_Biogenic_v3_0"/>
+            <enumeration value="NEI_Onroad_v3_0"/>
+            <enumeration value="NEI_Point_v3_0"/>
+            <enumeration value="NetDMR_v1_0"/>
+            <enumeration value="NHDEvent_v2"/>
+            <enumeration value="NHDEvent_v2_1"/>
+            <enumeration value="OWIR-ATT_v2"/>
+            <enumeration value="PNWWQXMeasurementsList_v1_3"/>
+            <enumeration value="RCRA_v1_0"/>
+            <enumeration value="RCRA_v3_0"/>
+            <enumeration value="RCRA_v4_0"/>
+            <enumeration value="RCRA_v5_0"/>
+            <enumeration value="RCRA_v5_10"/>
+            <enumeration value="RCRA_v5_4"/>
+            <enumeration value="RCRA_v5_5"/>
+            <enumeration value="RCRA_v5_7"/>
+            <enumeration value="RCRA_v5_8"/>
+            <enumeration value="RCRA_v5_9"/>
+            <enumeration value="SDWA_v4_0"/>
+            <enumeration value="SmartLabel_Pesticide"/>
+            <enumeration value="SmartLabel_CFR180"/>
+            <enumeration value="SmartLabel_Common"/>
+            <enumeration value="SmartLabel_Index"/>
+            <enumeration value="TRI_v1_1"/>
+            <enumeration value="TRI_v1_2"/>
+            <enumeration value="TRI_v2_0"/>
+            <enumeration value="TRI_v3_0"/>
+            <enumeration value="TRI_v4_0"/>
+            <enumeration value="TRI_v5_0"/>
+            <enumeration value="UIC_draft_v2_0"/>
+            <enumeration value="UIC_v1_0"/>
+            <enumeration value="UIC_v2_0"/>
+            <enumeration value="VERIFY_MotorcycleSubmission_v2_0"/>
+            <enumeration value="VERIFY_LD_FE_CAFE_v1_0"/>
+            <enumeration value="VERIFY_LD_FE_LABEL_v1_0"/>
+            <enumeration value="VERIFY_LD_IUVP_v1_0"/>
+            <enumeration value="VERIFY_LD_CD_CARLINE_v1_0"/>
+            <enumeration value="VERIFY_LD_CD_CERTDATA_v1_0"/>
+            <enumeration value="VERIFY_LD_CD_EVAP_v1_0"/>
+            <enumeration value="VERIFY_LD_CERTREQ_v1_0"/>
+            <enumeration value="VERIFY_LD_CFT_DI_v1_0"/>
+            <enumeration value="VERIFY_LD_CFT_SS_v1_0"/>
+            <enumeration value="VERIFY_LD_CFT_SI_v1_0"/>
+            <enumeration value="VERIFY_LD_CTD_FP_v1_0"/>
+            <enumeration value="VERIFY_LD_CTD_TI_v1_0"/>
+            <enumeration value="VERIFY_LD_CTD_VI_v1_0"/>
+            <enumeration value="VERIFY_Locomotive_v1_0"/>
+            <enumeration value="VERIFY_CommonServices_v1_0"/>
+            <enumeration value="WAD_v1_0"/>
+            <enumeration value="WCIT"/>
+            <enumeration value="WQX_v1_0"/>
+            <enumeration value="WQX_v2_0"/>
+            <enumeration value="WQX_v2_2"/>
+            <enumeration value="WQX_v3_0"/>
+        </xsd:restriction>
+      </simpleType>
+      <simpleType name="SchematronType">
+        <xsd:restriction base='xsd:string'>
+          <enumeration value="AQS_Submission_v2_0"/>
+          <enumeration value="AQS_Submission_v1_1"/>
+          <enumeration value="NEI_AreaNonroad_v3_0"/>
+          <enumeration value="NEI_Biogenic_v3_0"/>
+          <enumeration value="NEI_Onroad_v3_0"/>
+          <enumeration value="NEI_Point_v3_0"/>
+          <enumeration value="OWWQX_v1_0"/>
+          <enumeration value="VERIFY_MotorcycleSubmission_v2_0"/>
+          <enumeration value="UIC_v1_0"/>
+          <enumeration value="UIC_v2_0"/>
+          <enumeration value="UIC_draft_v2_0"/>
+      <enumeration value="Recovery_v1_0"/>
+    <enumeration value="SmartLabel_Pesticide"/>
+    <enumeration value="SmartLabel_Common"/>
+    <enumeration value="SmartLabel_CFR180"/>
+    <enumeration value="SmartLabel_Index"/>
+        <enumeration value="SmartLabel_Pesticide_DEV"/>
+    <enumeration value="SmartLabel_Common_DEV"/>
+    <enumeration value="SmartLabel_CFR180_DEV"/>
+    <enumeration value="SmartLabel_Index_DEV"/>
+        </xsd:restriction>
+      </simpleType>
+      <simpleType name="TransformType">
+        <xsd:restriction base='xsd:string'>
+          <enumeration value="UIC_v1_0Filter"/>
+      <enumeration value="UIC_v2_0Filter"/>
+        </xsd:restriction>
+      </simpleType>
+      <simpleType name="ValidationType">
+        <xsd:restriction base='xsd:string'>
+          <enumeration value="schema"/>
+          <enumeration value="schematron"/>
+          <enumeration value ="virusscan"/>
+          <enumeration value="all"/>
+        <enumeration value="complete"/>
+
+        </xsd:restriction>
+      </simpleType>      
+      <simpleType name="DocumentFormat">
+        <xsd:restriction base='xsd:string'>
+          <enumeration value="XML"/>
+          <enumeration value="ZIP"/>
+    <enumeration value="xml"/>
+          <enumeration value="zip"/>
+        <enumeration value="BIN"/>
+        </xsd:restriction>
+      </simpleType>
+      <simpleType name="PasswordType">
+        <xsd:restriction base='xsd:string'>
+        </xsd:restriction>
+      </simpleType>
+      <element name="NodeFaultDetailType">
+        <complexType>
+          <sequence>
+            <element name="errorCode" type="xsd:string" minOccurs="1" maxOccurs="1" nillable="false"/>
+            <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1" nillable="false"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- message definitions-->
+      <element name='ValidateDocument'>
+        <complexType>
+          <sequence>
+            <element name='userId' type='xsd:string'/>
+            <element name='password' type='typens:PasswordType'/>
+            <element name='domain' type='xsd:string'/>
+            <element name='validationType' type='typens:ValidationType'/>
+            <element name='documentType' type='typens:SchemaType'/>
+            <element name='xmlDocument' type='xsd:base64Binary' xmime:expectedContentTypes='*/*'/>
+            <element name='documentFormat' type='typens:DocumentFormat'/>
+            <element name='sendResultTo' type='xsd:string'/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ValidateDocumentResponse">
+        <complexType>
+          <sequence>
+            <element name="return" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SchemaValidate">
+        <complexType>
+          <sequence>
+            <element name='userId' type='xsd:string'/>
+            <element name='password' type='typens:PasswordType'/>
+            <element name='documentType' type='typens:SchemaType'/>
+            <element name='xmlDocument' type='xsd:base64Binary' xmime:expectedContentTypes='*/*'/>
+            <element name='documentFormat' type='typens:DocumentFormat'/>
+            <element name='sendResultTo' type='xsd:string'/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SchemaValidateResponse">
+        <complexType>
+          <sequence>
+            <element name="return" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <element name="SchematronValidate">
+        <complexType>
+          <sequence>
+            <element name='userId' type='xsd:string'/>
+            <element name='password' type='typens:PasswordType'/>
+            <element name='documentType' type='typens:SchematronType'/>
+            <element name='xmlDocument' type='xsd:base64Binary' xmime:expectedContentTypes='*/*'/>
+            <element name='documentFormat' type='typens:DocumentFormat'/>
+            <element name='sendResultTo' type='xsd:string'/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SchematronValidateResponse">
+        <complexType>
+          <sequence>
+            <element name="return" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+
+
+      <element name="TransformFile">
+        <complexType>
+          <sequence>
+            <element name='userId' type='xsd:string'/>
+            <element name='password' type='typens:PasswordType'/>
+            <element name='styleSheet' type='typens:TransformType'/>
+            <element name='xmlDocument' type='xsd:base64Binary' xmime:expectedContentTypes='*/*'/>
+            <element name='documentFormat' type='typens:DocumentFormat'/>
+            <element name='sendResultTo' type='xsd:string'/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="TransformFileResponse">
+        <complexType>
+          <sequence>
+            <element name="return" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="ValidateDocument" >
+    <part name="parameter" element="typens:ValidateDocument"/>
+  </message>
+  <message name="ValidateDocumentResponse">
+    <part name="return" element="typens:ValidateDocumentResponse"/>
+  </message>
+  <message name="SchemaValidate">
+    <part name="parameter" element="typens:SchemaValidate"/>
+  </message>
+  <message name="SchemaValidateResponse">
+    <part name="return" element="typens:SchemaValidateResponse"/>
+  </message>
+  <message name="SchematronValidate">
+    <part name="parameter" element="typens:SchematronValidate"/>
+  </message>
+  <message name="SchematronValidateResponse">
+    <part name="return" element="typens:SchematronValidateResponse"/>
+  </message>
+  <message name="TransformFile">
+    <part name="parameter" element="typens:TransformFile"/>
+  </message>
+  <message name="TransformFileResponse">
+    <part name="return" element="typens:TransformFileResponse"/>
+  </message>
+  <!-- Fault message -->
+  <message name="NodeFaultMessage">
+    <part name="fault" element="typens:NodeFaultDetailType"/>
+  </message>
+
+  <portType name='ValidatorPortType3'>
+    <operation name='SchemaValidate'>
+      <documentation>Validate an XML document using schema files</documentation>
+      <input message='tns:SchemaValidate' />
+      <output message='tns:SchemaValidateResponse' />
+      <fault name="NodeFaultDetail" message="tns:NodeFaultMessage"/>
+    </operation>
+    <operation name='SchematronValidate'>
+      <documentation>Validate an XML document using schematron flie</documentation>
+      <input message='tns:SchematronValidate' />
+      <output message='tns:SchematronValidateResponse' />
+      <fault name="NodeFaultDetail" message="tns:NodeFaultMessage"/>
+    </operation>
+    <operation name='ValidateDocument'>
+      <documentation>Validate an XML document using xml schema and schematron</documentation>
+      <input message='tns:ValidateDocument' />
+      <output message='tns:ValidateDocumentResponse' />
+      <fault name="NodeFaultDetail" message="tns:NodeFaultMessage"/>
+    </operation>
+    <operation name='TransformFile'>
+      <documentation>Transform an XML document using XSLT</documentation>
+      <input message='tns:TransformFile' />
+      <output message='tns:TransformFileResponse' />
+      <fault name="NodeFaultDetail" message="tns:NodeFaultMessage"/>
+    </operation>
+
+  </portType>
+  <binding name='ValidatorBinding3' type='tns:ValidatorPortType3' >
+
+    <!-- we are using document/literal style for Node 2.0 interface. -->
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="ValidateDocument" >
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3" />
+      </input>
+      <output>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </output>
+      <fault name="NodeFaultDetail">
+        <soap12:fault name="NodeFaultDetail" use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </fault>
+    </operation>
+    <operation name="SchemaValidate" >
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3" />
+      </input>
+      <output>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </output>
+      <fault name="NodeFaultDetail">
+        <soap12:fault name="NodeFaultDetail" use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </fault>
+    </operation>
+
+    <operation name="SchematronValidate" >
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3" />
+      </input>
+      <output>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </output>
+      <fault name="NodeFaultDetail">
+        <soap12:fault name="NodeFaultDetail" use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </fault>
+    </operation>
+
+    <operation name="TransformFile" >
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3" />
+      </input>
+      <output>
+        <soap12:body use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </output>
+      <fault name="NodeFaultDetail">
+        <soap12:fault name="NodeFaultDetail" use="literal" namespace="http://www.exchangenetwork.net/schema/validator/3"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name='Validator' >
+    <documentation>A set of xml validattion services for the National Environmental Information Exchange Network (NEIEN)</documentation>
+    <port name='ValidatorPortType3' binding='tns:ValidatorBinding3' >
+      <soap12:address location='https://cdxtools.epa.gov/xml/validator_v30.wsdl' />
+    </port>
+  </service>
+</definitions>

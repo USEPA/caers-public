@@ -1,0 +1,1 @@
+ALTER TABLE release_point ALTER COLUMN description DROP NOT NULL;

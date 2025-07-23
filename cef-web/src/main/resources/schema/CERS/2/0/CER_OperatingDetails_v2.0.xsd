@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_OperatingDetails_v2.0.xsd
+        		Current Version Available At :  http://www.exchangenetwork.net/schema/cer/2/0/CER_OperatingDetails_v2.0.xsd
+		        Description   : Identifies the typical operating schedule for the process during the reporting period.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:complexType name="OperatingDetailsDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:ActualHoursPerPeriod" minOccurs="0"/>
+			<xsd:element ref="cer:AverageDaysPerWeek" minOccurs="0"/>
+			<xsd:element ref="cer:AverageHoursPerDay" minOccurs="0"/>
+			<xsd:element ref="cer:AverageWeeksPerPeriod" minOccurs="0"/>
+			<xsd:element ref="cer:PercentWinterActivity" minOccurs="0"/>
+			<xsd:element ref="cer:PercentSpringActivity" minOccurs="0"/>
+			<xsd:element ref="cer:PercentSummerActivity" minOccurs="0"/>
+			<xsd:element ref="cer:PercentFallActivity" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="OperatingDetails" type="cer:OperatingDetailsDataType"/>
+</xsd:schema>

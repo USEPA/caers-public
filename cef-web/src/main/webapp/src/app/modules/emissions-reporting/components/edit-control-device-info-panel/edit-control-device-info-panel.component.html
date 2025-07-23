@@ -1,0 +1,186 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="controlDeviceForm">
+    <div class="row pb-1">
+
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The identifier of the control." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="controlIdentifierInput" class="ml-1 col-form-label" ><strong>Control ID:</strong></label>
+            <app-required-asterisk [control]="controlDeviceForm.get('identifier')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input [readonly]="control" type="text" class="form-control" maxlength="20" id="controlIdentifierInput" formControlName="identifier">
+            <app-validation-message [control]="controlDeviceForm.get('identifier')"></app-validation-message>
+            <div class="validation-message" *ngIf="controlDeviceForm.errors?.duplicateControlIdentifier">
+                Control Identifier must be unique within the facility.
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Code that identifies the operating status of the control measure." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="controlStatusCodeSelect" class="ml-1 col-form-label"><strong>Operating Status:</strong></label>
+            <app-required-asterisk [control]="controlDeviceForm.get('operatingStatusCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="controlStatusCodeSelect" (ngModelChange)="onChange($event)" formControlName="operatingStatusCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of subFacilityOperatingStatusValues" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="controlDeviceForm.get('operatingStatusCode')"></app-validation-message>
+            <div class="validation-message" *ngIf="controlDeviceForm.errors?.invalidStatusCodeTS">
+                If the facility site operating status is Temporarily Shutdown then each sub-facility component must also be either Permanently Shutdown or Temporarily Shutdown.
+            </div>
+            <div class="validation-message" *ngIf="controlDeviceForm.errors?.invalidStatusCodePS">
+                If the facility site operating status is Permanently Shutdown then each sub-facility component must also be Permanently Shutdown.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="ml-2 mt-2" title="Code that describes the control measure." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="controlMeasureCodeSelect" class="ml-1 col-form-label"><strong>Control Measure:</strong></label>
+            <app-required-asterisk [control]="controlDeviceForm.get('controlMeasureCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <select type="text" class="form-control" id="controlMeasureCodeSelect" formControlName="controlMeasureCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of controlMeasureCode" [ngValue]="opt">{{opt.description}}</option>
+            </select>
+            <app-validation-message [control]="controlDeviceForm.get('controlMeasureCode')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The year the current control operating status came into effect (i.e. changed status).  Required if Control Status Code is anything other than &quot;Operating&quot;.  A control that operated at any time during the year is considered &quot;Operating&quot;, even if it was shut down for some of that year.  Must be between 1900 - 2050.  Cannot be a future year to the reporting year." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="controlStatusYearInput" class="ml-1 col-form-label"><strong>Year Op Status Changed:</strong></label>
+            <app-required-asterisk [control]="controlDeviceForm.get('statusYear')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="controlStatusYearInput" formControlName="statusYear" maxlength="4">
+            <app-validation-message [control]="controlDeviceForm.get('statusYear')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1 mt-2">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Description of the control measure, given by/for the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="descriptionInput" class="ml-1 col-form-label"><strong>Control Description:</strong></label>
+
+        </div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="mb-2 form-control" maxlength="200" id="descriptionInput" formControlName="description"></textarea>
+            <app-validation-message [control]="controlDeviceForm.get('description')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="The number of months in the inventory year that the control operated as designed."  [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="numberOperatingMonths" class="ml-1 col-form-label"><strong>Control Number Operating Months:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="2" id="numberOperatingMonths" formControlName="numberOperatingMonths">
+            <app-validation-message [control]="controlDeviceForm.get('numberOperatingMonths')"></app-validation-message>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="An estimate of the portion of the reporting period's activity for which the overall control system or approach (including both capture and control measures) were operating as designed (regardless of whether the control measure is due to rule or voluntary)." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="percentControlInput" class="ml-1 col-form-label"><strong>Percent Control Effectiveness:</strong></label>
+            <app-required-asterisk [control]="controlDeviceForm.get('percentControl')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" maxlength="7" id="percentControlInput" formControlName="percentControl">
+            <app-validation-message [control]="controlDeviceForm.get('percentControl')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Day a brand new control device started operating." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="startDate" class="ml-1 col-form-label"><strong>Control Start Date:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" id="startDate"
+                        name="startDate" formControlName="startDate" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><fa-icon class="fas calendar" [icon]="['fas', 'calendar']" aria-hidden="true"></fa-icon></button>
+                </div>
+            </div>
+            <app-validation-message [control]="controlDeviceForm.get('startDate')"></app-validation-message>
+            <div class="validation-message" *ngIf="controlDeviceForm.get('startDate').errors?.startDateInvalid">
+                {{startDateErrorMsg}}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Day an existing control device was upgraded." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="upgradeDate" class="ml-1 col-form-label"><strong>Control Upgrade Date:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" id="upgradeDate"
+                        name="upgradeDate" formControlName="upgradeDate" ngbDatepicker #d2="ngbDatepicker">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"><fa-icon class="fas calendar" [icon]="['fas', 'calendar']" aria-hidden="true"></fa-icon></button>
+                </div>
+            </div>
+            <app-validation-message [control]="controlDeviceForm.get('upgradeDate')"></app-validation-message>
+            <div class="validation-message" *ngIf="controlDeviceForm.get('upgradeDate').errors?.upgradeDateInvalid">
+                {{upgradeDateErrorMsg}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Day the control device stoppped operating." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="endDate" class="ml-1 col-form-label"><strong>Control End Date:</strong></label>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" id="endDate"
+                        name="endDate" formControlName="endDate" ngbDatepicker #d3="ngbDatepicker">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="d3.toggle()" type="button"><fa-icon class="fas calendar" [icon]="['fas', 'calendar']" aria-hidden="true"></fa-icon></button>
+                </div>
+            </div>
+            <app-validation-message [control]="controlDeviceForm.get('endDate')"></app-validation-message>
+            <div class="validation-message" *ngIf="controlDeviceForm.get('endDate').errors?.endDateInvalid">
+                {{endDateErrorMsg}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1 mt-2">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" title="Type of upgrade that was made to the control device." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="upgradeDescription" class="ml-1 col-form-label"><strong>Control Upgrade Description:</strong></label>
+        </div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="mb-2 form-control" maxlength="200" id="upgradeDescription" formControlName="upgradeDescription"></textarea>
+            <app-validation-message [control]="controlDeviceForm.get('upgradeDescription')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-3">
+            <fa-icon class="mt-2 ml-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="controlCommentsInput" class="ml-1 col-form-label"><strong>Comments:</strong></label>
+        </div>
+        <div class="col-sm-9">
+            <textarea rows="3" class="form-control" style="height:100%;" maxlength="400" id="controlCommentsInput" formControlName="comments"></textarea>
+            <app-validation-message [control]="controlDeviceForm.get('comments')"></app-validation-message>
+        </div>
+    </div>
+</form>

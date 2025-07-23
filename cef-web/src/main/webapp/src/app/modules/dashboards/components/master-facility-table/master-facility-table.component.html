@@ -1,0 +1,56 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+  <div class="form-inline">
+    <label for="id-filter-text" class="col-form-label mr-2">
+        <strong>Filter Table:</strong>
+    </label>
+    <div class="input-group">
+        <input id="id-filter-text" type="text" placeholder="Search"
+              class="form-control form-control-sm"
+              [formControl]="filter"/>
+        <div class="input-group-append">
+          <button type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  title="Clear filter"
+                  (click)="onClearFilterClick()">
+              <fa-icon icon="times"></fa-icon>
+          </button>
+        </div>
+    </div>
+  </div>
+
+  <div class="mh-100 overflow-auto">
+    <table class="table table-sm table-striped table-bordered">
+      <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Facility Name</th>
+          <th scope="col" sortable="agencyFacilityIdentifier" (sort)="onSort($event)">Agency Facility ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of tableItems">
+          <tr class="cursor-pointer" [class.table-dark]="item === selectedFacility" (click)="selectFacility(item)">
+            <td>{{item.name}}</td>
+            <td>{{item.agencyFacilityIdentifier}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+  </div>
+</div>

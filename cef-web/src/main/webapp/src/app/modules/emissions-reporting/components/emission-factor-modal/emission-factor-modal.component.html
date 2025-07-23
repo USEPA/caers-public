@@ -1,0 +1,71 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="modal-header">
+  <h4 class="modal-title w-100">Select Emission Factor</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="tableData && tableData.length">
+    <table class="table table-sm table-striped table-bordered">
+      <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col">Select</th>
+		  <th scope="col" sortable="revoked" (sort)="onSort($event)">Status</th>
+          <th scope="col" sortable="quality" (sort)="onSort($event)">Quality</th>
+          <th scope="col" sortable="emissionFactor" (sort)="onSort($event)">Emissions Factor</th>
+          <th scope="col" sortable="description" (sort)="onSort($event)">Description</th>
+          <th scope="col" sortable="calculationMaterialCode.description" (sort)="onSort($event)">Calculation Material</th>
+          <th scope="col" sortable="controlMeasureCode.description" (sort)="onSort($event)">Control Measure</th>
+		  <th scope="col" sortable="source" (sort)="onSort($event)">Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of tableItems">
+          <td><input *ngIf="!factorRevoked(item) && item.quality !== 'U'" [id]="'selectEf' + item.id"  type="radio" name="efRadio" [formControl]="efControl" [value]="item" aria-label="select emission factor"></td>
+		  <td *ngIf="factorRevoked(item)">Revoked</td>
+          <td *ngIf="!factorRevoked(item)">Active</td>
+          <td>{{item.quality}}</td>
+		  <td *ngIf="item.minValue == null && item.maxValue == null">{{item.emissionFactor || item.emissionFactorFormula}} {{item.emissionsNumeratorUom.description + "/" + item.emissionsDenominatorUom.description}}</td>
+          <td *ngIf="item.minValue != null || item.maxValue != null">{{item.minValue + " - " + item.maxValue + " " + item.emissionsNumeratorUom.description + "/" + item.emissionsDenominatorUom.description}}</td>
+          <td>{{item.description}}<span *ngIf="item.note != null"><br><br><strong>Notes:</strong><br>{{item.note}}</span>
+                                  <span *ngIf="item.applicability != null"><br><br><strong>Applicability:</strong><br>{{item.applicability}}</span>
+                                  <span *ngIf="item.derivation != null"><br><br><strong>Derivation:</strong><br>{{item.derivation}}</span>
+                                  <span *ngIf="item.condition != null"><br><br><strong>Condition:</strong><br>{{item.condition}}</span></td>
+          <td>{{item.calculationMaterialCode.description}}</td>
+          <td>{{createControlMeasureCodeList(item)}}</td>
+		  <td>{{item.source}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="validation-message" *ngIf="efControl.errors && (efControl.dirty || efControl.touched)">
+      <div *ngIf="efControl.errors?.required">
+          An Emission Factor must be selected.
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!tableData || !tableData.length">
+    {{errorMessage}}
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onClose()">Cancel</button>
+  <button type="submit" class="btn btn-success" (click)="onSubmit()" *ngIf="tableData && tableData.length">Select</button>
+</div>

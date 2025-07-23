@@ -1,0 +1,241 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="facilitySiteForm">
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The ID your facility holds for your State, Local, or Tribal Authority you report to." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="agencyFacilityIdentifierInput" class="ml-1 col-form-label"><strong>Agency Facility ID:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('agencyFacilityIdentifier')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="30" id="agencyFacilityIdentifierInput" formControlName="agencyFacilityIdentifier" [value]="facilitySiteForm.value.agencyFacilityIdentifier" readonly>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code that identifies the operating status of the facility site." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="facilityStatusCodeSelect" class="ml-1 col-form-label"><strong>Operating Status:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('operatingStatusCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <select type="text" class="form-control" (ngModelChange)="onChange($event)" id="facilityStatusCodeSelect" formControlName="operatingStatusCode" [compareWith]="formUtils.compareCode">
+                <option *ngFor="let opt of facilityOperatingStatusValues" [ngValue]="opt">{{opt?.description}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.get('operatingStatusCode')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The name of your facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="facilityNameInput" class="ml-1 col-form-label"><strong>Facility Name:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="80" id="facilityNameInput" formControlName="name" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('name')"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The year the current facility operating status came into effect (i.e. changed status).  Required if Facility Status Code is anything other than &quot;Operating&quot;.  A facility that operated at any time during the year is considered &quot;Operating&quot;, even if it was shut down for some of that year.  Must be between 1900 - 2050.  Cannot be a future year to the reporting year." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="statusYearInput" style="font-size:97%" class="ml-1 col-form-label"><strong>Year Op Status Changed:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('statusYear')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="4" id="statusYearInput" formControlName="statusYear">
+            <app-validation-message [control]="facilitySiteForm.get('statusYear')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="In reference to the location of the facility, the measure of the angular distance east or west from the prime meridian. Because the physical area a facility occupies extends over one latitudinal point, the latitude and longitude reported represent the location of the mid-point of the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="longitudeInput" class="ml-1 col-form-label"><strong>Longitude:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="11" id="longitudeInput" formControlName="longitude" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('longitude')"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="In reference to the location of the facility on the surface of the Earth, the measure of the angular distance  north or south from the equator.  Because the physical area a facility occupies extends over one latitudinal point, the latitude and longitude reported represent the location of the mid-point of the facility." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="latitudeInput" class="ml-1 col-form-label"><strong>Latitude:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="10" id="latitudeInput" formControlName="latitude" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('latitude')"></app-validation-message>
+        </div>
+    </div>
+
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="Code that identifies the Clean Air Act Stationary Source designation." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="facilityCategoryCodeSelect" style="font-size:99%" class="ml-1 col-form-label"><strong>Facility Category Code:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <select type="text" class="form-control" id="facilityCategoryCodeSelect" formControlName="facilityCategoryCode" [compareWith]="formUtils.compareCode">
+                <option *ngFor="let opt of facilityCategoryCodeValues" [ngValue]="opt">{{opt?.name}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.get('facilityCategoryCode')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="The location of the facility, which may be different from a mailing address or a headquarters office." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="streetAddressInput" class="ml-1 col-form-label"><strong>Facility Address:</strong></label>
+        </div>
+        <div class="col-sm-10">
+            <input type="text" class="form-control"  maxlength="100" id="streetAddressInput" formControlName="streetAddress" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('streetAddress')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="cityInput" class="ml-1 col-form-label"><strong>City:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" maxlength="60" class="form-control" id="cityInput" formControlName="city" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('city')"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="stateCodeSelect" class="ml-1 col-form-label"><strong>State:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <select type="text" class="form-control" id="stateCodeSelect" formControlName="stateCode" [compareWith]="formUtils.compareCode" [attr.disabled]="true">
+                <option *ngFor="let opt of fipsStateCode" [ngValue]="opt">{{opt?.uspsCode}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.controls.stateCode"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-2">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="postalCodeInput" class="ml-1 col-form-label"><strong>ZIP code:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" maxlength="10" class="form-control" id="postalCodeInput" formControlName="postalCode" readonly>
+            <app-validation-message [control]="facilitySiteForm.get('postalCode')"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="countySelect" class="ml-1 col-form-label"><strong>County:</strong></label>
+        </div>
+        <div class="col-sm-4">
+            <select class="form-control" id="countySelect" formControlName="countyCode" [compareWith]="formUtils.compareCode" [attr.disabled]="true">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of counties" [ngValue]="opt">{{opt?.name}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.get('countyCode')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-3">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" title="U.S. Bureau of Indian Affairs (BIA) code that identifies tribal entities." [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="facilityBIACodeSelect" class="ml-1 col-form-label"><strong>BIA Code:</strong></label>
+        </div>
+        <div class="col-sm-10">
+            <select type="text" class="form-control" id="facilityBIACodeSelect" formControlName="tribalCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of tribalCodeValues" [ngValue]="opt">{{opt?.description}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.get('tribalCode')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="mailingStreetAddressInput" style="font-size:97%" class="ml-1 col-form-label"><strong>Mailing Street Address:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('mailingStreetAddress')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" maxlength="100" class="form-control" id="mailingStreetAddressInput" formControlName="mailingStreetAddress">
+            <app-validation-message [control]="facilitySiteForm.get('mailingStreetAddress')"></app-validation-message>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="mailingPostalCodeInput" class="ml-1 col-form-label"><strong>ZIP code:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('mailingPostalCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" maxlength="10" id="mailingPostalCodeInput" formControlName="mailingPostalCode">
+            <app-validation-message [control]="facilitySiteForm.get('mailingPostalCode')"></app-validation-message>
+            <div class="validation-message"  *ngIf="facilitySiteForm.getError('mailingStreetAddress')">
+                This field is required for mailing address.
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="mailingCityInput" class="ml-1 col-form-label"><strong>City:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('mailingCity')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" maxlength="60" class="form-control" id="mailingCityInput" formControlName="mailingCity">
+            <app-validation-message [control]="facilitySiteForm.get('mailingCity')"></app-validation-message>
+            <div class="validation-message"  *ngIf="facilitySiteForm.getError('mailingStreetAddress')">
+                This field is required for mailing address.
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="mailingStateCodeSelect" class="ml-1 col-form-label"><strong>State:</strong></label>
+            <app-required-asterisk [control]="facilitySiteForm.get('mailingStateCode')"></app-required-asterisk>
+        </div>
+        <div class="col-sm-4">
+            <select type="text" class="form-control" id="mailingStateCodeSelect" formControlName="mailingStateCode" [compareWith]="formUtils.compareCode">
+                <option [ngValue]="null"></option>
+                <option *ngFor="let opt of fipsStateCode" [ngValue]="opt">{{opt?.uspsCode}}</option>
+            </select>
+            <app-validation-message [control]="facilitySiteForm.controls.mailingStateCode"></app-validation-message>
+            <div class="validation-message"  *ngIf="facilitySiteForm.getError('mailingStreetAddress')">
+                This field is required for mailing address.
+            </div>
+        </div>
+    </div>
+    <div class="row pb-1">
+
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="descriptionInput" class="ml-1 col-form-label"><strong>Description:</strong></label>
+        </div>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" maxlength="100" id="descriptionInput" formControlName="description">
+            <app-validation-message [control]="facilitySiteForm.get('description')"></app-validation-message>
+        </div>
+    </div>
+
+    <div class="row pb-1">
+        <div class="col-sm-2">
+            <fa-icon class="mt-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+            <label for="facilityCommentsInput" class="ml-1 col-form-label"><strong>Comments:</strong></label>
+        </div>
+        <div class="col-sm-10">
+            <textarea rows="3" class="form-control" maxlength="400" style="height:100%;" id="facilityCommentsInput" formControlName="comments"></textarea>
+            <app-validation-message [control]="facilitySiteForm.get('comments')"></app-validation-message>
+        </div>
+    </div>
+
+
+</form>

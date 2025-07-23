@@ -1,0 +1,191 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="container print-page-break">
+	<h1 class="pl-3 pb-2 child-header">Emissions Units</h1>
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>Unit Type</th>
+                    <th>Unit Description</th>
+                    <th>Operating Status</th>
+                </tr>
+            </thead>
+            <tbody>
+			<tr th:unless="${fs.emissionsUnits ne null and !fs.emissionsUnits.isEmpty()}">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+            <tr th:each="unit : ${T(gov.epa.cef.web.controller.CorController).getSortedUnitList(fs.emissionsUnits)}">
+                <th th:text="${unit.unitIdentifier}"></th>
+                <td th:text="${unit.unitTypeCode?.description}"></td>
+                <td th:text="${unit.description}"></td>
+                <td th:text="${unit.operatingStatusCode?.description}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pt-5" th:each="unit : ${T(gov.epa.cef.web.controller.CorController).getSortedUnitList(fs.emissionsUnits)}">
+            <div class="pb-4">
+                <h2 class="pb-3"><strong><span
+                    th:text="|Emissions Unit Information ${unit.unitIdentifier} (${unit.unitTypeCode?.description})|"></span></strong></h2>
+                <div><strong>Unit ID:</strong> <span th:text="${unit.unitIdentifier}"></span></div>
+                <div><strong>Operating Status:</strong> <span th:text="${unit.operatingStatusCode?.description}"></span></div>
+                <div><strong>Unit Design Capacity:</strong> <span th:text="${unit.designCapacity}"></span></div>
+                <div><strong>Unit Type Code:</strong> <span th:text="${unit.unitTypeCode?.description}"></span></div>
+                <div><strong>Year Op Status Changed:</strong> <span th:text="${unit.statusYear}"></span></div>
+                <div><strong>Unit Design Capacity UoM:</strong> <span th:text="${unit.unitOfMeasureCode?.code}"></span></div>
+                <div><strong>Unit Description:</strong> <span th:text="${unit.description}"></span></div>
+                <div class="pb-5"><strong>Comments:</strong> <span th:text="${unit.comments}"></span></div>
+            </div>
+
+            <div class="pb-4">
+                <div class="pl-5">
+                    <h3 class="pb-4"><strong>Processes Associated with this Emissions Unit</strong></h3>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Process ID</th>
+                            <th>SCC</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+						<tr th:unless="${unit.emissionsProcesses ne null and !unit.emissionsProcesses.isEmpty()}">
+							<td></td>
+							<td></td>
+						</tr>
+                        <tr th:each="process : ${T(gov.epa.cef.web.controller.CorController).getSortedProcessList(unit.emissionsProcesses)}">
+                            <th th:text="${process.emissionsProcessIdentifier}"></th>
+                            <td th:text="${process.sccCode}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pt-5" th:each="process : ${T(gov.epa.cef.web.controller.CorController).getSortedProcessList(unit.emissionsProcesses)}">
+                        <h3 class="pb-3"><strong><span
+                            th:text="|Emissions Unit ${unit.unitIdentifier}, Process ${process.emissionsProcessIdentifier} Information|"></span></strong></h3>
+                        <div><strong>Unit ID:</strong> <span th:text="${process.emissionsUnit?.unitIdentifier}"></span></div>
+                        <div><strong>Process ID:</strong> <span th:text="${process.emissionsProcessIdentifier}"></span></div>
+                        <div><strong>Process Description:</strong> <span th:text="${process.description}"></span></div>
+                        <div><strong>Operating Status:</strong> <span th:text="${process.operatingStatusCode?.description}"></span></div>
+                        <div><strong>Year Op Status Changed:</strong> <span th:text="${process.statusYear}"></span></div>
+                        <div><strong>SCC:</strong> <span th:text="${process.sccCode}"></span></div>
+                        <div><strong>SCC Description:</strong> <span th:text="${process.sccDescription}"></span></div>
+                        <div th:if="${process.aircraftEngineTypeCode ne null}"><strong>Aircraft Engine Code:</strong>
+                            <span th:text="|${process.aircraftEngineTypeCode?.faaAircraftType} - ${process.aircraftEngineTypeCode?.engine}|"></span>
+                        </div>
+                        <div class="pb-5"><strong>Comments:</strong> <span th:text="${process.comments}"></span></div>
+                        <div th:if="${process.operatingStatusCode.code ne 'PS' and process.operatingStatusCode.code ne 'TS'}">
+                            <div th:each="rptPeriod : ${process.reportingPeriods}">
+                                <div th:if="${rptPeriod.reportingPeriodTypeCode.code} == 'A'">
+                                    <div th:each="optDetails : ${rptPeriod.operatingDetails}">
+                                        <div class="avoid-page-break">
+                                            <h3 class="pb-3"><strong>Operating Details</strong></h3>
+                                            <div><strong>Hours per Period:</strong> <span th:text="${optDetails.actualHoursPerPeriod}"></span></div>
+                                            <div><strong>Avg. Hours per Day:</strong> <span th:text="${optDetails.avgHoursPerDay}"></span></div>
+                                            <div><strong>Avg. Days per Week:</strong> <span th:text="${optDetails.avgDaysPerWeek}"></span></div>
+                                            <div><strong>Avg. Weeks per Year:</strong> <span th:text="${optDetails.avgWeeksPerPeriod}"></span></div>
+                                            <div><strong>Winter Operating Percent:</strong> <span th:text="${optDetails.percentWinter}"></span></div>
+                                            <div><strong>Spring Operating Percent:</strong> <span th:text="${optDetails.percentSpring}"></span></div>
+                                            <div><strong>Summer Operating Percent:</strong> <span th:text="${optDetails.percentSummer}"></span></div>
+                                            <div class="pb-5"><strong>Fall Operating Percent:</strong> <span th:text="${optDetails.percentFall}"></span></div>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="pb-3"><strong>Reporting Period</strong></h3>
+                                    <div><strong>Reporting Period:</strong> <span th:text="${rptPeriod.reportingPeriodTypeCode?.shortName}"></span></div>
+                                    <div><strong>Operating Type:</strong> <span th:text="${rptPeriod.emissionsOperatingTypeCode?.shortName}"></span></div>
+                                    <div><strong>Throughput Parameter:</strong> <span th:text="${rptPeriod.calculationParameterTypeCode?.description}"></span></div>
+                                    <div><strong>Throughput Material:</strong> <span th:text="${rptPeriod.calculationMaterialCode?.description}"></span></div>
+                                    <div><strong>Throughput Value:</strong> <span th:text="${rptPeriod.calculationParameterValue}"></span></div>
+                                    <div><strong>Throughput UoM:</strong> <span th:if="${rptPeriod.calculationParameterUom?.code ne null}" th:text="|${rptPeriod.calculationParameterUom?.description} (${rptPeriod.calculationParameterUom?.code})|"></span></div>
+                                    <div><strong>Fuel Material:</strong> <span th:text="${rptPeriod.fuelUseMaterialCode?.description}"></span></div>
+                                    <div><strong>Fuel Value:</strong> <span th:text="${rptPeriod.fuelUseValue}"></span></div>
+                                    <div><strong>Fuel UoM:</strong> <span th:if="${rptPeriod.fuelUseUom?.code ne null}" th:text="|${rptPeriod.fuelUseUom?.description} (${rptPeriod.fuelUseUom?.code})|"></span></div>
+                                    <div><strong>Heat Content Ratio:</strong> <span th:text="${rptPeriod.heatContentValue}"></span></div>
+                                    <div><strong>Heat Content Ratio Numerator:</strong> <span th:if="${rptPeriod.heatContentUom?.code ne null}" th:text="|${rptPeriod.heatContentUom?.description} (${rptPeriod.heatContentUom?.code})|"></span></div>
+                                    <div><strong>Heat Content Ratio Denominator:</strong> <span th:if="${rptPeriod.fuelUseUom?.code ne null}" th:text="|${rptPeriod.fuelUseUom?.description} (${rptPeriod.fuelUseUom?.code})|"></span></div>
+                                    <div class="pb-5"><strong>Comments:</strong> <span th:text="${rptPeriod.comments}"></span></div>
+
+                                    <div class="pl-5">
+                                        <h3 class="pb-4 grandchild-header">Emissions Associated with this Process</h3>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Pollutant</th>
+                                                <th>Code</th>
+                                                <th>CAS ID</th>
+                                                <th>Not reporting this year</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:unless="${rptPeriod.emissions ne null and !rptPeriod.emissions.isEmpty()}">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr th:each="emissions : ${T(gov.epa.cef.web.controller.CorController).getSortedEmissionsList(rptPeriod.emissions)}">
+                                                <th th:text="${emissions.pollutant.pollutantName}"></th>
+                                                <td th:text="${emissions.pollutant.pollutantCode}"></td>
+                                                <td th:text="${emissions.pollutant.pollutantCasId}"></td>
+                                                <td th:text="${emissions.notReporting}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="pl-5">
+                                        <h3 class="pt-4 pb-3 grandchild-header">Emissions Information</h3>
+                                        <div th:each="emissions : ${T(gov.epa.cef.web.controller.CorController).getSortedEmissionsList(rptPeriod.emissions)}">
+                                            <div><strong>Pollutant Name:</strong> <span th:text="${emissions.pollutant?.pollutantName}"></span></div>
+                                            <div><strong>Pollutant Code:</strong> <span th:text="${emissions.pollutant?.pollutantCode}"></span></div>
+                                            <div><strong>CAS ID:</strong> <span th:text="${emissions.pollutant?.pollutantCasId}"></span></div>
+                                            <div><strong>Not reporting this year:</strong> <span th:text="${emissions?.notReporting}"></span></div>
+                                            <div><strong>Calculation Method:</strong> <span th:text="${emissions.emissionsCalcMethodCode?.description}"></span></div>
+                                            <div><strong>Emission Factor:</strong>
+                                                <span th:if="${emissions.emissionsFactorFormula ne null}" th:text="${emissions.emissionsFactorFormula}"></span>
+                                                <span th:if="${emissions.emissionsFactorFormula == null}" th:text="${emissions.emissionsFactor}"></span>
+                                            </div>
+                                            <div th:if="${emissions.variables ne null}" th:each="var : ${emissions.variables}">
+                                                <strong><span th:text="|${var.variableCode?.code}-${var.variableCode?.description}|"></span>: </strong> <span th:text="${var.value}"></span>
+                                            </div>
+                                            <div><strong>Emission Factor Description:</strong> <span th:text="${emissions.emissionsFactorText}"></span></div>
+                                            <div><strong>Emission Factor Source:</strong> <span class="col-3" th:text="${emissions.emissionsFactorSource}"></span></div>
+                                            <div><strong>Emission Factor Numerator UoM:</strong> <span th:if="${emissions.emissionsNumeratorUom?.code ne null}" th:text="|${emissions.emissionsNumeratorUom?.description} (${emissions.emissionsNumeratorUom?.code})|"></span></div>
+                                            <div><strong>Emission Factor Denominator UoM:</strong> <span th:if="${emissions.emissionsDenominatorUom?.code ne null}" th:text="|${emissions.emissionsDenominatorUom?.description} (${emissions.emissionsDenominatorUom?.code})|"></span></div>
+                                            <div><strong>Overall Control %:</strong> <span th:text=" ${emissions.overallControlPercent}"></span></div>
+                                            <div><strong>Total Emissions:</strong> <span th:text="${emissions.totalEmissions}"></span></div>
+                                            <div><strong>Total Emissions UoM:</strong> <span th:if="${emissions.emissionsUomCode?.code ne null}" th:text="|${emissions.emissionsUomCode?.description} (${emissions.emissionsUomCode?.code})|"></span></div>
+                                            <div th:if="${emissions.emissionsCalcMethodCode?.totalDirectEntry} != true and ${emissions.totalManualEntry} == true">
+                                                <div><input type="checkbox" title="checkbox indicating direct entry" th:checked="true" disabled><strong> I prefer to calculate the total emissions of this pollutant.</strong></div>
+                                            </div>
+                                            <div class="pb-5"><strong>Comments:</strong> <span class="col-8" th:text="${emissions.comments}"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

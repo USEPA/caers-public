@@ -1,0 +1,110 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="feedbackForm">
+	<div class="row pb-3 ml-2" aria-label="User feedback page">
+		Thank you for reporting with the Combined Air Emissions Reporting System (CAERS)! CAERS is continuously evolving to better fit the needs of our user base. We appreciate you taking the time to tell us about your experience while using the application. The feedback you provide will help enhance future application functionality to better fit your needs. 
+	</div>
+	<div class="row pb-3 ml-2">
+		How would you rate your experience with the following features during the reporting process? Leave blank if not applicable.
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			1. Easy and intuitive navigation through the system:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for easy and intuitive navigation throughout the system" style="font-size: 175%; border-style: hidden" max="5" formControlName="intuitiveRating" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			2. Data entry via screens:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for data entry via screens" style="font-size: 175%; border-style: hidden" max="5" formControlName="dataEntryScreens" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			3. Data entry via bulk upload template:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for data entry via bulk upload template" style="font-size: 175%; border-style: hidden" max="5" formControlName="dataEntryBulkUpload" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			4. Calculation screens and features:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for calculation screens and features" style="font-size: 175%; border-style: hidden" max="5" formControlName="calculationScreens" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			5. Controls and control path assignments:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for controls and control path assignments" style="font-size: 175%; border-style: hidden" max="5" formControlName="controlsAndControlPathAssignments" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			6. Quality assurance checks:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for quality assurance checks" style="font-size: 175%; border-style: hidden" max="5" formControlName="qualityAssuranceChecks" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row ml-2">
+		<div class="col-sm-4 mt-3">
+			7. Overall reporting time:
+		</div>
+		<div class="col-sm-2">
+			<ngb-rating aria-label="1 through 5 star rating for overall reporting time" style="font-size: 175%; border-style: hidden" max="5" formControlName="overallReportingTime" class="form-control"></ngb-rating>
+		</div>
+	</div>
+	<div class="row pb-2 ml-1">
+		What application functionality did you find to be beneficial to your reporting experience?
+	</div>
+	<div class="row pb-3">
+		<div class="col-sm-12">
+			<textarea aria-label="Input text area for what application functionality did you find to be beneficial to your reporting experience?" rows="3" maxlength="2000"  formControlName="beneficialFunctionalityComments" class="form-control" style="height:100%;" id="beneficialApplicationFunctionalityComments"></textarea>
+		</div>
+	</div>
+	<div class="row pb-2 ml-1">
+		Was there any particular application functionality you found to be difficult to use or understand?
+	</div>
+	<div class="row pb-3">
+		<div class="col-sm-12">
+			<textarea aria-label="Input text area for what additional features or enhancements would improve your experience in the future?" rows="3" maxlength="2000"  formControlName="difficultFunctionalityComments" class="form-control" style="height:100%;" id="difficultApplicationFunctionalityComments"></textarea>
+		</div>
+	</div>
+	<div class="row pb-2 ml-1">
+		What additional features or enhancements would improve your experience in the future?
+	</div>
+	<div class="row pb-3">
+		<div class="col-sm-12">
+			<textarea aria-label="Input text area for what additional features or enhancements would improve your experience in the future?" rows="3" maxlength="2000"  formControlName="enhancementComments" class="form-control" style="height:100%;" id="enhancementComments"></textarea>
+		</div>
+	</div>
+	<div class="row pb-3 float-right" style="margin-right: 30px;">
+			<button class="btn btn-primary mr-1" [disabled]="clicked" (click)="onNoThanks()">No Thanks</button>
+			<button class="btn btn-success"  [disabled]="clicked" (click)="onSubmit()">Submit</button>
+	</div>
+</form>
+
+

@@ -1,0 +1,69 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="facilitySite">
+    <div class="row">
+        <div class="col-sm-12" *ngIf="tableData">
+            <div class="card  mb-3">
+                <div class="card-header text-center">
+                    <strong>Report History</strong>
+                </div>
+                <div class="card-body">
+                    <div class="mh-100 overflow-auto" style="overflow-y: auto;" tabindex="0">
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead class="thead-cef-medium">
+                                <tr>
+                                    <th scope="col" sortable="actionDate" (sort)="onSort($event)">Date</th>
+                                    <th scope="col" sortable="userId" (sort)="onSort($event)">Role</th>
+                                    <th scope="col" sortable="userFullName" (sort)="onSort($event)">User Name</th>
+                                    <th scope="col" sortable="reportAction" (sort)="onSort($event)">Action</th>
+                                    <th scope="col" sortable="comments" (sort)="onSort($event)" style="width:30%;">Comments</th>
+                                    <th scope="col" sortable="fileName" (sort)="onSort($event)" style="width:20%;">Attachments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let report of tableItems">
+                                    <td>{{ report.actionDate | date:'shortDate' }}</td>
+                                    <td>{{ report.userRole }}</td>
+                                    <td>{{ report.userFullName }}</td>
+                                    <td>{{ enumValue(report.reportAction) }}</td>
+                                    <td>
+                                        {{ report.comments }}
+                                        <div *ngIf="report.reviewerComments">
+                                            <a routerLink="." (click)="openReviewerCommentsModal(report)">View Reviewer Comments</a>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div *ngIf="!report.fileDeleted && report.cromerrActivityId == null && report.cromerrDocumentId == null">
+                                            <a routerLink="." (click)="download(report)">{{ report?.fileName}}</a>
+                                        </div>
+                                        <div *ngIf="!report.fileDeleted && report.cromerrActivityId != null && report.cromerrDocumentId != null">
+                                            <a routerLink="." (click)="downloadCopyOfRecord(report)">Copy of Record</a>
+                                        </div>
+                                        <div *ngIf="report.fileDeleted">
+                                            {{ report?.fileName }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="emissionsUnit">
+    <div class="row">
+        <div class="col-sm-12">
+	        <app-emission-unit-info [facilitySiteId]="facilitySiteId" [emissionsUnit]="emissionsUnit" [readOnlyMode]="readOnlyMode"></app-emission-unit-info>
+        </div>
+    </div>
+
+    <div *ngIf="processes">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <strong>Processes Associated with this Emissions Unit</strong>
+                    </div>
+                    <div class="card-body">
+                        <app-emissions-process-table [tableData]="processes" [createUrl]="'./process/create'" [readOnlyMode]="readOnlyMode" [semiannualSubmitted]="semiannualSubmitted"  [emissionUnit]="emissionsUnit"></app-emissions-process-table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Controls Associated with this Emissions Unit</strong>
+                    </div>
+                    <div class="card-body">
+                        <app-control-path-panel [tableData]="controlPaths" [readOnlyMode]="readOnlyMode"></app-control-path-panel>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

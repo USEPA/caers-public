@@ -1,0 +1,65 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Process Information</strong>
+                </div>
+                <div class="card-body">
+                    <app-edit-process-info-panel [emissionsUnit]="emissionsUnit" [process]="originalProcess"></app-edit-process-info-panel>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Operating Details</strong>
+                </div>
+                <div class="card-body">
+                    <app-edit-process-operating-detail-panel [operatingDetails]="originalDetails" [facilitySite]="facilitySite"></app-edit-process-operating-detail-panel>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Reporting Period</strong>
+                </div>
+                <div class="card-body">
+                    <app-edit-process-reporting-period-panel [reportingPeriod]="originalPeriod" [facilitySite]="facilitySite"></app-edit-process-reporting-period-panel>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="float-right pb-3 pr-3">
+        <button type="button" class="btn btn-primary mr-2" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-success" (click)="onSubmit()">Save</button>
+    </div>
+
+</div>

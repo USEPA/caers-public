@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name : CER_FacilitySiteControl_v2.0.xsd Current Version Available At : http://www.exchangenetwork.net/schema/cer/2/0/CER_FacilitySiteControl_v2.0.xsd 
+			Description : Identifies a control device, where applied at an emissions process to reduce the amount of pollutants released into the environment. 
+			Developed by  : 	 Jonathan Miller, National Air Data Group (NADG)
+			Point of Contact :  NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+			Last Edited: March 18, 2020.			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_Identification_v2.0.xsd"/>
+	<xsd:include schemaLocation="CER_ControlPollutant_v2.0.xsd"/>
+	<xsd:complexType name="SiteControlDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:ControlMeasureCode" minOccurs="0"/>
+			<xsd:element ref="cer:ControlDescription" minOccurs="0"/>
+			<xsd:element ref="cer:PercentControlEffectiveness" minOccurs="0"/>
+			<xsd:element ref="cer:ControlUpgradeDate" minOccurs="0"/>
+			<xsd:element ref="cer:ControlUpgradeDescription" minOccurs="0"/>
+			<xsd:element ref="cer:ControlStatusCode" minOccurs="0"/>
+			<xsd:element ref="cer:ControlStatusCodeYear" minOccurs="0"/>
+			<xsd:element ref="cer:ControlNumberOperatingMonths" minOccurs="0"/>
+			<xsd:element ref="cer:ControlStartDate" minOccurs="0"/>
+			<xsd:element ref="cer:ControlEndDate" minOccurs="0"/>
+			<xsd:element ref="cer:ControlComment" minOccurs="0"/>
+			<xsd:element ref="cer:ControlIsReadOnly" minOccurs="0"/>
+			<xsd:element ref="cer:SiteControlIdentification" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element ref="cer:SiteControlPollutant" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="FacilitySiteControl" type="cer:SiteControlDataType"/>
+</xsd:schema>

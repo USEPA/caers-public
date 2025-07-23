@@ -1,0 +1,55 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="facilitySiteOperatingStatusForm">
+    <div class="modal-header">
+        <h1 class="h4 modal-title w-100">Change Facility Operating Status</h1>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row pb-1">
+            <div class="col-6">
+                <label for="operatingStatusSelect" class="ml-1 col-form-label"><strong>Operating Status</strong></label>
+                <app-required-asterisk [control]="facilitySiteOperatingStatusForm.get('operatingStatusControl')"></app-required-asterisk>
+                <select id="operatingStatusSelect" class="form-control" formControlName="operatingStatusControl">
+                    <option *ngFor="let status of operatingStatusChangeOptions" [ngValue]="status">
+                        {{status.description}}
+                    </option>
+                </select>
+                <app-validation-message [control]="facilitySiteOperatingStatusForm.get('operatingStatusControl')"></app-validation-message>
+            </div>
+            <div class="col-6">
+                <label for="statusYearSelect" class="ml-1 col-form-label"><strong>Status Year</strong></label>
+                <app-required-asterisk [control]="facilitySiteOperatingStatusForm.get('statusYearControl')"></app-required-asterisk>
+                <select id="statusYearSelect" class="form-control" formControlName="statusYearControl">
+                    <option *ngFor="let year of operatingStatusYearOptions" [ngValue]="year">
+                        {{year}}
+                    </option>
+                </select>
+                <app-validation-message [control]="facilitySiteOperatingStatusForm.get('statusYearControl')"></app-validation-message>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()"
+                [disabled]="!facilitySiteOperatingStatusForm.valid">Save</button>
+        <button type="button" class="btn btn-success" (click)="onClose()">Cancel</button>
+    </div>
+</form>

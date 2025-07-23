@@ -1,0 +1,90 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="pb-4 container">
+    <h2 class="pl-3 pb-5 child-header">Release Point Apportionments</h2>
+	<div th:each="unit : ${T(gov.epa.cef.web.controller.CorController).getSortedUnitList(fs.emissionsUnits)}">
+        <div th:each="process : ${T(gov.epa.cef.web.controller.CorController).getSortedProcessList(unit.emissionsProcesses)}">
+		    <div class="pb-4">
+			    <h2 class="container pt-1"><strong>
+                <span th:text="|Emissions Unit ${unit.unitIdentifier} (${unit.unitTypeCode.description}), Process  ${process.emissionsProcessIdentifier}"></span></strong></h2>
+			    <div class="col">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Release Point</th>
+                            <th>Release Type</th>
+                            <th>Control Path</th>
+                            <th>% Release Point Apportionment</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+						<tr th:unless="${process.releasePointAppts ne null and !process.releasePointAppts.isEmpty()}">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+                        <tr th:each="apportionment : ${T(gov.epa.cef.web.controller.CorController).getSortedReleasePointApptList(process.releasePointAppts)}">
+                            <th th:text="${apportionment.releasePoint.releasePointIdentifier}"></th>
+                            <td th:text="${apportionment.releasePoint.typeCode ne null} ? ${apportionment.releasePoint.typeCode.description} : ''"></td>
+                            <td th:text="${apportionment.controlPath?.pathId}"></td>
+                            <td><span th:if="${apportionment.percent ne null}" th:text="${apportionment.percent}+'%'"></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>Total Apportionment of Emissions</strong></td>
+                            <td th:unless="${process?.releasePointAppts.isEmpty()}" th:text="${#aggregates.sum(process.releasePointAppts.![percent])}+'%'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+					<div class="pl-5">
+					<div th:each="apportionment : ${T(gov.epa.cef.web.controller.CorController).getSortedReleasePointApptList(process.releasePointAppts)}">
+						<h3 class="pt-4"><strong>
+								<span>Controls Associated with</span>
+								<span th:text="${apportionment?.releasePoint ne null ? 'Release Point '+ apportionment?.releasePoint?.releasePointIdentifier +', ' : 'Release Point ,'}"></span>
+								<span th:text="${apportionment?.controlPath ne null ? apportionment?.controlPath.pathId : 'Path '}"></span>
+							</strong></h3>
+						<table class="table">
+							<thead>
+							<tr>
+								<th>Assignment</th>
+								<th>Sequence Number</th>
+								<th>% Path Apportionment</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:unless="${apportionment.controlPath?.assignments ne null and !apportionment.controlPath?.assignments.isEmpty()}">
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+                            <tr th:each="assignment : ${T(gov.epa.cef.web.controller.CorController).getSortedControlAssignmentList(apportionment.controlPath?.assignments)}">
+                                <th>
+                                    <span th:if="${assignment?.control ne null}" th:text="${assignment?.control?.identifier}"></span>
+                                    <span th:unless="${assignment?.control ne null}" th:text="${assignment?.controlPathChild?.pathId}"></span>
+                                </th>
+                                <td th:text="${assignment?.sequenceNumber}"></td>
+                                <td><span th:if="${assignment?.percentApportionment ne null}" th:text="${assignment?.percentApportionment}+'%'"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+	                    </div>
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

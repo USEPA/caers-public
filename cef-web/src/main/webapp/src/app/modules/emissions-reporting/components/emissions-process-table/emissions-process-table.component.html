@@ -1,0 +1,70 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="mh-100 overflow-auto">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+        <th scope="col" sortable="emissionsUnitId" (sort)="onSort($event)">Unit ID</th>
+        <th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+      <th scope="col" sortable="sccCode" (sort)="onSort($event)">SCC</th>
+      <ng-container *ngIf="!readOnlyMode && parentComponentType!=='releasePointAppt'">
+        <th scope="col"></th>
+      </ng-container>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableData">
+          <td>
+              <a routerLink="{{baseUrl}}/process/{{item.id}}" [attr.aria-label]="'emissions process' + item?.emissionsUnitId"
+                 [attr.data-cy]="'emissions process' + item?.emissionsUnitId">
+                  {{emissionUnit?.description ? (emissionUnit?.unitIdentifier) + ' - ' + (emissionUnit?.description?.slice(0,6)) : emissionUnit?.unitIdentifier }}
+              </a>
+
+            <a routerLink="{{baseUrl}}/emissionUnit/{{item.emissionsUnitId}}" [attr.aria-label]="'emissions unit' + item?.emissionsUnitId"
+               [attr.data-cy]="'emissions unit' + item?.emissionsUnitId">
+                {{item?.emissionsUnitDescription ? (item?.unitIdentifier) + ' - ' + (item?.emissionsUnitDescription?.slice(0,6)) : item?.unitIdentifier }}
+            </a>
+        </td>
+        <td>
+          <a routerLink="{{baseUrl}}/process/{{item.id}}" [attr.aria-label]="'emissions process' + item?.emissionsProcessIdentifier"
+             [attr.data-cy]="'emissions process' + item?.emissionsProcessIdentifier">
+            {{ item?.description ? (item?.emissionsProcessIdentifier) + ' - ' + (item?.description?.slice(0,6)) : item?.emissionsProcessIdentifier }}
+          </a>
+        </td>
+        <td>{{item.sccCode}}</td>
+        <ng-container *ngIf="!readOnlyMode && parentComponentType!=='releasePointAppt'">
+          <td>
+            <a routerLink="." (click)="openDeleteModal(item)" *ngIf="!(semiannualSubmitted && processWithMonthlyData.includes(item.emissionsProcessIdentifier))"
+               [attr.aria-label]="'delete emissions process' + item?.emissionsProcessIdentifier"
+               [attr.data-cy]="'delete emissions process' + item?.emissionsProcessIdentifier">
+              <fa-icon icon="trash-alt"></fa-icon>
+            </a>
+          </td>
+        </ng-container>
+      </tr>
+      <ng-container *ngIf="!readOnlyMode && parentComponentType!=='releasePointAppt'">
+        <tr>
+          <td colspan="3"></td>
+          <td>
+            <a routerLink="{{createUrl}}" aria-label="add emissions process" id="tblAddProcessBtn"><fa-icon [icon]="faPlus"></fa-icon></a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

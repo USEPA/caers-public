@@ -1,0 +1,111 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div  *ngIf="tableData">
+  <form [formGroup]="reportingPeriodForm">
+    <div  class="overflow-auto" style="max-height: 60vh;">
+      <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col" sortable="unitIdentifier" (sort)="onSort($event)">Unit ID</th>
+          <th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+          <th scope="col" sortable="calculationMaterialCode.description" (sort)="onSort($event)">Throughput Material</th>
+          <th scope="col">Throughput Value</th>
+          <th scope="col" sortable="calculationMaterialCode.description" (sort)="onSort($event)">Fuel Material</th>
+          <th scope="col">Fuel Value</th>
+          <th scope="col">Previously Reported Throughput Value</th>
+          <th scope="col">% Change in Throughput</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of tableItems">
+            <td>
+              {{item.unitIdentifier}}
+              <br>
+              <fa-icon class="mt-2 ml-1" [icon]="['fas', 'question-circle']" [title]="item.unitDescription"></fa-icon>
+              <span *ngIf="item.unitStatus.code === operatingStatus.TEMP_SHUTDOWN">
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']"
+                    title="This Emissions Unit is Temporarily Shutdown. Each sub-facility component must also be either Temporarily Shutdown or Permanently Shutdown."></fa-icon>
+              </span>
+              <span *ngIf="item.unitStatus.code === operatingStatus.PERM_SHUTDOWN">
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" title="This Emissions Unit is Permanently Shutdown. Each sub-facility component must also be Permanently Shutdown."></fa-icon>
+              </span>
+            </td>
+            <td>
+              <a routerLink="{{baseUrl}}/process/{{item.emissionsProcessId}}" [title]="item.emissionsProcessDescription"
+                    [attr.aria-label]="'emissions process' + item?.emissionsProcessIdentifier">
+                {{item.emissionsProcessIdentifier}}
+              </a>
+              <span *ngIf="item.operatingStatusCode.code === operatingStatus.TEMP_SHUTDOWN">
+                <br>
+                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" title="This process is Temporarily Shutdown and cannot be edited."></fa-icon>
+              </span>
+            </td>
+            <td>{{item.calculationMaterialCode?.description}}</td>
+            <td>
+              <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                <input type="text" class="form-control" id="{{item.reportingPeriodId + 'Throughput'}}" formControlName="{{'throughput' + item.reportingPeriodId}}" [readOnly]="readOnlyMode"
+                        [attr.aria-label]="'Throughput for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier">
+                  <app-validation-message [control]="reportingPeriodForm.get('throughput' + item.reportingPeriodId)"></app-validation-message>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                  {{item.calculationParameterUom?.description}}
+                </div>
+              </div>
+            </td>
+            <td>{{item.fuelUseMaterialCode?.description}}</td>
+            <td>
+              <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                  <input type="text" class="form-control" id="{{item.reportingPeriodId + 'Fuel'}}" formControlName="{{'fuel' + item.reportingPeriodId}}" [readOnly]="!item.fuelUseRequired || readOnlyMode"
+                       [attr.aria-label]="'Fuel for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier">
+                  <app-validation-message [control]="reportingPeriodForm.get('fuel' + item.reportingPeriodId)"></app-validation-message>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                  <select type="text" class="form-control" id="rpFuelUomSelect" formControlName="{{'fuelUom' + item.reportingPeriodId}}" [compareWith]="formUtils.compareCode">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let opt of fuelUseUomValues" [ngValue]="opt">{{opt.description}}</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span *ngIf="item.previousCalculationParameterValue; else elseBlock">
+                {{item.previousCalculationParameterValue}} {{item.previousCalculationParameterUomCode}}
+              </span>
+              <ng-template #elseBlock>N/A</ng-template>
+            </td>
+            <td>
+              <span *ngIf="item.previousCalculationParameterValue; else elseBlock">
+                {{((reportingPeriodForm.get('throughput' + item.reportingPeriodId).value - item.previousCalculationParameterValue) / item.previousCalculationParameterValue * 100).toFixed(3)}}
+              </span>
+              <ng-template #elseBlock>N/A</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="float-right mt-3" *ngIf="!readOnlyMode">
+      <button type="button" class="btn btn-success" (click)="onSubmit()">Save Processes
+        <div *ngIf="savingBulkInfo" class="spinner-border spinner-border-sm" role="status" title="Saving Process Information...">
+          <span class="sr-only">Saving Process Information...</span>
+        </div>
+      </button>
+    </div>
+  </form>
+</div>

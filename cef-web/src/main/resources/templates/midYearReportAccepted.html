@@ -1,0 +1,32 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<p>Your <span th:text="${reportingYear}" /> semi-annual report for <span th:text="${facilityName}" />, submitted from CAER, has been reviewed and accepted by <span th:text="${slt}"/>.
+		You may be contacted if any corrections for the report are necessary. Access CAER to view your submitted report at any time.
+	</p>
+	<p th:if="${!#strings.isEmpty(comments)}">
+		<strong>Additional Comments:</strong><br/>
+		<span th:text="${comments}"></span>
+	</p>
+	<p>If you have any questions about the progress of your emissions report review please contact <span th:text="${slt}"/> at <span th:text="${sltEmail}"/>.</p>
+	<br/>
+	<p>US Environmental Protection Agency</p>
+</body>
+</html>

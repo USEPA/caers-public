@@ -1,0 +1,62 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<footer class="footer">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div id="navbarToggleFooter" class="collapse navbar-collapse justify-content-md-center">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link p-0 pl-1" target="_blank"
+                       href="https://www.epa.gov">
+                        <span>EPA Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link p-0 pl-1" href="javascript:void(0);"
+                       (click)="handoffToCdx('/CDX/MyCDX')">
+                        <span>MyCDX</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link p-0 pl-1" target="_blank"
+                       href="https://www.epa.gov/accessibility">
+                        <span>Accessibility Notice</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link p-0 pl-1" target="_blank"
+                       href="https://cdx.epa.gov/Terms#privacy">
+                        <span>Privacy and Security Notice</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link p-0 pl-1" target="_blank"
+                       href="https://www.epa.gov/privacy/vulnerability-disclosure-policy">
+                        <span>Vulnerability Disclosure Policy</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <form #cdxHandoffForm method='POST'
+          [action]='cdxHandoffLink'>
+        <input name='ssoToken' type='hidden' [value]='ssoToken'>
+        <input name='returnUrl' type='hidden' [value]='returnUrl'>
+    </form>
+    <div class="text-center text-white small p-2 navbar-dark bg-dark" *ngIf="lastModified">
+        Last Modified: {{ lastModified.slice(0, -12) }}
+    </div>
+</footer>

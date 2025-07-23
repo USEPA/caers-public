@@ -1,0 +1,149 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="control">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Device Information</strong>
+                    <div class="float-right" *ngIf="!editInfo && !readOnlyMode">
+                        <button type="button" class="btn btn-success" aria-label="edit control device information" (click)="setEditInfo(true)">Edit</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="!editInfo">
+                        <div class="row pb-1">
+                            <div class="col-sm-6 col-md-2"><strong>Control ID:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.identifier}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Operating Status:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.operatingStatusCode.description}}</div>
+                        </div>
+
+                        <div class="row pb-1">
+                            <div class="col-sm-6 col-md-2"><strong>Control Measure:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.controlMeasureCode.description}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Year Op Status Changed:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.statusYear}}</div>
+                        </div>
+
+                        <div class="row pb-3">
+                            <div class="col-sm-6 col-md-2"><strong>Control Description:</strong></div>
+                            <div class="col-sm-6 col-md-10">{{control.description}}</div>
+                        </div>
+
+                        <div class="row pb-1">
+                            <div class="col-sm-6 col-md-2"><strong>Control Number Operating Months:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.numberOperatingMonths}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Percent Control Effectiveness:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.percentControl}}</div>
+                            <div class="col-sm-6 col-md-2" *ngIf="control.percentCapture"><strong>Percent Capture:</strong></div>
+                            <div class="col-sm-6 col-md-2" *ngIf="control.percentCapture">{{control.percentCapture}}</div>
+                        </div>
+
+                        <div class="row pb-2">
+                            <div class="col-sm-6 col-md-2"><strong>Control Start Date:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.startDate | date:'yyyy-MM-dd'}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Control Upgrade Date:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.upgradeDate | date:'yyyy-MM-dd'}}</div>
+                            <div class="col-sm-6 col-md-2"><strong>Control End Date:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{control.endDate | date:'yyyy-MM-dd'}}</div>
+                        </div>
+
+                        <div class="row pb-3">
+                            <div class="col-sm-6 col-md-2"><strong>Control Upgrade Description:</strong></div>
+                            <div class="col-sm-6 col-md-10">{{control.upgradeDescription}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-md-2"><strong>Comments:</strong></div>
+                            <div class="col-sm-6 col-md-10">{{control.comments}}</div>
+                        </div>
+
+                        <app-reviewer-comment [entityId]="control.id" [entityType]="entityType.CONTROL"></app-reviewer-comment>
+                    </div>
+
+                    <div *ngIf="editInfo">
+                        <app-edit-control-device-info-panel [control]="control" [year]="facilitySite.emissionsReport.year"></app-edit-control-device-info-panel>
+                        <div class="float-right pb-3 pr-3" *ngIf="controlComponent">
+                            <button type="button" class="btn btn-primary mr-2" (click)="setEditInfo(false)">Cancel</button>
+                            <button type="submit" class="btn btn-success" (click)="updateControl()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Device Assignment</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-assignment-table [tableData]="emissionsReportItems" [readOnlyMode]="readOnlyMode"></app-control-assignment-table>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Device Pollutants</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-pollutant-table [facilitySiteId]="facilitySite.id" [year]="facilitySite.emissionsReport.year"
+                            [controlId]="control.id" [tableData]="control.pollutants" [readOnlyMode]="readOnlyMode"></app-control-pollutant-table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Paths Associated with this Control</strong>
+                </div>
+                <div class="card-body">
+                    <div class="mh-100 overflow-auto">
+                    <table class="table table-sm table-striped table-bordered">
+                        <thead class="thead-cef-medium">
+                        <tr>
+                        <th scope="col" sortable="identifier" (sort)="onSort($event)">Path Identifier</th>
+                        <th scope="col" sortable="description" (sort)="onSort($event)">Path Description</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <ng-container *ngFor="let path of controlPaths">
+                            <tr>
+                            <td><a routerLink="{{baseUrl}}/{{path.id}}" [attr.aria-label]="'path identifer' + path?.pathId" >{{path.pathId}}</a></td>
+                            <td [attr.aria-label]="'path description' + path?.description">{{path.description}}</td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

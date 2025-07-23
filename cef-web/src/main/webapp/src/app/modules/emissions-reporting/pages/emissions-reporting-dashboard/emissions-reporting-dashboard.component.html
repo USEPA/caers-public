@@ -1,0 +1,114 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="card">
+  <div class="card-header d-flex flex-row justify-content-between"
+   *ngIf="!thresholdScreeningEnabled; else noChangeStatusHeaderTemplate">
+    <div></div><!--Used for justify-content-between class in parent div-->
+    <strong class="my-auto">Emissions Reports</strong>
+    <button type="button" class="btn btn-primary" (click)="openChangeStatusModal()">Change Status</button>
+  </div>
+  <ng-template #noChangeStatusHeaderTemplate>
+    <div class="card-header text-center">
+      <strong>Emissions Reports</strong>
+    </div>
+  </ng-template>
+  <div class="list-group list-group-flush">
+    <div *ngFor="let report of reports" class="list-group-item">
+      <div class="d-flex flex-row justify-content-between">
+        <div>{{report.year}} Report</div>
+
+        <span *ngIf="onreReportYear && report.year == onreReportYear">
+            Facility marked as ONRE for Inventory Year {{onreReportYear}}.
+        </span>
+
+        <div *ngIf="(!onreReportYear || report.year < onreReportYear || (report.year > onreReportYear && facility.operatingStatusCode.code == OP_CODE))" class="button-list-horizontal">
+          <div ngbDropdown class="d-inline-block">
+            <button ngbDropdownToggle class="btn btn-primary" type="button" id="dropdownMenuButtonUpload"
+                *ngIf="isOneOf(report.status, ['NEW', 'IN_PROGRESS', 'RETURNED', 'VALIDATED']) && allowUpload(report) && allowReportCreation() && report.midYearSubmissionStatus !== 'SUBMITTED' && report.midYearSubmissionStatus !== 'APPROVED'"
+                [attr.aria-label]="'download '+ report.year +' report template'">
+              Upload Report
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuButtonUpload">
+              <a ngbDropdownItem [routerLink]="['/facility', report.masterFacilityRecordId, 'report', 'upload', report.year]">Excel Upload</a>
+              <a ngbDropdownItem [routerLink]="['/facility', report.masterFacilityRecordId, 'report', 'upload', 'json', report.year]">JSON Upload</a>
+            </div>
+          </div>
+
+          <a href="javascript:void(0);" class="btn btn-primary" [attr.aria-label]="'create new'+ report.year +'report'"
+             [id]="'createNew'+ report.year +'Report'"
+             (click)="openThresholdScreeningModal(report.year)" *ngIf="report.status === 'NEW' && allowReportCreation()">Create New Report</a>
+
+          <a [routerLink]="['/facility', report.masterFacilityRecordId, 'report', report.id, 'summary']"
+             class="btn btn-primary" [attr.aria-label]="'continue'+ report.year +'report'"
+             [id]="'continue'+ report.year +'Report'"
+             *ngIf="isOneOf(report.status, ['IN_PROGRESS', 'RETURNED', 'VALIDATED'])">Continue</a>
+
+          <a href="#" class="btn btn-primary"
+            *ngIf="report.status === 'VALIDATED' && userContext.user.isPreparer()">Notify NEI Certifier</a>
+
+          <a [routerLink]="['/facility', report.masterFacilityRecordId, 'report', report.id, 'summary']"
+            class="btn btn-primary" [attr.aria-label]="'view'+ report.year +'report'"
+            *ngIf="isOneOf(report.status, ['ADVANCED_QA', 'APPROVED', 'SUBMITTED'])">View</a>
+
+          <div ngbDropdown class="d-inline-block">
+            <button ngbDropdownToggle class="btn btn-primary" type="button" id="dropdownMenuButtonDownload"
+                *ngIf="excelExportEnabled && !isOneOf(report.status, ['NEW', 'ADVANCED_QA', 'APPROVED'])"
+                [attr.aria-label]="'download '+ report.year +' report template'">
+              Download as Template
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuButtonDownload">
+              <a ngbDropdownItem [routerLink]="['.']" (click)="downloadExcelTemplate(report)">Excel Download</a>
+              <a ngbDropdownItem [routerLink]="['.']" (click)="downloadJsonTemplate(report)">JSON Download</a>
+            </div>
+          </div>
+
+          <a [routerLink]="['.']" class="btn btn-primary" [attr.aria-label]="'reopen'+ report.year +'report'"
+             (click)="reopenReport(report)" *ngIf="isOneOf(report.status, ['SUBMITTED'])">Reopen Report</a>
+
+          <a href="#" class="btn btn-primary"
+             *ngIf="report.status === 'VALIDATED' && userContext.user.isNeiCertifier()">Certify</a>
+
+          <a href="#" class="btn btn-primary"
+             *ngIf="report.status === 'VALIDATED' && userContext.user.isNeiCertifier()">Return to Preparer</a>
+
+          <a href="#" class="btn btn-primary"
+             *ngIf="report.status === 'VALIDATED' && userContext.user.isPreparer()">Cancel Nomination</a>
+
+          <a href="#" class="btn btn-primary" [attr.aria-label]="'delete'+ report.year +'report'"
+             [id]="'delete'+ report.year +'Report'"
+             *ngIf="isOneOf(report.status, ['IN_PROGRESS', 'VALIDATED', 'RETURNED']) && report.midYearSubmissionStatus !== 'SUBMITTED' && report.midYearSubmissionStatus !== 'APPROVED'" [routerLink]="['.']"
+             (click)="openDeleteModal(report)">Delete</a>
+        </div>
+        <ng-template #FailedToCreateMessageBox>
+          <div class="modal-header bg-warning">
+            <h4 class="modal-title">Create Emissions Report Error</h4>
+            <button type="button" class="close" aria-label="Close" (click)="onFailedToCreateCloseClick()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Unable to create emissions report. If this problem persists, please contact the system administrator.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="onFailedToCreateCloseClick()">OK</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="mh-100 overflow-auto">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-cef-medium">
+        <tr>
+            <th scope="col" sortable="permitNumber" (sort)="onSort($event)">Permit Number</th>
+            <th scope="col" sortable="permitType" (sort)="onSort($event)">Permit Type</th>
+            <th scope="col" sortable="startDate" (sort)="onSort($event)">Start/Renewal Date</th>
+            <th scope="col" sortable="endDate" (sort)="onSort($event)">End Date</th>
+            <th scope="col" sortable="comments" (sort)="onSort($event)">Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="!tableItems || tableItems.length === 0">
+            <td colspan="7" class="text-center">
+                <strong class="text-larger">No data available.</strong>
+            </td>
+        </tr>
+        <tr *ngFor="let item of tableItems">
+            <td>{{item.permitNumber}}</td>
+            <td>
+                <span *ngIf="item.permitType?.type === 'Other'">Other - {{item.otherDescription}}</span>
+                <span *ngIf="item.permitType?.type !== 'Other'">{{item.permitType?.description}}</span>
+            </td>
+            <td>{{item.startDate}}</td>
+            <td>{{item.endDate}}</td>
+            <td>{{item.comments}}</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>

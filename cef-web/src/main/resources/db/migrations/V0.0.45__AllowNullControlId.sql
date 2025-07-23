@@ -1,0 +1,1 @@
+ALTER TABLE control_assignment ALTER COLUMN control_id DROP NOT NULL;

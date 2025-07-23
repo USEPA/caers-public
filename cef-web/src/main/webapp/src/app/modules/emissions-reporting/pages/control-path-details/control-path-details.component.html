@@ -1,0 +1,78 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="controlPath">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <strong>Control Path Information</strong>
+                        <div class="float-right" *ngIf="!editInfo && !readOnlyMode">
+                            <button type="button" class="btn btn-success" aria-label="edit control path information" (click)="setEditInfo(true)">Edit</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="!editInfo">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-3"><strong>Path ID:</strong></div>
+                                <div class="col-sm-6 col-md-2" style="margin-bottom: 10px;">{{controlPath.pathId}}</div>
+                                <div class="col-sm-6 col-md-2"><strong>Percent Path Effectiveness:</strong></div>
+                            <div class="col-sm-6 col-md-2">{{controlPath.percentControl}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 col-md-3"><strong>Path Description:</strong></div>
+                                <div class="col-sm-6 col-md-6">{{controlPath.description}}</div>
+                            </div>
+                        </div>
+
+                        <app-reviewer-comment [entityId]="controlPath.id" [entityType]="entityType.CONTROL_PATH"></app-reviewer-comment>
+
+                        <div *ngIf="editInfo">
+                            <app-edit-control-path-info-panel [controlPath]="controlPath"></app-edit-control-path-info-panel>
+                            <div class="float-right pb-3 pr-3" *ngIf="controlPathComponent">
+                                <button type="button" class="btn btn-primary mr-2" (click)="setEditInfo(false)">Cancel</button>
+                                <button type="submit" class="btn btn-success" (click)="updateControlPath()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Path Assignment</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-path-assignment-table [tableData]="controlPathAssignments" [facilitySiteId]="facilitySite.id" [controlPath]="controlPath" [readOnlyMode]="readOnlyMode"></app-control-path-assignment-table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header text-center">
+                    <strong>Control Path Pollutants</strong>
+                </div>
+                <div class="card-body">
+                    <app-control-path-pollutant-table [facilitySiteId]="facilitySite.id" [year]="facilitySite.emissionsReport.year"
+                            [controlPathId]="controlPath.id" [tableData]="controlPath.pollutants" [readOnlyMode]="readOnlyMode"></app-control-path-pollutant-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

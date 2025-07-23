@@ -1,0 +1,116 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="modal-header">
+  <h4 class="modal-title w-100">Emission Reporting Opt-In</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div>
+      <p>The questions below will help you determine your level of participation in the {{year}} Emissions Inventory Year reporting.</p>
+      <p>Was this facility operating in {{year}}?</p>
+      <div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" [(ngModel)]="selectedStatus" id="thresholdOpRadio" value="OP">
+            <label class="form-check-label" for="thresholdOpRadio">
+                Yes. The facility was <strong>operating</strong> during some or all of {{year}}.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" [(ngModel)]="selectedStatus" id="thresholdTsRadio" value="TS">
+            <label class="form-check-label" for="thresholdTsRadio">
+                No. The facility did not operate at all during {{year}}, but is operating now or will operate again in the future, and is thus <strong>temporarily shutdown</strong>.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" [(ngModel)]="selectedStatus" id="thresholdPsRadio" value="PS">
+            <label class="form-check-label" for="thresholdPsRadio">
+                No. The facility did not operate at all during {{year}}, will not operate again, and is thus <strong>permanently shutdown</strong>.
+            </label>
+          </div>
+      </div>
+      <br>
+      <p>Note: If the facility has never operated and is currently in construction, you do not need to submit an EI. If you have received an EI email notification, please contact
+         <a href="mailto:Emissions.Inventory@dnr.ga.gov">emissions.inventory@dnr.ga.gov</a>
+      to be removed from the {{year}} EI email list. You should also delete the facility from your "My Facilities" page.</p>
+  </div>
+
+  <div *ngIf="selectedStatus === 'PS'">
+    <p class="validation-warning">This facility will be "Permanently Shutdown" for the {{year}} inventory year and will not submit an emissions Inventory Report for this, or any future, years. You will now be redirected to the submission screen where you must certify your report.</p>
+  </div>
+
+  <div *ngIf="selectedStatus === 'TS'">
+    <p class="validation-warning">This facility will be "Temporarily Shutdown" for the {{year}} inventory year and will not submit an emissions Inventory Report this year. You will now be redirected to the submission screen where you must certify your report.</p>
+  </div>
+
+  <div *ngIf="selectedStatus === 'OP'">
+    <hr>
+    <div class="h3">Facility Emissions Thresholds</div>
+    <table class="table table-sm table-striped table-bordered">
+      <thead>
+        <tr *ngIf="isTriennialReportYear; else annualColumnHeadersTemplate">
+          <th>{{pollutantHeader}}</th>
+          <th>{{triennialThresholdHeader}}</th>
+        </tr>
+        <ng-template #annualColumnHeadersTemplate>
+          <tr>
+            <th>{{pollutantHeader}}</th>
+            <th>{{annualThresholdHeader}}</th>
+          </tr>
+        </ng-template>
+      </thead>
+      <tbody *ngIf="isTriennialReportYear; else annualTableBodyTemplate">
+        <tr *ngFor="let item of triennialPollutantThresholds">
+          <td>{{item.pollutant}}</td>
+          <td [innerHTML]="item.threshold"></td> <!--innerHTML for HTML symbol-->
+        </tr>
+      </tbody>
+      <ng-template #annualTableBodyTemplate>
+        <tbody>
+          <tr *ngFor="let item of annualPollutantThresholds">
+            <td>{{item.pollutant}}</td>
+            <td [innerHTML]="item.threshold"></td> <!--innerHTML for HTML symbol-->
+          </tr>
+        </tbody>
+      </ng-template>
+    </table>
+    <div class="h4">Is the facility below ALL of the thresholds listed?</div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" [(ngModel)]="belowThreshold" id="belowThresholdYCb" value="true" name="belowThresholdYCb">
+      <label class="form-check-label" for="belowThresholdYCb">
+        Yes
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" [(ngModel)]="belowThreshold" id="belowThresholdNCb" value="false" name="belowThresholdNCb">
+      <label class="form-check-label" for="belowThresholdNCb">
+        No
+      </label>
+    </div>
+    <p *ngIf="belowThreshold == 'true'" class="validation-warning">
+        This facility will be "Operating" below the AERR thresholds for the {{year}} inventory year and will not submit an emissions Inventory Report this year. You will now be redirected to the submission screen where you must provide your PTE analysis and certify your report.
+    </p>
+  </div>
+
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onClose()">Cancel</button>
+  <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!canSubmit()">Proceed</button>
+</div>

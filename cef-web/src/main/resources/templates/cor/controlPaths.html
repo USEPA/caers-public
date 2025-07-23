@@ -1,0 +1,75 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="container print-page-break">
+    <h2 class="pl-3 child-header">Control Paths</h2>
+    <div class="col">
+`		<table class="table">
+            <thead>
+                <tr>
+                    <th>Path ID:</th>
+                    <th>Path Description:</th>
+                </tr>
+            </thead>
+            <tbody>
+			<tr th:unless="${fs.controlPaths ne null and !fs.controlPaths.isEmpty()}">
+				<td></td>
+				<td></td>
+            </tr>
+            <tr th:each="path : ${T(gov.epa.cef.web.controller.CorController).getSortedControlPathList(fs.controlPaths)}">
+				<th th:text="${path.pathId}"></th>
+                <td th:text="${path.description}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <dev class="row pb-5"></dev>
+        <div th:each="path : ${T(gov.epa.cef.web.controller.CorController).getSortedControlPathList(fs.controlPaths)}">
+            <div class="pb-5">
+				<h3 class="pb-3"><strong>Control Path Information</strong></h3>
+				<div><strong>Path ID:</strong> <span th:text="${path.pathId}"></span></div>
+	            <div><strong>Path Description:</strong> <span th:text="${path.description}"></span></div>
+	            <div><strong>% Path Effectiveness:</strong> <span th:text="${path.percentControl}"></span></div>
+            </div>
+            <div class="pb-5 pl-5">
+				<h3 class="pb-2"><strong>Control Path Pollutants</strong></h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Pollutant Name</th>
+                        <th>Code</th>
+                        <th>CAS ID</th>
+                        <th>% Reduction Efficiency</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+					<tr th:unless="${path.pollutants ne null and !path.pollutants.isEmpty()}">
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+		            </tr>
+                    <tr th:each="pollutant : ${T(gov.epa.cef.web.controller.CorController).getSortedPathPollutantList(path.pollutants)}">
+                        <th th:text="${pollutant.pollutant.pollutantName}"></th>
+                        <td th:text="${pollutant.pollutant.pollutantCode}"></td>
+                        <td th:text="${pollutant.pollutant.pollutantCasId}"></td>
+                        <td th:text="${pollutant.percentReduction}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

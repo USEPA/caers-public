@@ -1,0 +1,32 @@
+{
+  "baseUrl": "http://localhost:8080/cef-web",
+  "experimentalStudio": true,
+  "chromeWebSecurity": false,
+  "XFrameOptions": false,
+  "requestTimeout": 60000,
+  "defaultCommandTimeout": 60000,
+  "env": {
+    "environment": "local",
+    "submit_to_reviewer": false,
+    "slt_naics": false,
+    "threshold_screening": false,
+    "dev": {
+      "base": "https://dev.epacdx.net",
+      "login": "https://dev.epacdx.net/CDX/Login",
+      "handoff": "https://dev.epacdx.net/AppHandoff?AppUrl=https%3A%2F%2Fcdxappsdev.epacdx.net%2Fcef-web%2FhandoffLanding&program=CAER&URL_Desc=NEI%20Certifier",
+      "app": "https://cdxappsdev.epacdx.net/cef-web/"
+    },
+    "test": {
+      "base": "https://test.epacdx.net",
+      "login": "https://test.epacdx.net/CDX/Login",
+      "handoff": "https://test.epacdx.net/AppHandoff?AppUrl=https%3A%2F%2Fcdxappstest.epacdx.net%2Fcef-web%2FhandoffLanding&program=CAER&URL_Desc=NEI%20Certifier",
+      "app": "https://cdxappstest.epacdx.net/cef-web/"
+    },
+    "prod": {
+      "base": "https://cdx.epa.gov",
+      "login": "https://cdx.epa.gov/CDX/Login",
+      "handoff": "https://cdx.epa.gov/AppHandoff?AppUrl=https%3A%2F%2Fcdxapps.epa.gov%2Fcef-web%2FhandoffLanding&program=CAER&URL_Desc=NEI%20Certifier",
+      "app": "https://cdxapps.epa.gov/cef-web/"
+    }
+  }
+}

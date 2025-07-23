@@ -1,0 +1,67 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="modal-header">
+  <h4 class="modal-title">{{feedback.year}} {{feedback.facilityName}} Feedback Details</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+      <tr>
+        <th>Intuitive System Navigation</th>
+        <th>Application Data Entry</th>
+        <th>Bulk Upload Template Data Entry</th>
+        <th>Emissions Calculations</th>
+        <th>Controls Approach</th>
+        <th>QA Checks</th>
+        <th>Overall Reporting Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{feedback.intuitiveRating ? feedback.intuitiveRating : 'N/A'}}</td>
+        <td>{{feedback.dataEntryScreens ? feedback.dataEntryScreens : 'N/A'}}</td>
+        <td>{{feedback.dataEntryBulkUpload ? feedback.dataEntryBulkUpload : 'N/A'}}</td>
+        <td>{{feedback.calculationScreens ? feedback.calculationScreens : 'N/A'}}</td>
+        <td>{{feedback.controlsAndControlPathAssignments ? feedback.controlsAndControlPathAssignments : 'N/A'}}</td>
+        <td>{{feedback.qualityAssuranceChecks ? feedback.qualityAssuranceChecks : 'N/A'}}</td>
+        <td>{{feedback.overallReportingTime ? feedback.overallReportingTime : 'N/A'}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+      <tr>
+        <th>Beneficial Application Functionality</th>
+        <th>Difficult Application Functionality</th>
+        <th>Future Enhancements</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{feedback.beneficialFunctionalityComments ? feedback.beneficialFunctionalityComments : 'N/A'}}</td>
+        <td>{{feedback.difficultFunctionalityComments ? feedback.difficultFunctionalityComments : 'N/A'}}</td>
+        <td>{{feedback.enhancementComments ? feedback.enhancementComments : 'N/A'}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="modal-footer">
+</div>

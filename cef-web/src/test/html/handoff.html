@@ -1,0 +1,34 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<html>
+<head>
+    <title>Handoff</title>
+</head>
+<body>
+<form method="POST" action="http://localhost:8080/cef-web/handoffLanding">
+    <div style="margin-bottom: 3px">
+        <textarea name="Token" rows="10" cols="45" placeholder="Token"></textarea>
+    </div>
+    <div style="margin-bottom: 3px">
+        <input type="text" name="CDX_DATA" placeholder="IP Address"/>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+        <th scope="col">Control</th>
+        <th scope="col">Description</th>
+        <th scope="col">Control Path</th>
+    </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let item of tableItems">
+            <ng-container *ngFor="let assignment of item.assignments">
+                <tr *ngIf="assignment.control">
+                    <td><a routerLink="{{baseUrl}}/{{assignment.control.id}}" [attr.aria-label]="'control assignment' + assignment?.control?.identifier">{{assignment.control.identifier}}</a></td>
+                    <td>{{assignment.control.description}}</td>
+                    <td><a routerLink="{{controlPathUrl}}/{{item.id}}" [attr.aria-label]="'control path' + item?.pathId">{{item.pathId}}</a></td>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </tbody>
+</table>

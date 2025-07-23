@@ -1,0 +1,67 @@
+//
+// © Copyright 2019 EPA CAERS Project Team
+//
+// This file is part of the Common Air Emissions Reporting System (CAERS).
+//
+// CAERS is free software: you can redistribute it and/or modify it under the 
+// terms of the GNU General Public License as published by the Free Software Foundation, 
+// either version 3 of the License, or (at your option) any later version.
+//
+// CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with CAERS.  If 
+// not, see <https://www.gnu.org/licenses/>.
+//
+
+.pageHeader {
+    padding-top: 0.3em;
+    display: inline-block;
+}
+.even {
+    background: #ecf0f1;
+}
+.textboxes{
+    padding-top: 0.3em;
+}
+.custom-switch.custom-switch {
+    padding-left: 0;
+    padding-top: 0.6em;
+    
+    .custom-control-label {
+        padding: 0 1.5em;
+        position: relative;
+        border-radius: 1em;
+        line-height: 1.4em;
+        width: 7em;
+        color: white !important;
+        border: 1px solid #2C3E50;
+        background-color: #2C3E50;
+        transition: background-color 200ms;
+        &::before {
+            content: none;
+        }
+        &::after {
+            position: absolute;
+            height: 1em;
+            top: 0.2em;
+            left: 0.2em;
+            width: 1em;
+            border-radius: 1em;
+            background-color: white !important;
+            transition: left 200ms;
+        }
+    }
+    .custom-control-input:checked ~ .custom-control-label {
+        color: white !important;
+        background-color: #187773;
+        border-color: #187773;
+        &::after {
+            background-color: white;
+            left: calc(100% - 1.2em);
+            transform: none;
+            -webkit-transform: none;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS geographic_reference_point_code;
+DROP TABLE IF EXISTS horizontal_collection_method_code;
+DROP TABLE IF EXISTS geometric_type_code;
+DROP TABLE IF EXISTS coordinate_datasource_code;
+DROP TABLE IF EXISTS region_code;
+DROP TABLE IF EXISTS verification_code;
+DROP TABLE IF EXISTS vertical_collection_method_code;
+DROP TABLE IF EXISTS vertical_reference_datum_code;
+DROP TABLE IF EXISTS horizontal_reference_datum_code;

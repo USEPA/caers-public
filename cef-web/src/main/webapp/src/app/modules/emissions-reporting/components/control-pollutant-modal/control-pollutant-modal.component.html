@@ -1,0 +1,61 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="pollutantForm">
+    <div class="modal-header">
+        <h4 class="modal-title w-100" *ngIf="controlPollutantFor == 'CONTROL_PATH'"><strong>Control Path Pollutant</strong></h4>
+        <h4 class="modal-title w-100" *ngIf="controlPollutantFor === 'CONTROL_DEVICE'"><strong>Control Device Pollutant</strong></h4>
+    </div>
+
+    <div class="modal-body" style="height: 350px;">
+        <div class="row pb-1">
+            <div class="col-sm-4">
+                <fa-icon class="mt-2 ml-2" style="visibility: hidden" [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="pollutantSelect" class="ml-1 col-form-label"><strong>Pollutant:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('pollutant')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-6">
+                <input [attr.aria-multiline]="null" id="pollutantSelect" type="text" class="form-control"
+                       formControlName="pollutant" [ngbTypeahead]="searchPollutants" [editable]="true"
+                       [inputFormatter]="pollutantFormatter" [resultFormatter]="pollutantFormatter"/>
+                        <!--[editable]="true" needed for error handling-->
+                <app-validation-message [control]="pollutantForm.get('pollutant')"></app-validation-message>
+            </div>
+        </div>
+        <div class="row pb-1">
+            <div class="col-sm-4" *ngIf="controlPollutantFor === 'CONTROL_DEVICE'">
+                <fa-icon class="mt-2 ml-2" title="The percent reduction achieved for the controlled pollutant when all control measures are operating as designed." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="percentReductionSelect" class="ml-1 col-form-label"><strong>Percent Reduction Efficiency:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('percentReduction')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-4" *ngIf="controlPollutantFor === 'CONTROL_PATH'">
+                <fa-icon class="mt-2 ml-2" title="The combined percent reduction efficiency of all controls in that path that apply to a single pollutant.  It is the same as the control device percent reduction efficiency when there is only one control." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="percentReductionSelect" class="ml-1 col-form-label"><strong>Percent Reduction Efficiency:</strong></label>
+    			<app-required-asterisk [control]="pollutantForm.get('percentReduction')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-6">
+                <input id="percentReductionSelect" class="form-control" formControlName="percentReduction" maxlength="6"/>
+                <app-validation-message [control]="pollutantForm.get('percentReduction')"></app-validation-message>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="onClose()">Cancel</button>
+    </div>
+
+</form>

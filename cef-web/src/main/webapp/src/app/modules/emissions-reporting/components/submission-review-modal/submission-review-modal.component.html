@@ -1,0 +1,69 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="modal-header">
+  <h4 class="modal-title">Submission Review</h4>
+  <button type="button" class="close" aria-label="Close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+	<div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Facility Name:</strong></div>
+			<div class="col-md-6">{{facility.name}}</div>
+		</div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Facility ID:</strong></div>
+			<div class="col-md-6">{{facility.agencyFacilityIdentifier}}</div>
+		</div>
+		<div class="row pb-1">
+			<div class="col-md-4"><strong>Report Year:</strong></div>
+			<div *ngIf="!semiannualReport" class="col-md-6">{{report.year}}</div>
+            <div *ngIf="semiannualReport" class="col-md-6">{{report.year}} - Semi-annual</div>
+		</div>
+		<div class="row pb-2">
+			<div class="col-md-4"><strong>Emissions Report Last Updated:</strong></div>
+			<div class="col-md-6">{{lastModifiedDate | date: 'long'}}</div>
+		</div>
+		<p>Before submitting your report, you should view a copy and review it for accuracy.</p>
+		<div class ="buttonCenter">
+			<span *ngIf="semiannualReport"><a href="semiannual/cor/{{report.id}}?generate=false" target="_blank" class="btn btn-success">View Report</a></span>
+			<span *ngIf="!semiannualReport"><a href="cor/{{report.id}}?generate=false" target="_blank" class="btn btn-success">View Report</a></span>
+		</div>
+		<div *ngIf="tableData">
+			<h6><strong>Download Report Attachments</strong></h6>
+			<ul *ngFor="let attachment of tableData">
+				<li class="attachList">
+					<a routerLink="{{url}}/summary" (click)="download(attachment)">{{attachment?.fileName}}</a>
+				</li>
+			</ul>
+		<div>
+		<br>
+	</div>
+	<div class="form-check">
+		<div>
+			<input type="checkbox" class="form-check-input" [checked]="acknowledgmentChecked" (change)="acknowledgment(acknowledgmentChecked)" id="acknowledgment" aria-label="submission review acknowledgment">&nbsp;
+			<span class="form-check-label" for="acknowledgment">I acknowledge that I have had the opportunity to download and review the data in this report.</span>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" id="certifyAndSubmit"
+			[style.visibility]="'hidden'" [disabled]="!acknowledgmentChecked">certifyAndSubmit</button>
+	<button type="button" (click)="onContinue()" class="btn btn-success" id="modalProceedBtn" [disabled]="!acknowledgmentChecked">Proceed</button>
+    <button type="button" (click)="onCancel()" class="btn btn-primary" id="modalCancelBtn">Cancel</button>
+</div>

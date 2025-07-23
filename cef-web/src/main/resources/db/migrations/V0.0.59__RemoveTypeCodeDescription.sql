@@ -1,0 +1,1 @@
+ALTER TABLE emissions_unit DROP COLUMN type_code_description;

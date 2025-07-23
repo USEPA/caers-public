@@ -1,0 +1,40 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<p>Your <span th:text="${reportingYear}" /> annual emissions report for <span th:text="${facilityName}" />, submitted from CAER, has been returned.
+		Please review "Additional Comments" below for details of why the emissions report was sent back. You may also view these comments in the
+		"Report History" section of your submitted report inside of CAER at any time.
+	</p>
+	<div th:if="${!#strings.isEmpty(comments) || !#strings.isEmpty(attachment)}">
+		<strong>Additional Comments:</strong><br/>
+		<p th:text="${comments}" style="padding-top: 0; margin-top: 0"></p>
+		<p th:if="${!#strings.isEmpty(attachment)}" style="padding-top: 0; margin-top: 0">
+			Please review the attached document <strong><span th:text="${attachment}"/></strong> in the "Report History" section of your report for additional information.
+		</p>
+	</div>
+	<p>If you have any questions about this notice please contact <span th:text="${slt}"/> at <span th:text="${sltEmail}"/>.</p>
+	<p>If you or someone from your organization did not perform this submission, or discover any discrepancy between the
+        electronic document you signed and the record received by CDX, please contact the CDX Help Desk within 24 hours by using one of the options listed
+        at <a th:href="@{https://cdx.epa.gov/Contact}">https://cdx.epa.gov/Contact</a>, so we may address the issue promptly.
+	</p>
+	<br/>
+	<p>US Environmental Protection Agency</p>
+</body>
+</html>

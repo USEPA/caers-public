@@ -1,0 +1,46 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="mh-100 overflow-auto">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+      <tr>
+        <th scope="col" sortable="fullName" (sort)="onSort($event)">Name</th>
+        <th scope="col" sortable="email" (sort)="onSort($event)">Email</th>
+        <th scope="col" sortable="roleDescription" (sort)="onSort($event)">Role</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!tableItems || tableItems.length === 0">
+        <td colspan="4" class="text-center">
+            <strong class="text-larger">No data available.</strong>
+        </td>
+      </tr>
+      <tr *ngFor="let item of tableItems">
+        <td>{{item.fullName}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.roleDescription}}</td>
+        <td>
+          <a routerLink="." (click)="openDeleteModal(item)" [attr.aria-label]="'delete facility association for ' + item.fullName">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

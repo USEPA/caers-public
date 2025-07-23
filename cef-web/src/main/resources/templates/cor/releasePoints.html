@@ -1,0 +1,112 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="container print-page-break">
+    <h1 class="pl-3 pb-2 child-header">Release Points</h1>
+    <div class="col">
+        <div class="print-page-break">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Release Point ID</th>
+                        <th>Release Point Type</th>
+                        <th>Release Point Description</th>
+                        <th>Operating Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+				<tr th:unless="${fs.releasePoints ne null and !fs.releasePoints.isEmpty()}">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+                <tr th:each="rp : ${T(gov.epa.cef.web.controller.CorController).getSortedReleasePointList(fs.releasePoints)}">
+                    <th th:text="${rp.releasePointIdentifier}"></th>
+                    <td th:text="${rp.typeCode?.description}"></td>
+                    <td th:text="${rp.description}"></td>
+                    <td th:text="${rp.operatingStatusCode?.description}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2 class="pt-5"><strong>Release Point Information</strong></h2>
+        <div th:each="rp : ${T(gov.epa.cef.web.controller.CorController).getSortedReleasePointList(fs.releasePoints)}">
+            <div><strong>Release Point ID:</strong> <span th:text="${rp.releasePointIdentifier}"></span></div>
+            <div><strong>Release Point Type Code:</strong> <span th:text="${rp.typeCode?.description}"></span></div>
+            <div><strong>Release Point Description:</strong> <span th:text="${rp.description}"></span></div>
+            <div><strong>Operating Status:</strong> <span th:text="${rp.operatingStatusCode?.description}"></span></div>
+            <div><strong>Year Op Status Changed:</strong> <span th:text="${rp.statusYear}"></span></div>
+            <div><strong>Fence Line Distance:</strong> <span th:text="${rp.fenceLineDistance}"></span></div>
+            <div><strong>Fence Line Distance UoM:</strong> <span th:if="${rp.fenceLineUomCode?.code ne null}" th:text="|${rp.fenceLineUomCode?.description} (${rp.fenceLineUomCode?.code})|"></span></div>
+            <div>
+                <span th:if="${rp.typeCode.category == 'Stack'}"><strong>Latitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '1'}"><strong>SW Corner Latitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '7'}"><strong>Center Latitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '9'}"><strong>Mid Point 1 Latitude Measure:</strong> </span>
+                <span th:text="${rp.latitude}"></span>
+            </div>
+            <div>
+                <span th:if="${rp.typeCode.category == 'Stack'}"><strong>Longitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '1'}"><strong>SW Corner Longitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '7'}"><strong>Center Longitude Measure:</strong> </span>
+                <span th:if="${rp.typeCode.code == '9'}"><strong>Mid Point 1 Longitude Measure:</strong> </span>
+                <span th:text="${rp.longitude}"></span>
+            </div>
+            <div th:if="${rp.typeCode.code == '9'}">
+                <div><strong>Mid Point 2 Latitude Measure:</strong> <span th:text="${rp.fugitiveMidPt2Latitude}"></span></div>
+                <div><strong>Mid Point 2 Longitude Measure:</strong> <span th:text="${rp.fugitiveMidPt2Longitude}"></span></div>
+            </div>
+            <div><strong>Exit Gas Velocity Measure:</strong> <span th:text="${rp.exitGasVelocity}"></span></div>
+            <div><strong>Exit Gas Velocity UoM:</strong> <span th:if="${rp.exitGasVelocityUomCode?.code ne null}" th:text="|${rp.exitGasVelocityUomCode?.description} (${rp.exitGasVelocityUomCode?.code})|"></span></div>
+            <div><strong>Exit Gas Temperature Measure (&deg;F):</strong> <span th:text="${rp.exitGasTemperature}"></span></div>
+            <div><strong>Exit Gas Flow Rate Measure:</strong> <span th:text="${rp.exitGasFlowRate}"></span></div>
+            <div><strong>Exit Gas Flow Rate UoM:</strong> <span th:if="${rp.exitGasFlowUomCode?.code ne null}" th:text="|${rp.exitGasFlowUomCode?.description} (${rp.exitGasFlowUomCode?.code})|"></span></div>
+            <div th:if="${rp.typeCode.category == 'Fugitive'}">
+                <div><strong>Fugitive Height Measure:</strong> <span th:text="${rp.fugitiveHeight}"></span></div>
+                <div><strong>Fugitive Height UoM:</strong> <span th:if="${rp.fugitiveHeightUomCode?.code ne null}" th:text="|${rp.fugitiveHeightUomCode?.description} (${rp.fugitiveHeightUomCode?.code})|"></span></div>
+                <div th:if="${rp.typeCode.code == '1'}"><strong>Fugitive Angle Measure (degrees azimuth):</strong> <span th:if="${rp.typeCode.code == '1'}" th:text="${rp.fugitiveAngle}"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.category == 'Fugitive'}">
+                <div><strong>Fugitive Width  Measure:</strong> <span th:text="${rp.fugitiveWidth}"></span></div>
+                <div><strong>Fugitive Width  UoM:</strong> <span th:if="${rp.fugitiveWidthUomCode?.code ne null}" th:text="|${rp.fugitiveWidthUomCode?.description} (${rp.fugitiveWidthUomCode?.code})|"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.code == '1'}">
+                <div><strong>Fugitive Length Measure:</strong> <span th:text="${rp.fugitiveLength}"></span></div>
+                <div><strong>Fugitive Length UoM:</strong> <span th:if="${rp.fugitiveLengthUomCode?.code ne null}" th:text="|${rp.fugitiveLengthUomCode?.description} (${rp.fugitiveLengthUomCode?.code})|"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.category == 'Stack'}">
+                <div><strong>Stack Height Measure:</strong> <span th:text="${rp.stackHeight}"></span></div>
+                <div><strong>Stack Height UoM:</strong> <span th:if="${rp.stackHeightUomCode?.code ne null}" th:text="|${rp.stackHeightUomCode?.description} (${rp.stackHeightUomCode?.code})|"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.category == 'Stack'}">
+                <div><strong>Stack Diameter Measure:</strong> <span th:text="${rp.stackDiameter}"></span></div>
+                <div><strong>Stack Diameter UoM:</strong> <span th:if="${rp.stackDiameterUomCode?.code ne null}" th:text="|${rp.stackDiameterUomCode?.description} (${rp.stackDiameterUomCode?.code})|"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.category == 'Stack'}">
+                <div><strong>Stack Length Measure:</strong> <span th:text="${rp.stackLength}"></span></div>
+                <div><strong>Stack Length UoM:</strong> <span th:if="${rp.stackLengthUomCode?.code ne null}" th:text="|${rp.stackLengthUomCode?.description} (${rp.stackLengthUomCode?.code})|"></span></div>
+            </div>
+            <div th:if="${rp.typeCode.category == 'Stack'}">
+                <div><strong>Stack Width Measure:</strong> <span th:text="${rp.stackWidth}"></span></div>
+                <div><strong>Stack Width UoM:</strong> <span th:if="${rp.stackWidthUomCode?.code ne null}" th:text="|${rp.stackWidthUomCode?.description} (${rp.stackWidthUomCode?.code})|"></span></div>
+            </div>
+            <div class="pb-4">
+                <div><strong>Comments:</strong> <span th:text="${rp.comments}"></span></div>
+            </div>
+        </div>
+    </div>
+</div>

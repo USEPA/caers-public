@@ -1,0 +1,29 @@
+{
+	"user": "first name last name",
+	"userId": "CAER_Auto_Testing",
+	"password": "--REMOVED--",
+	"email": "your email address",
+	"cromerrQuestions": [
+		{
+			"id": "3",
+			"text": "What is your favorite vacation destination?",
+			"answer": "destination"
+		}, {
+			"id": "12",
+			"text": "What is your favorite hobby?",
+			"answer": "hobby"
+		}, {
+			"id": "6",
+			"text": "Where did you first meet your spouse?",
+			"answer": "spouse"
+		}, {
+			"id": "15",
+			"text": "What was your high school's mascot?",
+			"answer": "mascot"
+		}, {
+			"id": "1",
+			"text": "What is the first and middle name of your oldest sibling?",
+			"answer": "sibling"
+		}
+	]
+}

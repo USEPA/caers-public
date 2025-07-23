@@ -1,0 +1,557 @@
+{
+    "id": 9999997,
+    "masterFacilityRecordId": "9999991",
+    "eisProgramId": "9758611",
+    "programSystemCode": "GADNR",
+    "year": 2010,
+    "status": "IN_PROGRESS",
+    "validationStatus": "PASSED_WARNINGS",
+    "facilitySites": [
+        {
+            "id": 9999991,
+            "masterFacilityRecordId": "9999991",
+            "agencyFacilityIdentifier": "1301700008",
+            "facilityCategoryCode": "CAP",
+            "facilitySourceTypeCode": "133",
+            "name": "Gilman Building Products LLC",
+            "description": "Pulp and Paper Processing Plant",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "programSystemCode": "63JJJJ",
+            "streetAddress": "173 Peachtree Rd",
+            "city": "Fitzgerald",
+            "county": "Whitfield",
+            "stateCode": "GA",
+            "countryCode": "",
+            "postalCode": "31750",
+            "latitude": 33.749000,
+            "longitude": -84.388000,
+            "mailingStreetAddress": "173 Peachtree Rd",
+            "mailingCity": "Fitzgerald",
+            "mailingStateCode": "GA",
+            "mailingPostalCode": "31750",
+            "mailingCountryCode": null,
+            "eisProgramId": "9758611",
+            "tribalCode": null,
+            "comments": "Sample Comments for Facility Site"
+        }
+    ],
+    "facilityNAICS": [{
+			"facilitySiteId":"9999991",
+			"code": "221112",
+			"primaryFlag": true
+        },
+        {
+			"facilitySiteId":"9999991",
+			"code": "4241",
+			"primaryFlag": false
+		}
+	],
+	"facilityContacts": [{
+			"id": "9999991",
+			"facilitySiteId":"9999991",
+			"type": "RO",
+			"prefix": "",
+			"firstName": "John",
+			"lastName": "Smith",
+			"email": "johnsmith@test.com",
+			"phone": "3193193119",
+			"phoneExt": "001",
+			"streetAddress": "173 Peachtree Rd",
+			"city": "Fitzgerald",
+			"county": "Whitfield",
+			"stateCode": "GA",
+			"countryCode": "",
+			"postalCode": "31750",
+			"mailingStreetAddress": "173 Peachtree Rd",
+			"mailingCity": "Fitzgerald",
+			"mailingStateCode": "GA",
+			"mailingPostalCode": "31750",
+			"mailingCountryCode": ""
+        },
+        {
+			"id": "9999991",
+			"facilitySiteId":"9999991",
+			"type": "FAC",
+			"prefix": "",
+			"firstName": "Jane",
+			"lastName": "Doe",
+			"email": "janedoe@test.com",
+			"phone": "3193193119",
+			"phoneExt": "001",
+			"streetAddress": "173 Peachtree Rd",
+			"city": "Fitzgerald",
+			"county": "Whitfield",
+			"stateCode": "GA",
+			"countryCode": "",
+			"postalCode": "31750",
+			"mailingStreetAddress": "",
+			"mailingCity": "",
+			"mailingStateCode": "",
+			"mailingPostalCode": "",
+			"mailingCountryCode": ""
+		}
+	],
+    "emissionsUnits": [
+        {
+            "id": 9999991,
+            "facilitySiteId": 9999991,
+            "unitIdentifier": "Boiler 001",
+            "description": "Gas Boiler - Industrial Size",
+            "typeCode": "206",
+            "operatingStatusCodeDescription": "OP",
+            "statusYear": 1985,
+            "unitOfMeasureCode": "LB/DAY",
+            "comments": "Sample Comments for Boiler 001",
+            "designCapacity": 647
+        },
+        {
+            "id": 9999992,
+            "facilitySiteId": 9999991,
+            "unitIdentifier": "Boiler 002",
+            "description": "Coal Boiler - Industrial Size",
+            "typeCode": "100",
+            "operatingStatusCodeDescription": "OP",
+            "statusYear": 1985,
+            "unitOfMeasureCode": "TON/HR",
+            "comments": "Sample Comments for Boiler 002",
+            "designCapacity": 34
+        },
+        {
+            "id": 9999993,
+            "facilitySiteId": 9999991,
+            "unitIdentifier": "Dryer 001",
+            "description": "Big Dryer",
+            "typeCode": "1252",
+            "operatingStatusCodeDescription": "OP",
+            "statusYear": 1985,
+            "unitOfMeasureCode": "TON",
+            "comments": "Sample Comments for Dryer 001",
+            "designCapacity": 72
+        }
+    ],
+    "emissionsProcesses": [
+        {
+            "id": 9999991,
+            "emissionsUnitId": 9999991,
+            "emissionsProcessIdentifier": "Drying Process",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "sccCode": "30700752",
+            "sccShortName": "",
+            "description": "Softwood Veneer Dryer: Direct Natural Gas-fired: Heated Zones",
+            "aircraftEngineTypeCode": "2258",
+            "comments": "Sample Comments for Drying Process",
+            "sccDescription": null
+        },
+        {
+            "id": 9999992,
+            "emissionsUnitId": 9999991,
+            "emissionsProcessIdentifier": "Disposal Process",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "sccCode": "50300106",
+            "sccShortName": "",
+            "description": "Air Curtain Combustor: Wood",
+            "aircraftEngineTypeCode": null,
+            "comments": "Sample Comments for Disposal Process",
+            "sccDescription": null
+        },
+        {
+            "id": 9999993,
+            "emissionsUnitId": 9999991,
+            "emissionsProcessIdentifier": "Storage Process",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "sccCode": "30700828",
+            "sccShortName": "",
+            "description": "Chip Storage Piles: Hardwood",
+            "aircraftEngineTypeCode": null,
+            "comments": "Sample Comments for Storage Process",
+            "sccDescription": null
+        }
+    ],
+    "releasePoints": [
+        {
+            "id": 9999991,
+            "facilitySiteId": 9999991,
+            "releasePointIdentifier": "Smokestack 1",
+            "typeCode": "1",
+            "description": "A big smokestack",
+            "stackHeight": 40.0,
+            "stackHeightUomCode": "FT",
+            "stackDiameter": 7.0,
+            "stackDiameterUomCode": "FT",
+            "exitGasVelocity": 20.0,
+            "exitGasVelocityUomCode": "FPS",
+            "exitGasTemperature": 75,
+            "exitGasFlowRate": 25.0,
+            "exitGasFlowUomCode": "ACFS",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "latitude": 33.749,
+            "longitude": 84.388,
+            "fugitiveLine1Latitude": 32.749,
+            "fugitiveLine1Longitude": 83.388,
+            "fugitiveLine2Latitude": 34.749,
+            "fugitiveLine2Longitude": 85.388,
+            "comments": "Sample Comments for Smokestack 1",
+			"fenceLineDistance": 30,
+			"fenceLineUomCode": "FT",
+			"fugitiveHeight": 30,
+			"fugitiveHeightUomCode": "FT",
+			"fugitiveWidth": 10,
+			"fugitiveWidthUomCode": "FT",
+			"fugitiveLength": 30,
+			"fugitiveLengthUomCode": "FT",
+			"fugitiveAngle": 15
+        },
+        {
+            "id": 9999992,
+            "facilitySiteId": 9999991,
+            "releasePointIdentifier": "Smokestack 2",
+            "typeCode": "2",
+            "description": "Another big smokestack",
+            "stackHeight": 7.0,
+            "stackHeightUomCode": "FT",
+            "stackDiameter": 14.0,
+            "stackDiameterUomCode": "FT",
+            "exitGasVelocity": 154.0,
+            "exitGasVelocityUomCode": "FPS",
+            "exitGasTemperature": 100,
+            "exitGasFlowRate": 35.0,
+            "exitGasFlowUomCode": "ACFS",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "latitude": 33.749,
+            "longitude": 84.388,
+            "fugitiveLine1Latitude": null,
+            "fugitiveLine1Longitude": null,
+            "fugitiveLine2Latitude": null,
+            "fugitiveLine2Longitude": null,
+            "comments": "Sample Comments for Smokestack 2",
+			"fenceLineDistance": "",
+			"fenceLineUomCode": "",
+			"fugitiveHeight": "",
+			"fugitiveHeightUomCode": "",
+			"fugitiveWidth": "",
+			"fugitiveWidthUomCode": "",
+			"fugitiveLength": "",
+			"fugitiveLengthUomCode": "",
+			"fugitiveAngle": ""
+        },
+        {
+            "id": 9999993,
+            "facilitySiteId": 9999991,
+            "releasePointIdentifier": "Vent 1",
+            "typeCode": "5",
+            "description": "A big vent",
+            "stackHeight": 25.0,
+            "stackHeightUomCode": "FT",
+            "stackDiameter": 25.0,
+            "stackDiameterUomCode": "FT",
+            "exitGasVelocity": 627.0,
+            "exitGasVelocityUomCode": "FPS",
+            "exitGasTemperature": 123,
+            "exitGasFlowRate": 76.0,
+            "exitGasFlowUomCode": "ACFS",
+            "operatingStatusCode": "OP",
+            "statusYear": 1985,
+            "latitude": 33.749,
+            "longitude": 84.388,
+            "fugitiveLine1Latitude": null,
+            "fugitiveLine1Longitude": null,
+            "fugitiveLine2Latitude": null,
+            "fugitiveLine2Longitude": null,
+            "comments": "Sample Comments for Vent 1",
+			"fenceLineDistance": "",
+			"fenceLineUomCode": "",
+			"fugitiveHeight": "",
+			"fugitiveHeightUomCode": "",
+			"fugitiveWidth": "",
+			"fugitiveWidthUomCode": "",
+			"fugitiveLength": "",
+			"fugitiveLengthUomCode": "",
+			"fugitiveAngle": ""
+        }
+    ],
+    "releasePointAppts": [
+        {
+            "id": 9999991,
+            "releasePointId": 9999991,
+            "emissionProcessId": 9999991,
+            "percent": 33.0,
+            "controlPathId": 9999991
+        },
+        {
+            "id": 9999996,
+            "releasePointId": 9999991,
+            "emissionProcessId": 9999993,
+            "percent": 10.0,
+            "controlPathId": 9999992
+        },
+        {
+            "id": 9999994,
+            "releasePointId": 9999991,
+            "emissionProcessId": 9999992,
+            "percent": 60.0,
+            "controlPathId": 9999994
+        },
+        {
+            "id": 9999995,
+            "releasePointId": 9999992,
+            "emissionProcessId": 9999992,
+            "percent": 40.0,
+            "controlPathId": 9999991
+        },
+        {
+            "id": 9999992,
+            "releasePointId": 9999992,
+            "emissionProcessId": 9999991,
+            "percent": 33.0,
+            "controlPathId": 9999992
+        },
+        {
+            "id": 9999997,
+            "releasePointId": 9999992,
+            "emissionProcessId": 9999993,
+            "percent": 20.0,
+            "controlPathId": 9999993
+        },
+        {
+            "id": 9999993,
+            "releasePointId": 9999993,
+            "emissionProcessId": 9999991,
+            "percent": 34.0,
+            "controlPathId": 9999993
+        },
+        {
+            "id": 9999998,
+            "releasePointId": 9999993,
+            "emissionProcessId": 9999993,
+            "percent": 70.0,
+            "controlPathId": 9999994
+        }
+    ],
+    "reportingPeriods": [
+        {
+            "id": 9999991,
+            "emissionsProcessId": 9999991,
+            "reportingPeriodTypeCode": "A",
+            "emissionsOperatingTypeCode": "R",
+            "calculationParameterTypeCode": "I",
+            "calculationParameterValue": 351,
+            "calculationParameterUom": "LB",
+            "calculationMaterialCode": "698",
+            "comments": "Reporting Period Comment"
+        },
+        {
+            "id": 9999992,
+            "emissionsProcessId": 9999992,
+            "reportingPeriodTypeCode": "A",
+            "emissionsOperatingTypeCode": "R",
+            "calculationParameterTypeCode": "O",
+            "calculationParameterValue": 15876,
+            "calculationParameterUom": "TON",
+            "calculationMaterialCode": "70",
+            "comments": "Reporting Period Comment"
+        },
+        {
+            "id": 9999993,
+            "emissionsProcessId": 9999993,
+            "reportingPeriodTypeCode": "A",
+            "emissionsOperatingTypeCode": "R",
+            "calculationParameterTypeCode": "E",
+            "calculationParameterValue": 466,
+            "calculationParameterUom": "TON",
+            "calculationMaterialCode": "956",
+            "comments": "Reporting Period Comment"
+        }
+    ],
+    "operatingDetails": [
+        {
+            "id": 9999991,
+            "reportingPeriodId": 9999991,
+            "actualHoursPerPeriod": 8700,
+            "averageHoursPerDay": 24.0,
+            "averageDaysPerWeek": 7.0,
+            "averageWeeksPerPeriod": 52,
+            "percentWinter": 25.0,
+            "percentSpring": 25.0,
+            "percentSummer": 25.0,
+            "percentFall": 25.0
+        },
+        {
+            "id": 9999992,
+            "reportingPeriodId": 9999992,
+            "actualHoursPerPeriod": 8700,
+            "averageHoursPerDay": 20.0,
+            "averageDaysPerWeek": 6.0,
+            "averageWeeksPerPeriod": 52,
+            "percentWinter": 10.0,
+            "percentSpring": 10.0,
+            "percentSummer": 50.0,
+            "percentFall": 30.0
+        },
+        {
+            "id": 9999993,
+            "reportingPeriodId": 9999993,
+            "actualHoursPerPeriod": 8700,
+            "averageHoursPerDay": 18.0,
+            "averageDaysPerWeek": 5.0,
+            "averageWeeksPerPeriod": 52,
+            "percentWinter": 45.0,
+            "percentSpring": 5.0,
+            "percentSummer": 25.0,
+            "percentFall": 25.0
+        }
+    ],
+    "emissions": [
+        {
+            "id": 9999992,
+            "reportingPeriodId": 9999991,
+            "pollutantCode": "208968",
+            "totalEmissions": 1007.75,
+            "emissionsUomCode": "TON",
+            "emissionsFactor": 0.5920,
+            "emissionsFactorText": "5.900E-2 Lb per 1000 Square Feet 3/8-inch Thick Veneer Produced",
+            "emissionsCalcMethodCode": "1",
+            "comments": "Sample comments for Acenaphthylene",
+            "emissionsNumeratorUom": "TON",
+            "emissionsDenominatorUom": "E3FT2/HR",
+            "calculatedEmissionsTons": 1007.75
+        },
+        {
+            "id": 9999991,
+            "reportingPeriodId": 9999991,
+            "pollutantCode": "75070",
+            "totalEmissions": 1000,
+            "emissionsUomCode": "TON",
+            "emissionsFactor": 0.6200,
+            "emissionsFactorText": "6.200E-2 Lb per 1000 Square Feet 3/8-inch Thick Veneer Produced",
+            "emissionsCalcMethodCode": "1",
+            "comments": "Sample comments for Acetaldehyde",
+            "emissionsNumeratorUom": "TON",
+            "emissionsDenominatorUom": "E3FT2/HR",
+            "calculatedEmissionsTons": 1000
+        },
+        {
+            "id": 9999993,
+            "reportingPeriodId": 9999991,
+            "pollutantCode": "71432",
+            "totalEmissions": 2015.6,
+            "emissionsUomCode": "TON",
+            "emissionsFactor": 0.5700,
+            "emissionsFactorText": "5.700E-3 Lb per 1000 Square Feet 3/8-inch Thick Veneer Produced",
+            "emissionsCalcMethodCode": "1",
+            "comments": "Sample comments for Benzene",
+            "emissionsNumeratorUom": "TON",
+            "emissionsDenominatorUom": "E3FT2/HR",
+            "calculatedEmissionsTons": 2015.6
+        }
+    ],
+    "controlPaths": [
+        {
+            "id": 9999994,
+            "facilitySiteId": 9999991,
+            "description": "Path Description",
+            "pathId": "Path D"
+        },
+        {
+            "id": 9999991,
+            "facilitySiteId": 9999991,
+            "description": "Path Description",
+            "pathId": "Path A"
+        },
+        {
+            "id": 9999993,
+            "facilitySiteId": 9999991,
+            "description": "Path Description",
+            "pathId": "Path C"
+        },
+        {
+            "id": 9999992,
+            "facilitySiteId": 9999991,
+            "description": "Path Description",
+            "pathId": "Path B"
+        }
+    ],
+    "controls": [
+        {
+            "id": 9999991,
+            "facilitySiteId": 9999991,
+            "operatingStatusCode": "OP",
+            "identifier": "Control 001",
+            "description": "Acetaldehyde and Benzene Control",
+            "percentCapture": 50.0,
+            "percentControl": 50.0,
+            "comments": "Sample comments for Control 001",
+            "controlMeasureCode": "1"
+        },
+        {
+            "id": 9999992,
+            "facilitySiteId": 9999991,
+            "operatingStatusCode": "OP",
+            "identifier": "Control 002",
+            "description": "Acetaldehyde Control",
+            "percentCapture": 25.0,
+            "percentControl": 75.0,
+            "comments": "Sample comments for Control 002",
+            "controlMeasureCode": "2"
+        }
+    ],
+    "controlAssignments": [
+        {
+            "id": 9999994,
+            "controlId": 9999992,
+            "controlPathId": 9999994,
+            "controlPathChildId": null,
+            "sequenceNumber": 1,
+            "percentApportionment": 100.0
+        },
+        {
+            "id": 9999991,
+            "controlId": 9999991,
+            "controlPathId": 9999991,
+            "controlPathChildId": null,
+            "sequenceNumber": 1,
+            "percentApportionment": 100.0
+        },
+        {
+            "id": 9999993,
+            "controlId": 9999991,
+            "controlPathId": 9999993,
+            "controlPathChildId": null,
+            "sequenceNumber": 1,
+            "percentApportionment": 100.0
+        },
+        {
+            "id": 9999992,
+            "controlId": 9999991,
+            "controlPathId": 9999992,
+            "controlPathChildId": null,
+            "sequenceNumber": 1,
+            "percentApportionment": 100.0
+        }
+    ],
+    "controlPollutants": [
+        {
+            "id": 9999992,
+            "controlId": 9999991,
+            "pollutantCode": "71432",
+            "percentReduction": 99.9
+        },
+        {
+            "id": 9999991,
+            "controlId": 9999991,
+            "pollutantCode": "75070",
+            "percentReduction": 100.0
+        },
+        {
+            "id": 9999993,
+            "controlId": 9999992,
+            "pollutantCode": "75070",
+            "percentReduction": 1.3
+        }
+    ]
+}

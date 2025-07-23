@@ -1,0 +1,37 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="form-group">
+	<label for="file-jsonl-workbook" class="font-weight-bold" title="Json Workbook is required.">
+		<span>Bulk Upload (json) </span>
+		<span style="color: red">*</span>
+	</label>
+	<div class="d-none"><input type="file" (change)="onFileChanged($event)" multiple #fileUpload></div>
+    <div [innerHtml]="uploadStatus" style="height: 350px;" class="border overflow-auto w-75"></div>
+
+    <div class="w-75 mt-2">
+        <div class="float-right">
+            <button type="button" class="btn btn-success mr-2" (click)="fileUpload.click()">
+                <span>Choose File(s)</span>
+            </button>
+            
+            <button type="button" class="btn btn-success" (click)="onUpload()"
+                    [ngClass]="{'disable-click' : uploadFiles.length === 0}" [disabled]="uploadFiles.length === 0">
+                <span>Upload</span>
+            </button>
+        </div>
+    </div>
+</div>

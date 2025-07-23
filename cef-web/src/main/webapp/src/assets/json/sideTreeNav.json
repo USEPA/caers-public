@@ -1,0 +1,28 @@
+[
+    {
+        "id": 1,
+        "description": "Boiler 001",
+        "baseUrl": "emissionUnit",
+        "children": [
+            {
+                "id": 1,
+                "description": "Process 007",
+                "baseUrl": "process",
+                "children": [
+                    {
+                        "id": 1,
+                        "description": "Release Point 002",
+                        "baseUrl": "release",
+                        "children": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "description": "Turbine 001",
+        "baseUrl": "emissionUnit",
+        "children": []
+    }
+]

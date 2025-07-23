@@ -1,0 +1,91 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="controlPathAssignmentForm" >
+    <div class="modal-header">
+        <h4 class="modal-title w-100"><strong>Control Path Assignment</strong></h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="row pb-1">
+            <div class="col-sm-6">
+                <fa-icon class="mt-2 ml-2" title="The number in the sequence the control or path occupies within a path." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="sequenceNumberInput" class="ml-1 col-form-label"><strong>Enter the Sequence Number</strong></label>
+    			<app-required-asterisk [control]="controlPathAssignmentForm.get('sequenceNumber')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-3">
+                <input maxlength="10" class="mb-1" formControlName="sequenceNumber" id="sequenceNumberInput">
+                <app-validation-message [control]="controlPathAssignmentForm.get('sequenceNumber')"></app-validation-message>
+            </div>
+        </div>
+        <div class="row pb-1">
+            <div class="col-sm-7">
+                <fa-icon class="mt-2 ml-2" title="Is the identifier of either a control or a path that has been assigned to this path." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="controlOrControlPath" class="ml-1 col-form-label"><strong>You must select either a Control or a Control Path:</strong></label>
+    			<app-required-asterisk [control]="controlPathAssignmentForm.get('sequenceNumber')"></app-required-asterisk>
+            </div>
+        </div>
+            <div class ="row ml-1">
+                <label for="controlSelect"><strong>Control</strong></label>
+                <label style="margin-left:256px;" for="controlPathSelect"><strong>Control Path</strong></label>
+            </div>
+            <div class="row ml-1">
+                <select style="width: 300px;" type="text" id="controlSelect" class="form-control mr-2" formControlName="control">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let c of controls" [ngValue]="c">
+                        {{c.identifier}}
+                    </option>
+                </select>
+                <app-validation-message [control]="controlPathAssignmentForm.get('control')"></app-validation-message>
+                <select style="width: 300px;" type="text" id="controlPathSelect" class="form-control" formControlName="controlPathChild">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let cp of controlPaths" [ngValue]="cp">
+                        {{cp.pathId}}
+                    </option>
+                </select>
+                <span class="validation-message" [hidden]="!controlPathAssignmentForm.hasError('controlAndPathSelected')" >You can only select a control OR a path, not both</span>
+                <span class="validation-message" [hidden]="!controlPathAssignmentForm.hasError('controlAndPathNotSelected') || !(controlPathAssignmentForm.controls.control.dirty || controlPathAssignmentForm.controls.controlPathChild.dirty)">You must select either a control or a path</span>
+                <span class="validation-message" [hidden]="!controlPathAssignmentForm.hasError('permShutdownControl')">This Control Path cannot be associated with a Permanently shutdown Control Device.</span>
+                <app-validation-message [control]="controlPathAssignmentForm.get('controlPathChild')"></app-validation-message>
+                <div class="validation-message" *ngIf="controlPathAssignmentForm.get('control').errors?.duplicateControl">
+                    Control Device must be assigned only once within the Control Path, including child paths. 
+                </div>
+                <div class="validation-message" *ngIf="controlPathAssignmentForm.get('controlPathChild').errors?.duplicatePathControl">
+                    Control Device must be assigned only once within the Control Path, including child paths. 
+                </div>
+                <div class="validation-message" *ngIf="controlPathAssignmentForm.get('controlPathChild').errors?.duplicateChildPath">
+                    Control Path must be assigned only once within the Control Path.
+                </div>
+                <div class="validation-warning" *ngIf="tempShutdownControlWarning?.length > 0">{{tempShutdownControlWarning}}</div>
+            </div>
+        <div class="row pb-1 mt-3">
+            <div class="col-sm-6">
+                <fa-icon class="mt-2 ml-2" title="The percentage of emissions from the previous control or path in the sequence, that is directed to this control or path." [icon]="['fas', 'question-circle']"></fa-icon>
+                <label for="percentInput" style="font-size:100%" class="ml-1 col-form-label"><strong>% Path Apportionment (of Control or Sub-Path)</strong></label>
+    			<app-required-asterisk [control]="controlPathAssignmentForm.get('percentApportionment')"></app-required-asterisk>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" maxlength="5" formControlName="percentApportionment" id="percentInput">
+                <app-validation-message [control]="controlPathAssignmentForm.get('percentApportionment')"></app-validation-message>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="onClose()">Cancel</button>
+    </div>
+</form> 

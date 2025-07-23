@@ -1,0 +1,57 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="mh-100 overflow-auto" style="overflow-y: auto;" tabindex="0">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-cef-medium">
+
+            <tr>
+                <th scope="col" sortable="actionDate" (sort)="onSort($event)">Date</th>
+                <th scope="col" sortable="userId" (sort)="onSort($event)">Role</th>
+                <th scope="col" sortable="userFullName" (sort)="onSort($event)">User Name</th>
+                <th scope="col" sortable="comments" (sort)="onSort($event)" style="width:35%;">Comments</th>
+                <th scope="col" sortable="fileName" (sort)="onSort($event)" style="width:25%;">Attachments</th>
+                <ng-container *ngIf="(reportStatus === 'IN_PROGRESS' || reportStatus === 'RETURNED') && user.canPrepare()">
+                    <th scope="col"></th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of tableItems">
+            <td>{{ item.actionDate | date:'shortDate' }}</td>
+            <td>{{ item.userRole }}</td>
+            <td>{{ item.userFullName }}</td>
+            <td>{{ item.comments }}</td>
+            <td >
+                <a routerLink="." (click)="download(item)">{{ item.fileName }}</a>
+            </td>
+            <ng-container *ngIf="(reportStatus === 'IN_PROGRESS' || reportStatus === 'RETURNED') && user.canPrepare()">
+                <td>
+                    <a routerLink="." (click)="openDeleteModal(item.reportAttachmentId, item.fileName)"
+                        [attr.aria-label]="'delete attachment' + item.filename">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </a>
+                </td>
+            </ng-container>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="float-right" *ngIf="user.canPrepare() && (reportStatus === 'IN_PROGRESS' || reportStatus === 'RETURNED')">
+    <button class="btn btn-success btn-md my-3 ml-3" (click)="openAttachmentModal()">
+        Attach Report Document
+    </button>
+</div>

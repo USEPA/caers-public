@@ -1,0 +1,86 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="tableData">
+<form [formGroup]="monthlyReportingForm">
+	<div class="overflow-auto" style="max-height: 60vh;">
+		<table class="table table-sm table-striped table-bordered">
+			<thead class="thead-cef-medium">
+				<tr>
+					<th scope="col" sortable="unitIdentifier" (sort)="onSort($event)">Unit ID</th>
+					<th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+					<th scope="col" sortable="emissionsProcessSccCode" (sort)="onSort($event)">SCC</th>
+					<th scope="col">Fuel Material</th>
+					<th scope="col">Total Fuel Value</th>
+					<th scope="col">Total Operating Days</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngIf="!tableItems || tableItems.length === 0">
+					<td colspan="7" class="text-center">
+						<strong class="text-larger">No data available.</strong>
+					</td>
+				</tr>
+				<tr *ngFor="let item of tableItems">
+					<td>{{item.unitIdentifier}}
+					<br>
+					<fa-icon class="mt-2 ml-1" [icon]="['fas', 'question-circle']" [title]="item.unitDescription"></fa-icon>
+		              <span *ngIf="item.unitStatus.code === operatingStatus.TEMP_SHUTDOWN">
+		                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" 
+		                    title="This Emissions Unit is Temporarily Shutdown. Each sub-facility component must also be either Temporarily Shutdown or Permanently Shutdown."></fa-icon>
+		              </span>
+		              <span *ngIf="item.unitStatus.code === operatingStatus.PERM_SHUTDOWN">
+		                <fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']" title="This Emissions Unit is Permanently Shutdown. Each sub-facility component must also be Permanently Shutdown."></fa-icon>
+		              </span>
+					</td>
+					<td>
+						<a routerLink="{{baseUrl}}/process/{{item.emissionsProcessId}}" [title]="item.emissionsProcessDescription"
+							[attr.aria-label]="'emissions process' + item?.emissionsProcessIdentifier">
+							{{item.emissionsProcessIdentifier}}
+						</a>
+						<span *ngIf="item.operatingStatusCode.code === operatingStatus.TEMP_SHUTDOWN">
+							<br>
+							<fa-icon class="mt-2 ml-1" [icon]="['fas', 'power-off']"
+								title="This process is Temporarily Shutdown and cannot be edited."></fa-icon>
+						</span>
+					</td>
+					<td>{{item.emissionsProcessSccCode}}</td>
+					<td>{{item.fuelUseMaterialCode?.description}}</td>
+					<td>
+						<div class="row">
+			                <div class="col-sm-12 col-lg-9">
+							  <input type="text" class="form-control" id="{{period + item.reportingPeriodId  + 'Input'}}" formControlName="{{period + item.reportingPeriodId}}" [readOnly]="readOnlyMode"
+			                        [attr.aria-label]="'Fuel Use Value for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier">
+			                  
+								<app-validation-message [control]="monthlyReportingForm.get(period + item.reportingPeriodId)"></app-validation-message>
+							</div>
+	                		<div class="col-sm-12 col-lg-3">
+			                  {{item.fuelUseUom?.description}}
+			                </div>
+              			</div>
+					</td>
+					<td>
+						<input type="text" class="form-control" id="{{period + 'totalOpDays' + item.reportingPeriodId + 'Input'}}" formControlName="{{period + 'totalOpDays' + item.reportingPeriodId}}" [readOnly]="readOnlyMode"
+		                        [attr.aria-label]="'The total number of days that the emissions process is active within the reporting period. Not to exceed 31 in a month.'">
+		                  
+						<app-validation-message [control]="monthlyReportingForm.get(period + 'totalOpDays' + item.reportingPeriodId)"></app-validation-message>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+</div>

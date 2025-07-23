@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.2">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_FacilitySite_v2.0.xsd
+		        Current Version Available At :  http://www.exchangenetwork.net/schema/cer/2/0/CER_Event_v2.0.xsd
+        		Description   : Identifies the event, reporting land manager, management methods, and data sources.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020
+	        </xsd:documentation>
+	</xsd:annotation>
+<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+<xsd:include schemaLocation="CER_EventReportingPeriod_v2.0.xsd"/>
+<xsd:complexType name="EventDataType">
+	<xsd:sequence>
+		<xsd:element ref="cer:EventIdentifier"/>
+		<xsd:element ref="cer:ProgramSystemCode"/>
+		<xsd:element ref="cer:EventName" minOccurs="0"/>
+		<xsd:element ref="cer:LandManager" minOccurs="0"/>
+		<xsd:element ref="cer:LocationDescription" minOccurs="0"/>
+		<xsd:element ref="cer:EventClassificationCode" minOccurs="0"/>
+		<xsd:element ref="cer:EventSizeSourceCode" minOccurs="0"/>
+		<xsd:element ref="cer:ContainmentDate" minOccurs="0"/>
+		<xsd:element ref="cer:RecurrenceIndicatorCode" minOccurs="0"/>
+		<xsd:element ref="cer:RecurrenceYear" minOccurs="0"/>
+		<xsd:element ref="cer:GroundBasedDataSourceCode" minOccurs="0"/>
+		<xsd:element ref="cer:RemoteSensingDataSourceCode" minOccurs="0"/>
+		<xsd:element ref="cer:FuelConsumptionAndEmissionsModelCode" minOccurs="0"/>
+		<xsd:element ref="cer:FuelTypeModelCode" minOccurs="0"/>
+		<xsd:element ref="cer:FuelSelectionCode" minOccurs="0"/>
+		<xsd:element ref="cer:IgnitionMethodCode" minOccurs="0"/>
+		<xsd:element ref="cer:IgnitionLocationCode" minOccurs="0"/>
+		<xsd:element ref="cer:IgnitionOrientationCode" minOccurs="0"/>
+		<xsd:element ref="cer:EventComment" minOccurs="0"/>
+		<xsd:element ref="cer:EventReportingPeriod" minOccurs="0" maxOccurs="unbounded"/>
+	</xsd:sequence>
+</xsd:complexType>
+	<xsd:element name="Event" type="cer:EventDataType"/>
+</xsd:schema>

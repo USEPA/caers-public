@@ -1,0 +1,74 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+        [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive">
+
+    <div class="nav-link p-0">
+        <button class="btn btn-link text-primary font-weight-bold text-left small p-0" type="button"
+                (click)="toggleCollapsedMapEntry()"
+                [attr.aria-expanded]="getCollapsedMapEntry()"
+                [attr.aria-controls]="targetId" *ngIf="navItem?.children?.length"
+                [attr.aria-label]="'unit ' + navItem?.identifier + ' list of ' + navItem?.children?.length + ' processes'">
+            <app-collapse-icon [collapsed]='!getCollapsedMapEntry()'></app-collapse-icon>
+        </button>
+        <a class="text-primary font-weight-bold small" [routerLinkActive]="'active text-success'"
+                [attr.aria-label]="'select ' + navItem?.baseUrl + ' ' + navItem?.identifier"
+                [attr.aria-description]="navItem?.identifier + ': ' + navItem?.description"
+                [routerLinkActiveOptions]="{exact: true}" routerLink="{{itemUrl}}"
+                [attr.data-cy]="'select ' + navItem?.baseUrl + ' ' + navItem?.identifier"
+                title="{{ (navItem?.description && navItem?.description.length > 0) ? navItem?.description : navItem?.identifier }}">
+            <span>
+                {{navItem?.identifier.length > 30 ? (navItem?.identifier | slice:0:25) + '...' : navItem?.identifier}}
+                <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{'d-none': !rla.isActive}" size="lg"></fa-icon>
+            </span>
+        </a>
+    </div>
+
+</div>
+
+<ng-container *ngIf="navItem.children?.length">
+
+  <div class="ml-2" [attr.id]="targetId" [ngbCollapse]="!getCollapsedMapEntry()"
+       *ngFor="let childItem of navItem.children">
+
+    <div class="nav-item d-flex flex-row justify-content-between" [routerLinkActive]="'active'"
+         [routerLinkActiveOptions]="{exact: true}" #rlaChild="routerLinkActive">
+
+      <div class="nav-link p-0">
+        <a [attr.aria-label]="'select ' + childItem?.baseUrl + ' ' + childItem?.identifier
+              + (activeParentProcessId === childItem?.id ? activeEmissionLabel : '')"
+           [attr.aria-description]="childItem?.identifier + ': ' + childItem?.description"
+           class="text-primary font-weight-bold small"
+           [routerLinkActive]="'active text-success'"
+           [routerLinkActiveOptions]="{exact: true}"
+           routerLink="{{baseUrl + childItem?.url}}"
+           [attr.data-cy]="'select ' + childItem?.baseUrl + ' ' + childItem?.identifier
+              + (activeParentProcessId === childItem?.id ? activeEmissionLabel : '')"
+           title="{{ (childItem?.description && childItem?.description.length > 0) ? childItem?.description : childItem?.identifier }}">
+          <span>
+                {{childItem?.identifier.length > 30 ? (childItem?.identifier | slice:0:25) + '...' : childItem?.identifier}}
+            <fa-icon icon="angle-left" class="text-success p-1" [ngClass]="{
+              'd-none': (activeParentProcessId !== childItem?.id) && !rlaChild.isActive}" size="lg"></fa-icon>
+          </span>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-container>

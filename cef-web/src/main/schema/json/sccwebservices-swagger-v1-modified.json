@@ -1,0 +1,652 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.11",
+    "title": ""
+  },
+  "host": "sor-scc-api.epa.gov",
+  "basePath": "/sccwebservices/v1",
+  "tags": [
+    {
+      "name": "SCC Search API"
+    },
+    {
+      "name": "Last Updated API"
+    },
+    {
+      "name": "SCC Item Search API"
+    },
+    {
+      "name": "Lookup Element API"
+    },
+    {
+      "name": "Lookup Element Type API"
+    },
+    {
+      "name": "SCC Detail API"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/LastUpdated": {
+      "get": {
+        "tags": [
+          "Last Updated API"
+        ],
+        "summary": "Returns the UNIX timestamp of when the SCC data was last updated.",
+        "description": "",
+        "operationId": "getLastUpdated",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/LookupElement/Name/{Name}": {
+      "get": {
+        "tags": [
+          "Lookup Element API"
+        ],
+        "summary": "Query all SCC lookup elements of a specific lookup element type name. See GET /LookupElementType service to determine lookup element type names. Can be used to populate a list of options for a filtering on one or more facets; for example, a filter on data category.",
+        "description": "",
+        "operationId": "getResourceSearchResultsByName",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Name",
+            "in": "path",
+            "description": "The element type name.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "facetName[]",
+            "in": "query",
+            "description": "The name of the facet to search. Multiple facet names may be passed, separated by double pipe characters (||). Possible facet names include: Activity Value Required?, Code, Data Category, ERT Valid, History, Last Updated Date, SCC Level Four, SCC Level One, SCC Level Three, SCC Level Two, Sector, Status, Tier 1 Code, Tier 1 Description, Tier 2 Code, Tier 2 Description, Tier 3 Code, Tier 3 Description",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetValue[]",
+            "in": "query",
+            "description": "The value to search for the specified facetName. Multiple values may be passed, separated by double pipe characters (||).",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetQualifier[]",
+            "in": "query",
+            "description": "The qualifier to use when searching the specified facetName. Possible values: contains, begins, exact. If omitted, contains is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetMatchType[]",
+            "in": "query",
+            "description": "The type of match to perform when searching. Possible values: all_words, any_word, whole_phrase. If omitted, all_words is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastUpdatedSince",
+            "in": "query",
+            "description": "The date on or after which the item has been modified. Date Format: YYYY-MM-DD.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortFacet",
+            "in": "query",
+            "description": "The facet to sort results by. If omitted, the results are sorted by code.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "The page number of results to show. pageSize must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of results to show per page. pageNum must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/LookupElement/{Id}": {
+      "get": {
+        "tags": [
+          "Lookup Element API"
+        ],
+        "summary": "Query all SCC lookup elements of a specific lookup element type ID. See GET /LookupElementType service to determine lookup element type IDs. Can be used to populate a list of options for a filtering on one or more facets; for example, a filter on data category.",
+        "description": "",
+        "operationId": "getResourceSearchResults",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Id",
+            "in": "path",
+            "description": "The element ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "facetName[]",
+            "in": "query",
+            "description": "The name of the facet to search. Multiple facet names may be passed, separated by double pipe characters (||). Possible facet names include: Activity Value Required?, Code, Data Category, ERT Valid, History, Last Updated Date, SCC Level Four, SCC Level One, SCC Level Three, SCC Level Two, Sector, Status, Tier 1 Code, Tier 1 Description, Tier 2 Code, Tier 2 Description, Tier 3 Code, Tier 3 Description",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetValue[]",
+            "in": "query",
+            "description": "The value to search for the specified facetName. Multiple values may be passed, separated by double pipe characters (||).",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetQualifier[]",
+            "in": "query",
+            "description": "The qualifier to use when searching the specified facetName. Possible values: contains, begins, exact. If omitted, contains is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetMatchType[]",
+            "in": "query",
+            "description": "The type of match to perform when searching. Possible values: all_words, any_word, whole_phrase. If omitted, all_words is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastUpdatedSince",
+            "in": "query",
+            "description": "The date on or after which the item has been modified. Date Format: YYYY-MM-DD.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortFacet",
+            "in": "query",
+            "description": "The facet to sort results by. If omitted, the results are sorted by code.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "The page number of results to show. pageSize must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of results to show per page. pageNum must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/LookupElementType": {
+      "get": {
+        "tags": [
+          "Lookup Element Type API"
+        ],
+        "summary": "Query all available SCC lookup types and attributes. Can be used to determine exactly which facets are searchable.",
+        "description": "",
+        "operationId": "getResourceSearchResults",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastUpdatedSince",
+            "in": "query",
+            "description": "The date on or after which the SCC has been modified. If omitted, SCCs will not be filtered by date. Date Format: YYYY-MM-DD.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/SCC": {
+      "get": {
+        "tags": [
+          "SCC Search API"
+        ],
+        "summary": "Query SCCs by one or more facet.",
+        "description": "",
+        "operationId": "getResourceSearchResults",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "facetName[]",
+            "in": "query",
+            "description": "The name of the facet to search. Multiple facet names may be passed, separated by double pipe characters (||). Possible facet names include: Activity Value Required?, Code, Data Category, ERT Valid, History, Last Updated Date, SCC Level Four, SCC Level One, SCC Level Three, SCC Level Two, Sector, Status, Tier 1 Code, Tier 1 Description, Tier 2 Code, Tier 2 Description, Tier 3 Code, Tier 3 Description",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetValue[]",
+            "in": "query",
+            "description": "The value to search for the specified facetName. Multiple values may be passed, separated by double pipe characters (||).",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetQualifier[]",
+            "in": "query",
+            "description": "The qualifier to use when searching the specified facetName. Possible values: contains, begins, exact. If omitted, contains is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetMatchType[]",
+            "in": "query",
+            "description": "The type of match to perform when searching. Possible values: all_words, any_word, whole_phrase. If omitted, all_words is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastUpdatedSince",
+            "in": "query",
+            "description": "The date on or after which the SCC has been modified. If omitted, SCCs will not be filtered by date. Date Format: YYYY-MM-DD.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortFacet",
+            "in": "query",
+            "description": "The facet to sort results by. If omitted, the results are sorted by code.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "The page number of results to show. pageSize must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of results to show per page. pageNum must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/SccDetail"
+                }
+              }
+          }
+        }
+      }
+    },
+    "/SCC/{Code}": {
+      "get": {
+        "tags": [
+          "SCC Detail API"
+        ],
+        "summary": "Lookup SCC details by SCC code.",
+        "description": "",
+        "operationId": "getResourceDetailResults",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Code",
+            "in": "path",
+            "description": "The SCC code.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/SCCHierarchyItem": {
+      "get": {
+        "tags": [
+          "SCC Item Search API"
+        ],
+        "summary": "Query SCC hierarchy items by facet or level.",
+        "description": "",
+        "operationId": "getResourceSearchResults",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "facetName[]",
+            "in": "query",
+            "description": "The name of the facet to search. Multiple facet names may be passed, separated by double pipe characters (||). Possible facet names include: Activity Value Required?, Code, Data Category, ERT Valid, History, Last Updated Date, SCC Level Four, SCC Level One, SCC Level Three, SCC Level Two, Sector, Status, Tier 1 Code, Tier 1 Description, Tier 2 Code, Tier 2 Description, Tier 3 Code, Tier 3 Description",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetValue[]",
+            "in": "query",
+            "description": "The value to search for the specified facetName. Multiple values may be passed, separated by double pipe characters (||).",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetQualifier[]",
+            "in": "query",
+            "description": "The qualifier to use when searching the specified facetName. Possible values: contains, begins, exact. If omitted, contains is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "facetMatchType[]",
+            "in": "query",
+            "description": "The type of match to perform when searching. Possible values: all_words, any_word, whole_phrase. If omitted, all_words is used by default.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The output format. Possible values: JSON, XML, CSV. If omitted, JSON format is used by default.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The filename used. Only used when CSV format is requested.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level[]",
+            "in": "query",
+            "description": "Level of the SCC hierarchy item. Possible values: 1, 2, 3, 4. Multiple values are allowed.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sortFacet",
+            "in": "query",
+            "description": "The facet to sort results by. If omitted, the results are sorted by code.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "The page number of results to show. pageSize must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of results to show per page. pageNum must also be specified; otherwise both parameters are ignored. If omitted, the full result set is returned.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SccAttribute": {
+      "type": "object",
+      "properties": {
+        "uid": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        }
+      }
+    },
+    "SccDetail": {
+      "type": "object",
+      "properties": {
+        "uid": {
+            "type": "string"
+        },
+        "code": {
+            "type": "string"
+        },
+        "lastUpdated": {
+            "type": "string"
+        },
+        "attributes": {
+          "type": "object",
+          "additonalProperties": {
+            "$ref": "#/definitions/SccAttribute"
+          }
+        }
+      }
+    }
+  }
+}

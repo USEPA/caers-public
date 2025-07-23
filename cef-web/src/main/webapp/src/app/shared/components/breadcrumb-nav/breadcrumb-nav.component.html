@@ -1,0 +1,45 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul *ngIf="(user?.canPrepare())" class="navbar-nav mr-auto">
+      <li *ngIf="((url === '/helpPage') || (url === '/error') || (url === '/review'))" class="nav-item">
+        <u><a class="nav-link menu_links" (click)="goToMyFacilities()" id="bcMyFacilities">My Facilities</a></u>
+      </li>
+      <li *ngFor="let breadcrumb of breadcrumbs; index as i" class="nav-item">
+        <a [routerLink]="[breadcrumb.url]" *ngIf="i<breadcrumbs.length-1 && (url !== '/helpPage') && (url !== '/error') && (url !== '/reviewer') && (url !== '/review') " class="nav-link" [attr.data-cy]="'bc' + breadcrumb.label">
+          <span *ngIf="i!=0">&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <u>{{ breadcrumb.label }}</u>
+        </a>
+        <span *ngIf="i==breadcrumbs.length-1 && (url !== '/helpPage') && (url !== '/error') && (url !== '/reviewer') && (url !== '/review')" class="nav-link">
+          <span *ngIf="i!=0">&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{ breadcrumb.label }}
+        </span>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+    	<li class="nav-item">
+          <a class="nav-link menu_links" style="color:#FFC71C" (click)="openCbiNoticeModal()" ><fa-icon [icon]="faExclamationTriangle"></fa-icon>&nbsp;<u>CBI Disclaimer</u></a>
+		</li>
+		<li class="nav-item">
+          <u><a class="nav-link menu_links" routerLink="/helpPage" target="_blank">CAERS Help</a></u>
+        </li>
+        <li class="nav-item">
+          <u><a class="nav-link menu_links" href="https://cdx.epa.gov/Contact" target="_blank">Contact CDX</a></u>
+        </li>
+    </ul>
+  </div>
+</nav>

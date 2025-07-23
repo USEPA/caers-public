@@ -1,0 +1,223 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="tableData.length > 0">
+    <form [formGroup]="monthlyPeriodForm">
+        <!--TODO: better way to combine formbuilder with regular array?-->
+        <div>
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="thead-cef-medium">
+                    <tr>
+                        <th scope="col" sortable="unitIdentifier" (sort)="onSort($event)">Unit ID</th>
+                        <th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+                        <th scope="col">SCC</th>
+                        <th scope="col">Throughput Material</th>
+                        <th scope="col">Throughput Value</th>
+                        <th scope="col">Fuel Material</th>
+                        <th scope="col">Fuel Value</th>
+                        <th scope="col">Hours per Reporting Period</th>
+                        <th scope="col">Avg. Hours per Day</th>
+                        <th scope="col">Avg. Days per Week</th>
+                        <th scope="col">Avg. Weeks per Reporting Period</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr *ngFor="let item of tableItems">
+                                <td>
+                                    <a [attr.aria-label]="'emissions unit ' + item.unitIdentifier"
+                                       routerLink="{{baseUrl}}/emissionUnit/{{item.emissionsUnitId}}"
+                                       [title]=""><!--TODO: get description-->
+                                        {{item.unitIdentifier}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a [attr.aria-label]="'emissions process ' + item.emissionsProcessIdentifier"
+                                       routerLink="{{baseUrl}}/process/{{item.emissionsProcessId}}"
+                                       [title]="item.emissionsProcessDescription">
+                                        {{item.emissionsProcessIdentifier}}
+                                    </a>
+                                </td>
+                                <td>{{item.emissionsProcessSccCode}}</td>
+                                <td>{{item.calculationMaterialCode?.description}}</td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12 col-lg-7">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Throughput for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{throughputValueFC}}"
+                                                id="{{'throughput-value-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <div class="col-12 col-lg-5">
+                                            {{item.calculationParameterUom?.description}}
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(throughputValueFC)"></app-validation-message>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(throughputValueFC)
+                                                 .getError('significantFiguresInvalid')">
+                                             Value is not in the correct format.
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{item.fuelUseMaterialCode?.description}}</td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12 col-lg-6">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Fuel Value for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{fuelUseValueFC}}"
+                                                id="{{'fuel-value-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            {{item.fuelUseUom?.description}}
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(fuelUseValueFC)"></app-validation-message>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(fuelUseValueFC)
+                                                 .getError('significantFiguresInvalid')">
+                                             Value is not in the correct format.
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Avg. Hours Per Period for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{hoursPerPeriodFC}}"
+                                                id="{{'hours-per-period-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(hoursPerPeriodFC)"></app-validation-message>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(hoursPerPeriodFC)
+                                                 .getError('februaryLeapYearHoursInvalid')">
+                                             Value must be between 0 and 696.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(hoursPerPeriodFC)
+                                                 .getError('februaryNonLeapYearHoursInvalid')">
+                                             Value must be between 0 and 672.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(hoursPerPeriodFC)
+                                                 .getError('monthsWith30DaysRangeInvalid')">
+                                             Value must be between 0 and 720.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(hoursPerPeriodFC)
+                                                 .getError('monthsWith31DaysRangeInvalid')">
+                                             Value must be between 0 and 744.
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Avg. Hours Per Day for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{avgHoursPerDayFC}}"
+                                                id="{{'avg-hours-per-day-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(avgHoursPerDayFC)"></app-validation-message>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Avg. Days Per Week for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{avgDaysPerWeekFC}}"
+                                                id="{{'avg-days-per-week-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(avgDaysPerWeekFC)"></app-validation-message>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row" formGroupName="{{item.reportingPeriodId}}">
+                                        <div class="col-12">
+                                            <input
+                                                class="form-control"
+                                                [attr.aria-label]="'Avg. Weeks Per Period for Process ' + item.emissionsProcessIdentifier + ' of Unit ' + item.unitIdentifier"
+                                                formControlName="{{avgWeeksPerPeriodFC}}"
+                                                id="{{'avg-weeks-per-period-' + item.emissionsProcessIdentifier}}"
+                                                type="text" [readOnly]="readOnlyMode"
+                                            >
+                                        </div>
+                                        <app-validation-message class="col-12" [control]="getPeriodFormGroup(item.reportingPeriodId).get(avgWeeksPerPeriodFC)"></app-validation-message>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(avgWeeksPerPeriodFC)
+                                                 .getError('februaryLeapYearWeeksInvalid')">
+                                            Value must be between 0 and 4.1.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(avgWeeksPerPeriodFC)
+                                                 .getError('februaryNonLeapYearWeeksInvalid')">
+                                            Value must be between 0 and 4.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(avgWeeksPerPeriodFC)
+                                                 .getError('weeksIn30DaysRangeInvalid')">
+                                            Value must be between 0 and 4.3.
+                                        </div>
+                                        <div class="validation-message col-12"
+                                             *ngIf="getPeriodFormGroup(item.reportingPeriodId)
+                                                 .get(avgWeeksPerPeriodFC)
+                                                 .getError('weeksIn31DaysRangeInvalid')">
+                                            Value must be between 0 and 4.43.
+                                        </div>
+                                    </div>
+                                </td>
+                        </tr>
+                </tbody>
+            </table>
+            <div [class.d-none]="!(tableItems && tableItems.length > 0)">
+                <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+            </div>
+        </div>
+
+        <div class="float-right" *ngIf="!readOnlyMode">
+            <span class="validation-message-large pr-3" *ngIf="!this.monthlyPeriodForm.valid">{{this.validMessage}}</span>
+            <button type="button" class="btn btn-success" (click)="onSubmit()">Save Processes
+                <div *ngIf="savingMonthlyInfo" class="spinner-border spinner-border-sm" role="status" title="Saving Process Information...">
+                    <span class="sr-only">Saving Process Information...</span>
+                </div>
+            </button>
+        </div>
+    </form>
+</div>

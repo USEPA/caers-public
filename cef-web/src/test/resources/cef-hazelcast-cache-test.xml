@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<hazelcast
+    xmlns="http://www.hazelcast.com/schema/config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.hazelcast.com/schema/config
+        http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd">
+
+    <instance-name>cef-hazelcast-cache</instance-name>
+
+    <map name="default">
+        <!--
+        Maximum number of seconds for each entry to stay in the map. Entries that are
+        older than <time-to-live-seconds> and not updated for <time-to-live-seconds>
+        will get automatically evicted from the map.
+        Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
+        -->
+        <time-to-live-seconds>20</time-to-live-seconds>
+
+        <eviction eviction-policy="LRU" size="5000"/>
+    </map>
+</hazelcast>

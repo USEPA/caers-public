@@ -1,0 +1,105 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="facilitySite">
+    <div class="row">
+        <div class="col-sm-12" [hidden]="!tableData">
+            <div class="card  mb-3">
+                <div class="card-header text-center">
+                    <strong>Report Summary</strong>
+                </div>
+                <div class="row-sm-12">
+                    <div *ngIf="tableData">
+                        <app-report-summary-table [tableData]="tableData" [radiationData]="radiationData"
+                                                  [emissionsReportYear]='emissionsReportYear'></app-report-summary-table>
+                        <div class="float-right pr-3">
+                            <button class="btn btn-success btn-md my-3 ml-1"
+                                    aria-label="download report"
+                                    (click)="downloadSummaryReport(facilitySite.agencyFacilityIdentifier)">
+                                Download Report Summary
+                            </button>
+                            <button class="btn btn-success btn-md my-3 ml-1"
+                                    aria-label="download report"
+                                    (click)="downloadReport(facilitySite.emissionsReport.id, facilitySite.id, facilitySite.agencyFacilityIdentifier)">
+                                Download Process Emissions Summary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card  mb-3">
+                <div class="card-header text-center">
+                    <strong>Preparer/NEI Certifier Attachments</strong>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <app-report-attachment-table [facilitySite]="facilitySite"></app-report-attachment-table>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="(facilitySite.emissionsReport.status==='IN_PROGRESS' || facilitySite.emissionsReport.status==='RETURNED')">
+            	<div *ngIf="operatingBelowThresholdNoAttachments()" >
+	            	<div class="float-right pr-3 validation-message-large">
+	               		You must attach your Potential to Emit (PTE) analysis before you can certify and submit.
+	            	</div>
+                <br>
+                </div>
+                <div>
+	                <div class="float-right pr-3" *ngIf="!facilitySite.emissionsReport.thresholdStatus || facilitySite.emissionsReport?.thresholdStatus === 'OPERATING_ABOVE_THRESHOLD'">
+                    <button *ngIf="user?.canPrepare()"
+                      id="runQualityChecksBtn"
+                      class="btn btn-primary btn-md my-3 ml-1"
+                      aria-label="run quality checks"
+                      (click)="validateReport()">
+                        Annual Report Quality Checks
+                    </button>
+	                </div>
+	                <div class="float-right pr-3" *ngIf="(facilitySite.emissionsReport.validationStatus==='PASSED'
+                    || facilitySite.emissionsReport.validationStatus==='PASSED_WARNINGS'
+                    || (facilitySite.emissionsReport.thresholdStatus
+                      && facilitySite.emissionsReport?.thresholdStatus !== 'OPERATING_ABOVE_THRESHOLD'))">
+                    <button *ngIf="user?.isPreparer()"
+                      id="notifyNeiCertifier"
+                      class="btn btn-success btn-md my-3 ml-1"
+                      aria-label="run quality checks"
+                      (click)="notifyNeiCertifier()">
+                        Ready to Certify
+                    </button>
+                    <button *ngIf="user?.isNeiCertifier()"
+                      [disabled]="operatingBelowThresholdNoAttachments() || !reportCertificationEnabled"
+                      id ="startCertifyAndSubmit"
+                      aria-label="certify and submit to SLT"
+                      class="btn btn-success btn-md my-3 ml-1" (click)="onCertifyAndSubmit()">
+                        Certify and Submit to SLT
+                    </button>
+	                </div>
+	            </div>
+	            <div *ngIf="(facilitySite.emissionsReport.status==='SUBMITTED')">
+	                <div class="float-right pr-3">
+	                    <button *ngIf="user?.canPrepare()"
+	                            class="btn btn-success btn-md my-3 ml-1"
+	                            aria-label="reopen report"
+	                            (click)="reopenReport()">
+	                        Reopen Report
+	                    </button>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,305 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+
+   <div class="row">
+      <div class="col-sm-12 col-md-9">
+
+         <div class="card">
+            <div class="card-header text-center">
+               <strong>Annual Reports</strong>
+            </div>
+
+            <div class="d-flex flex-row pl-2 py-3" *ngIf="user?.isAdmin()">
+               <label for="admin-agency-select" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Agency:</strong>
+               </label>
+               <select id="admin-agency-select" style="width: auto"
+                       class="form-control form-control-sm" #sltSelect
+                       [(ngModel)]="selectedAgency"
+                       (change)="onAgencySelected()" aria-label="select agency">
+                  <option value=""></option>
+                  <option *ngFor="let opt of agencyDataValues" [ngValue]="opt">{{opt.programSystemCode.code}} - {{opt.programSystemCode.description}}</option>
+               </select>
+               <hr>
+            </div>
+
+            <div class="d-flex flex-row pl-2 py-3">
+               <label for="cbo-report-status" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Report Status:</strong>
+               </label>
+               <select id="cbo-report-status" style="width: 150px"
+                       class="form-control form-control-sm mr-3" #statusSelect
+                       [(ngModel)]="selectedReportStatus"
+                       (change)="onStatusSelected()" aria-label="select report status">
+				  <option value="ALL">All</option>
+				  <option *ngIf="showNotStartedOption" value="NOT_STARTED">Not Started</option>
+				  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RETURNED">Reviewed and Returned</option>
+				  <option value="OPT_OUT_SUBMITTED" *ngIf="sltThresholdScreenEnabled">Opted-Out - Pending Review</option>
+                  <option value="SUBMITTED">Pending Review</option>
+                  <option value="ADVANCED_QA">Advanced QA</option>
+				  <option value="OPT_OUT_APPROVED" *ngIf="sltThresholdScreenEnabled">Opted-Out - Approved</option>
+                  <option value="APPROVED">Approved</option>
+               </select>
+               <label for="cbo-report-year" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Report Year:</strong>
+               </label>
+               <select id="cbo-report-year" style="width: 150px;"
+                       class="form-control form-control-sm mr-3" #yearSelect
+                       [(ngModel)]="selectedYear"
+                       (change)="onYearSelected()" aria-label="select report year">
+                  <option [ngValue]="undefined">All Years</option>
+                  <option *ngFor="let opt of yearValues" [value]="opt">{{opt}}</option>
+               </select>
+               <label for="cbo-industry-sector" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Industry Sector:</strong>
+               </label>
+               <select id="cbo-industry-sector" style="width: 150px;"
+                       class="form-control form-control-sm mr-3" #industrySelect
+                       (change)="onIndustrySelected(industrySelect.value)" aria-label="select industry sector">
+                  <option value="null" selected>All Sectors</option>
+                  <option *ngFor="let opt of industrySectors" [value]="opt">{{opt}}</option>
+               </select>
+               <label for="id-filter-text" class="col-form-label col-form-label-sm mr-2">
+			          <strong>Filter Table:</strong>
+			   </label>
+		       <input id="id-filter-text" style="width: 150px;" type="text" placeholder="Search"
+		             class="form-control form-control-sm"
+		             [(ngModel)]="filterText"/>
+		       <div class="input-group-append">
+		         <button type="button"
+		                 class="btn btn-sm btn-outline-secondary"
+		                 title="Clear filter"
+		                 (click)="onClearFilterClick()">
+		            <fa-icon icon="times"></fa-icon>
+		         </button>
+		       </div>
+            </div>
+			<app-submission-review-list [user]="user" (refreshSubmissions)="onSubmissionDeleted()"
+                                        [tableData]="submissions" [reportStatus]="selectedReportStatus" [filterText]="filterText"></app-submission-review-list>
+
+            <div class="validation-message p-3" *ngIf="invalidSelection">
+               <span>At least one submission must be selected.</span>
+            </div>
+
+            <div class="card-footer">
+               <div class="row" *ngIf="user?.isReviewer()">
+                  <div class="col-sm-3" style="text-align: align-left">
+                     <button class="btn btn-success btn-md"
+                           *ngIf="statusSelect.value === reportStatus.SUBMITTED && !isOptOut"
+                        (click)="onBeginAdvancedQA(yearSelect.value)">
+                     <span>Begin Advanced QA</span>
+                  </button>
+                  </div>
+                  <div class="col-sm-9" style="text-align: right">
+                     <button class="btn btn-primary btn-md mr-3"
+                           *ngIf="statusSelect.value !== reportStatus.IN_PROGRESS && statusSelect.value !== reportStatus.RETURNED
+							&& statusSelect.value !== ALL && statusSelect.value !== reportStatus.NOT_STARTED"
+                           (click)="onReject(yearSelect.value)">
+                        <span>Reject and Return to Facility</span>
+                     </button>
+                     <button class="btn btn-success btn-md"
+                              *ngIf="!hideAcceptButton"
+                           (click)="onApprove(yearSelect.value)">
+                        <span>Accept Report</span>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+
+      <div class="col-sm-12 col-md-3">
+         <div style="flex: 0 0 250px">
+            <div class="card">
+               <div class="card-header text-center">
+                  <strong>{{submissionStatusYear}} Report Submission Statuses</strong>
+               </div>
+               <div class="card-body">
+                 <div *ngIf="user?.isReviewer() || (user?.isAdmin() && selectedAgency)">
+                     <br>
+					 <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="allCount > 0 ? 'all' : 'none'"
+                           [title]="inProgressCount + ' reports All Status'"
+                           (click)="onFilter(ALL)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: black; font-size: 100%;">
+                              {{allCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == ALL && selectedYear == currentYear">
+	                           <strong class="mr-2">All</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show All reports"
+                                    *ngIf="allCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+					 <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="notStartedCount > 0 ? 'all' : 'none'"
+                           [title]="notStartedCount + ' reports Not Started'"
+                           (click)="onFilter(reportStatus.NOT_STARTED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #606b6c; font-size: 100%;">
+                              {{notStartedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.NOT_STARTED && selectedYear == currentYear">
+	                           <strong class="mr-2">Not Started</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Not Started reports"
+                                    *ngIf="notStartedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="inProgressCount > 0 ? 'all' : 'none'"
+                           [title]="inProgressCount + ' reports Returned Status'"
+                           (click)="onFilter(reportStatus.IN_PROGRESS)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ff1a1a; font-size: 100%;">
+                              {{inProgressCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.IN_PROGRESS && selectedYear == currentYear">
+	                           <strong class="mr-2">In Progress</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show In Progress reports"
+                                    *ngIf="inProgressCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="returnedCount > 0 ? 'all' : 'none'"
+                           [title]="returnedCount + ' reports Returned Status'"
+                           (click)="onFilter(reportStatus.RETURNED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ff1a1a; font-size: 100%;">
+                              {{returnedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.RETURNED && selectedYear == currentYear">
+	                           <strong class="mr-2">Reviewed and Returned</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Returned reports"
+                                    *ngIf="returnedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+					 <div class="mb-3 align-middle"  *ngIf="sltThresholdScreenEnabled">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="optOutSubmitted > 0 ? 'all' : 'none'"
+                           [title]="optOutSubmitted + ' reports Opt Out Pending Review Status'"
+                           (click)="onFilter(OPT_OUT_SUBMITTED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ffb90f; font-size: 100%;">
+                              {{optOutSubmitted}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == OPT_OUT_SUBMITTED && selectedYear == currentYear">
+	                           <strong class="mr-2">Opt-Out - Pending Review</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Opt Out Pending Review reports"
+                                    *ngIf="optOutSubmitted > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="submittedCount > 0 ? 'all' : 'none'"
+                           [title]="submittedCount + ' reports Pending Review Status'"
+                           (click)="onFilter(reportStatus.SUBMITTED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ffb90f; font-size: 100%;">
+                              {{submittedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.SUBMITTED && selectedYear == currentYear">
+	                           <strong class="mr-2">Pending Review</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Pending Review reports"
+                                    *ngIf="submittedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="advancedQACount > 0 ? 'all' : 'none'"
+                           [title]="advancedQACount + ' reports Advanced QA Status'"
+                           (click)="onFilter(reportStatus.ADVANCED_QA)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ffb90f; font-size: 100%;">
+                              {{advancedQACount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.ADVANCED_QA && selectedYear == currentYear">
+	                           <strong class="mr-2">Advanced QA</strong>
+    	                       <fa-icon icon="filter"
+                                    title="Show Advanced QA reports"
+                                    *ngIf="advancedQACount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+					 <div class="mb-3 align-middle"  *ngIf="sltThresholdScreenEnabled">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="optOutApproved > 0 ? 'all' : 'none'"
+                           [title]="optOutApproved + ' reports Opt Out Approved Status'"
+                           (click)="onFilter(OPT_OUT_APPROVED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #209c98; font-size: 100%;">
+                              {{optOutApproved}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == OPT_OUT_APPROVED && selectedYear == currentYear">
+	                           <strong class="mr-2">Opt-Out - Approved</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Opt Out Approved reports"
+                                    *ngIf="optOutApproved > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="approvedCount > 0 ? 'all' : 'none'"
+                           [title]="approvedCount + ' reports Approved'"
+                           (click)="onFilter(reportStatus.APPROVED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #209c98; font-size: 100%;">
+                              {{approvedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedReportStatus == reportStatus.APPROVED && selectedYear == currentYear">
+	                           <strong class="mr-2">Approved</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Approved reports"
+                                    *ngIf="approvedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:cer="http://www.exchangenetwork.net/schema/cer/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  : CER_Regulation_v2.0.xsd
+		        Current Version Available At : http://www.exchangenetwork.net/schema/cer/2/0/CER_Regulation_v2.0.xsd
+		        Description   : Identifies regulatory programs that are applicable to an emissions unit activity or process.
+		        Developed by  : Jonathan Miller, National Air Data Group (NADG)
+		        Point of Contact : NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+		        Last Edited: March 18, 2020		
+	        </xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CER_SimpleContent_v2.0.xsd"/>
+	<xsd:complexType name="RegulationDataType">
+		<xsd:sequence>
+			<xsd:element ref="cer:RegulatoryCode"/>
+			<xsd:element ref="cer:AgencyCodeText" minOccurs="0"/>
+			<xsd:element ref="cer:RegulatoryStartYear" minOccurs="0"/>
+			<xsd:element ref="cer:RegulatoryEndYear" minOccurs="0"/>
+			<xsd:element ref="cer:RegulationComment" minOccurs="0"/>
+			<xsd:element ref="cer:RegulationIsReadOnly" minOccurs="0"/>			
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ProcessRegulation" type="cer:RegulationDataType"/>
+	<xsd:element name="UnitRegulation" type="cer:RegulationDataType"/>
+</xsd:schema>

@@ -1,0 +1,52 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+	<div class="overflow-auto" style="max-height: 60vh;">
+		<table class="table table-sm table-striped table-bordered">
+			<thead class="thead-cef-medium">
+				<tr>
+					<th scope="col" sortable="unitIdentifier" (sort)="onSort($event)">Unit ID</th>
+					<th scope="col" sortable="emissionsProcessIdentifier" (sort)="onSort($event)">Process ID</th>
+					<th scope="col" sortable="emissionsProcessSccCode" (sort)="onSort($event)">SCC</th>
+					<th scope="col">Fuel Material</th>
+					<th scope="col">Total Fuel Value</th>
+					<th scope="col">Fuel UoM</th>
+					<th scope="col">Total Operating Days</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngIf="!tableItems || tableItems.length === 0">
+					<td colspan="7" class="text-center">
+						<strong class="text-larger">No data available.</strong>
+					</td>
+				</tr>
+				<tr *ngFor="let item of tableItems">
+					<td>{{item.unitIdentifier}}</td>
+					<td>{{item.emissionsProcessIdentifier}}</td>
+					<td>{{item.emissionsProcessSccCode}}</td>
+					<td>{{item.fuelUseMaterialCode?.description}}</td>
+					<td *ngIf="item.fuelUseValue !== null && item.fuelUseValue !== ''">{{item.fuelUseValue}}</td>
+					<td *ngIf="item.fuelUseValue === null || item.fuelUseValue === ''">--</td>
+					<td *ngIf="item.fuelUseUom?.description">{{item.fuelUseUom?.description}}</td>
+					<td *ngIf="!item.fuelUseUom">--</td>
+					<td *ngIf="item.totalOperatingDays !== null && item.totalOperatingDays !== ''">{{item.totalOperatingDays}}</td>
+					<td *ngIf="item.totalOperatingDays === null || item.totalOperatingDays === ''">--</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

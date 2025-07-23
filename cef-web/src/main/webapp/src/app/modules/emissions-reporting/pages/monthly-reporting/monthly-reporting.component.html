@@ -1,0 +1,294 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card  mb-3">
+			<div class="card-header text-center">
+                <div class="row d-flex align-items-center">
+                    <div class="col-5">
+                    </div>
+                    <div class="col-2">
+                        <h2 class="h6"><strong>Monthly Reporting</strong></h2>
+                    </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-2">
+                        <div class="float-end" *ngIf="!readOnlyMode">
+                            <button type="button" class="btn btn-success" aria-label="run semi-annual qa checks for submission"
+                                    *ngIf="!semiAnnualReportSubmittedOrApproved && user?.isNeiCertifier() && selectedPeriod==period.SEMIANNUAL
+                                            && (facilitySite.emissionsReport.validationStatus==='SEMIANNUAL_PASSED'
+                                                || facilitySite.emissionsReport.validationStatus==='SEMIANNUAL_PASSED_WARNINGS')"
+                                    (click)="initSubmissionReviewModal()">Certify and Submit Semi-Annual Report
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="float-end" *ngIf="!readOnlyMode">
+                            <button type="button" class="btn btn-success" aria-label="run semi-annual qa checks for submission"
+                                    *ngIf="!semiAnnualReportSubmittedOrApproved && (user?.isNeiCertifier() || user?.isPreparer()) && selectedPeriod==period.SEMIANNUAL"
+                                    (click)="openSemiAnnualValidationModal()">Run Semi-Annual QA Checks for Submission
+                            </button>
+                            <div *ngIf="savingMonthlyInfo" class="spinner-border spinner-border-sm" role="status" title="Saving Process Information...">
+                                <span class="sr-only">Saving Process Information...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="card-body">
+				<nav ngbNav #nav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('JANUARY')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.JANUARY)">January</a>
+						<ng-template ngbNavContent>
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.JANUARY,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+						</ng-template>
+					</ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('FEBRUARY')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.FEBRUARY)">February</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.FEBRUARY) || selectedPeriod == period.FEBRUARY">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.FEBRUARY,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+						</ng-template>
+					</ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('MARCH')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.MARCH)">March</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.MARCH) || selectedPeriod == period.MARCH">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.MARCH,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('APRIL')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.APRIL)">April</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.APRIL) || selectedPeriod == period.APRIL">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.APRIL,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('MAY')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.MAY)">May</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.MAY) || selectedPeriod == period.MAY">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.MAY,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('JUNE')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.JUNE)">June</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.JUNE) || selectedPeriod == period.JUNE">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.JUNE,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode || semiAnnualReportSubmittedOrApproved
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+                    <ng-container [ngbNavItem]="periodKeysArray.indexOf('SEMIANNUAL')" ngbNavItem [destroyOnHide]="true">
+                        <a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.SEMIANNUAL)">Semi-Annual Review</a>
+                        <ng-template ngbNavContent *ngIf="selectedPeriod == period.SEMIANNUAL">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.SEMIANNUAL,
+                                    facSite: facilitySite,
+                                    readOnly: true
+                                }
+                            ">
+                            </ng-container>
+						</ng-template>
+					</ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('JULY')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.JULY)">July</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.JULY) || selectedPeriod == period.JULY">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.JULY,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('AUGUST')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.AUGUST)">August</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.AUGUST) || selectedPeriod == period.AUGUST">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.AUGUST,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('SEPTEMBER')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.SEPTEMBER)">September</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.SEPTEMBER) || selectedPeriod == period.SEPTEMBER">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.SEPTEMBER,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('OCTOBER')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.OCTOBER)">October</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.OCTOBER) || selectedPeriod == period.OCTOBER">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.OCTOBER,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('NOVEMBER')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.NOVEMBER)">November</a>
+						<ng-template ngbNavContent *ngIf="loadedPeriods.includes(period.NOVEMBER) || selectedPeriod == period.NOVEMBER">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.NOVEMBER,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+					<ng-container [ngbNavItem]="periodKeysArray.indexOf('DECEMBER')" ngbNavItem>
+						<a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.DECEMBER)">December</a>
+						<ng-template ngbNavContent  *ngIf="loadedPeriods.includes(period.DECEMBER) || selectedPeriod == period.DECEMBER">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.DECEMBER,
+                                    facSite: facilitySite,
+                                    readOnly: readOnlyMode
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+
+                    <ng-container [ngbNavItem]="periodKeysArray.indexOf('ANNUAL')" ngbNavItem [destroyOnHide]="true">
+                        <a ngbNavLink class="monthly-tabs" (click)="setSelectedPeriod(period.ANNUAL)">Annual Review</a>
+                        <ng-template ngbNavContent *ngIf="selectedPeriod == period.ANNUAL">
+                            <ng-container *ngTemplateOutlet="
+                                subNavTemplate;
+                                context: {
+                                    prd: period.ANNUAL,
+                                    facSite: facilitySite,
+                                    readOnly: true
+                                }
+                            ">
+                            </ng-container>
+                        </ng-template>
+                    </ng-container>
+				</nav>
+				<div [ngbNavOutlet]="nav" class="mt-4"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #subNavTemplate let-prd="prd" let-facSite="facSite" let-readOnly="readOnly">
+    <nav ngbNav #subNav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
+        <ng-container ngbNavItem>
+            <a ngbNavLink>Process Information</a>
+            <ng-template ngbNavContent>
+                <app-monthly-reporting-period-table
+                    [facilitySite]="facSite"
+                    [period]="prd"
+                    [readOnlyMode]="readOnly">
+                </app-monthly-reporting-period-table>
+            </ng-template>
+        </ng-container>
+        <ng-container ngbNavItem>
+            <a ngbNavLink>Emission Information</a>
+            <ng-template ngbNavContent>
+                <app-monthly-reporting-emission-table
+                    [facilitySite]="facSite"
+                    [period]="prd"
+                    [readOnlyMode]="readOnly">
+                </app-monthly-reporting-emission-table>
+            </ng-template>
+        </ng-container>
+    </nav>
+    <div [ngbNavOutlet]="subNav" class="mt-4"></div>
+</ng-template>

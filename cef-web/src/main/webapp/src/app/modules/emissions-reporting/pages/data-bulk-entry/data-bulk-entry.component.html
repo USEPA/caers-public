@@ -1,0 +1,54 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="facilitySite">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card  mb-3">
+                <div class="card-header text-center" *ngIf="monthlyReportingEnabled; else elseBlock">
+                    <strong>Annual Data Bulk Entry</strong>
+                </div>
+                <ng-template #elseBlock>
+                    <div class="card-header text-center">
+                        <strong>Data Bulk Entry</strong>
+                    </div>
+                </ng-template>
+
+                <div class="card-body" *ngIf="reportingPeriods && emissions">
+                    <nav ngbNav #nav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
+                        <ng-container ngbNavItem>
+                            <a ngbNavLink>Process Information</a>
+                            <ng-template ngbNavContent>
+                                <app-bulk-entry-reporting-period-table [tableData]="reportingPeriods" [readOnlyMode]="readOnlyMode" (periodsUpdated)="onPeriodsUpdated($event)">
+                                </app-bulk-entry-reporting-period-table>
+                            </ng-template>
+                        </ng-container>
+                        <ng-container ngbNavItem>
+                            <a ngbNavLink>Emission Information</a>
+                            <ng-template ngbNavContent>
+                                <app-bulk-entry-emissions-table [tableData]="emissions" [readOnlyMode]="readOnlyMode" (emissionsUpdated)="onEmissionsUpdated($event)">
+                                </app-bulk-entry-emissions-table>
+                            </ng-template>
+                        </ng-container>
+                    </nav>
+
+                    <div [ngbNavOutlet]="nav" class="mt-4"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

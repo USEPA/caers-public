@@ -1,0 +1,81 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="mh-100 overflow-auto">
+  <table id="emissionTable" class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+      <th scope="col" sortable="pollutant.pollutantName" (sort)="onSort($event)">Pollutant Name</th>
+      <th scope="col" sortable="pollutant.pollutantCode" (sort)="onSort($event)">Code</th>
+      <th scope="col" sortable="pollutant.pollutantType" (sort)="onSort($event)">Pollutant Category</th>
+      <th scope="col" sortable="previousEmissionsFactor" (sort)="onSort($event)">Previous Year Reported Em. Fac.</th>
+      <th scope="col" sortable="emissionFactor" (sort)="onSort($event)">{{process.year}} Reported Em. Fac.</th>
+      <th scope="col" sortable="emissionsFactorFormula" (sort)="onSort($event)">Calculation Method</th>
+      <th scope="col" sortable="previousYearTotalEmissions" (sort)="onSort($event)">Previous Year Reported Emissions</th>
+      <th scope="col" sortable="totalEmissions" (sort)="onSort($event)">{{process.year}} Reported Emissions</th>
+      <ng-container *ngIf="!readOnlyMode">
+        <th scope="col"></th>
+      </ng-container>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of tableItems">
+        <td>
+            <a [routerLink]="[baseUrl, item.id]" [attr.aria-label]="'emission pollutant' + item?.pollutant?.pollutantName">
+                {{item.pollutant.pollutantName}}
+            </a>
+        </td>
+      <td>{{item.pollutant.pollutantCode}}</td>
+      <td>{{item.pollutant.pollutantType}}</td>
+      <td>
+        {{item.previousEmissionsFactor}}
+        <span *ngIf="item.previousEmissionsNumeratorUomCode && item.previousEmissionsDenominatorUomCode">
+          {{item.previousEmissionsNumeratorUomCode}}/{{item.previousEmissionsDenominatorUomCode}}
+        </span>
+      </td>
+      <td>
+        {{item.emissionsFactor}}
+        <span *ngIf="item.emissionsNumeratorUom && item.emissionsDenominatorUom">
+          {{item.emissionsNumeratorUom.description}}/{{item.emissionsDenominatorUom.description}}
+        </span>
+      </td>
+      <td>{{item?.emissionsCalcMethodCode.description}}</td>
+      <td>
+        {{item.previousYearTotalEmissions}}
+        <span>{{item.previousEmissionsUomCode}}</span>
+      </td>
+      <td>
+        {{item.totalEmissions}}
+        <span>{{item.emissionsUomCode?.description}}</span>
+      </td>
+      <ng-container *ngIf="!readOnlyMode">
+        <td><a routerLink="." (click)="openDeleteModal(item.pollutant.pollutantName, item.id)" [attr.aria-label]="'delete emission pollutant' + item?.pollutant?.pollutantName"
+               *ngIf="!monthlyReportingProcess || !semiannualSubmitted || emissionsCreatedAfterSemiannualSubmission.includes(item.pollutant.pollutantCode)">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </a></td>
+      </ng-container>
+    </tr>
+    <ng-container *ngIf="!readOnlyMode">
+      <tr>
+        <td colspan="9"></td>
+        <td><a [routerLink]="[baseUrl]" aria-label="add emission pollutant" id="tblAddEmissionBtn"><fa-icon [icon]="faPlus"></fa-icon></a></td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>

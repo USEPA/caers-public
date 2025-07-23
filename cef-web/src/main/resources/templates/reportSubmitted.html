@@ -1,0 +1,37 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+    <p>Your <span th:text="${reportingYear}" /> annual emissions report for <span th:text="${facilityName}" />; Agency ID <span th:text="${agencyFacilityId}" /> has been successfully signed and submitted
+        to EPA's Combined Air Emissions Reporting (CAER) system. Please review and save a copy of your Copy of Record (COR), which can be obtained through
+        <a th:href="@{${cdxSubmissionUrl}}">CDX Submission History</a>.
+    </p>
+    <p>Your report will now be reviewed by staff at <span th:text="${slt}"/>, who may reach out to you with additional questions or corrections.
+        You may view your submitted report inside of CAER at any time. If you have any questions about the progress of your emissions report review
+        please contact <span th:text="${slt}"/> at <span th:text="${sltEmail}"/>.
+	</p>
+	<p>If you or someone from your organization did not perform this submission, have any reason to dispute or repudiate this submission, or discover any
+		discrepancy between the electronic document you signed and the record received by CDX, please contact the CDX Helpdesk immediately (within 24 hours
+		from time of discovery of the issue), by using one of the options listed at <a th:href="@{https://cdx.epa.gov/Contact}">https://cdx.epa.gov/Contact</a>,
+		so we may address the issue promptly.
+	</p>
+    <br/>
+    <p>US Environmental Protection Agency</p>
+</body>
+</html>

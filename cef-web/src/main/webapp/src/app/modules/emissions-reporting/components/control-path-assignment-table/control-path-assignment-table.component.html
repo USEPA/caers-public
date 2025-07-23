@@ -1,0 +1,56 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="mh-100 overflow-auto">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+      <th scope="col" sortable="sequenceNumber" (sort)="onSort($event)">Sequence Number</th>
+      <th scope="col">Assignment</th>
+      <th scope="col" sortable="percentApportionment" (sort)="onSort($event)">% Apportionment</th>
+      <ng-container *ngIf="!readOnlyMode">
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </ng-container>
+     
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of tableItems">
+      <td>{{item.sequenceNumber}}</td>
+      <td><a routerLink="{{baseUrlForControlDevice}}/{{item?.control?.id}}" [attr.aria-label]="'control device' + item?.control?.identifier">{{item?.control?.identifier}}</a><a routerLink="{{baseUrlForControlPath}}/{{item?.controlPathChild?.id}}" [attr.aria-label]="'control path' + item?.controlPathChild?.pathId">{{item?.controlPathChild?.pathId}}</a></td>
+      <td>{{item.percentApportionment}}</td>
+      <ng-container *ngIf="!readOnlyMode">
+        <td><a routerLink="." (click)="openEditModal(item)" [attr.aria-label]="'edit control path assignment sequence number' + item?.sequenceNumber" [attr.data-cy]="'edit control path assignment sequence number' + item?.sequenceNumber">
+          <fa-icon style="color:#209c98" [icon]="faEdit"></fa-icon>
+        </a></td>
+        <td><a routerLink="." (click)="openDeleteModal(item?.control?.identifier, item.id, item?.controlPathChild?.pathId)"
+          [attr.aria-label]="'delete control path assignment sequence number' + item?.sequenceNumber">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </a></td>
+      </ng-container>
+     
+    </tr>
+      <ng-container *ngIf="!readOnlyMode">
+        <tr>
+          <td colspan="4"></td>
+          <td><button style="color:#187773;border:none;background-color: Transparent;padding: 0;" (click)="openCreateModal()" aria-label="add control path assignment" id="tblAddControlPathAssignmentBtn"><fa-icon [icon]="faPlus"></fa-icon></button></td> 
+        </tr>
+      </ng-container> 
+    </tbody>
+  </table>
+</div>

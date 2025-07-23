@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2016 rel. 2 (http://www.altova.com) by Jonathan Miller (Environmental Protection Agency) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.exchangenetwork.net/schema/cer/2" targetNamespace="http://www.exchangenetwork.net/schema/cer/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xsd:include schemaLocation="0/CER_CERS_v2.0.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation>
+			Schema Name  :                  index.xsd
+			Current Version Available At :  http://www.exchangenetwork.net/schema/cer/2/0/CER_FacilitySite_v2.0.xsd
+			Description :       Index Schema used for CER data flow. 
+			Developed by  :     Jonathan Miller, National Air Data Group (NADG)
+			Point of Contact :  NADG, Outreach and Inforamation Division, Office of Air Quality Planning and Standards, Office of Air and Radiation, USEPA
+			Last Edited: June 9, 2020			
+		</xsd:documentation>
+	</xsd:annotation>
+</xsd:schema>

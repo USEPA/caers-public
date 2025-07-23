@@ -1,0 +1,48 @@
+<configuration debug="true">
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+    <springProfile name="dev,unit_test,default">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd'T'HH:mm:ss,SSS} %-5p [%c] %m%n</pattern>
+            </encoder>
+        </appender>
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+    <springProfile name="prod">
+        <appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${log.home}/cef-web/cef-web.%d{yyyy-MM-dd}.${log.host}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd'T'HH:mm:ss,SSS} %-5p [%c] %m%n</pattern>
+            </encoder>
+        </appender>
+        <root level="warn">
+            <appender-ref ref="TIME_BASED_FILE"/>
+        </root>
+    </springProfile>
+    <logger name="gov.epa.cef" level="debug"/>
+    <logger name="org.springframework" level="info"/>
+    <logger name="org.springframework.security" level="info"/>
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="info"/>
+    <logger name="org.hibernate.SQL" level="info"/>
+    <logger name="org.flywaydb" level="info"/>
+    <logger name="org.thymeleaf" level="info"/>
+</configuration>

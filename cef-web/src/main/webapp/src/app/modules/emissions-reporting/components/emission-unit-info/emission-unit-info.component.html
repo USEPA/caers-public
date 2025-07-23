@@ -1,0 +1,68 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="card mb-3">
+	<div class="card-header text-center">
+		<strong>Emissions Unit Information</strong>
+		<div class="float-right" *ngIf="!editInfo && !readOnlyMode">
+            <button type="button" class="btn btn-success"  aria-label="edit emissions unit information" (click)="setEditInfo(true)">Edit</button>
+        </div>
+	</div>
+	<div class="card-body">
+		<div *ngIf="!editInfo">
+			<div class="row">
+				<div class="col-sm-6 col-md-2"><strong>Unit ID:</strong></div>
+				<div class="col-sm-6 col-md-2">{{emissionsUnit.unitIdentifier}}</div>
+				<div class="col-sm-6 col-md-2"><strong>Unit Type Code:</strong></div>
+				<div class="col-sm-6 col-md-2">{{emissionsUnit.unitTypeCode?.description}}</div>
+				<div class="col-sm-6 col-md-2"><strong>Operating Status:</strong></div>
+				<div class="col-sm-6 col-md-2">{{emissionsUnit.operatingStatusCode?.description}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 col-md-2"><strong>Unit Description:</strong></div>
+				<div class="col-sm-6 col-md-6">{{emissionsUnit.description}}</div>
+				<div class="col-sm-6 col-md-2"><strong>Year Op Status Changed:</strong></div>
+				<div class="col-sm-6 col-md-2">{{emissionsUnit.statusYear}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 col-md-2"><strong>Unit Design Capacity:</strong></div>
+				<div class="col-sm-6 col-md-2">{{emissionsUnit.designCapacity}}</div>
+				<div class="col-sm-6 col-md-2"><strong>Unit Design Capacity UoM:</strong></div>
+				<div class="col-sm-6 col-md-2"><span *ngIf="emissionsUnit.unitOfMeasureCode">{{emissionsUnit.unitOfMeasureCode.description}}</span></div>
+                <div class="col-sm-6 col-md-2" *ngIf="monthlyReportingEnabled">
+                    <strong>Initial Reporting Month for {{reportingYear}}:</strong></div>
+                <div class="col-sm-6 col-md-2" *ngIf="monthlyReportingEnabled">{{emissionsUnit.initialMonthlyReportingPeriod}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 col-md-2"><strong>Comments:</strong></div>
+				<div class="col-sm-6 col-md-10">{{emissionsUnit.comments}}</div>
+			</div>
+
+            <app-reviewer-comment [entityId]="emissionsUnit.id" [entityType]="entityType.EMISSIONS_UNIT"></app-reviewer-comment>
+		</div>
+
+		<div *ngIf="editInfo">
+            <app-edit-emission-unit-info-panel [emissionUnit]="emissionsUnit"></app-edit-emission-unit-info-panel>
+            <div class="float-right pb-3 pr-3" *ngIf="infoComponent">
+            	<button type="button" class="btn btn-primary mr-2" (click)="setEditInfo(false)">Cancel</button>
+        		<button type="submit" class="btn btn-success" (click)="updateUnit()">Save</button>
+            </div>
+        </div>
+	</div>
+</div>

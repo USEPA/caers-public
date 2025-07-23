@@ -1,0 +1,126 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <strong>Request Access to Facility</strong>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-4">
+                  <label for="pscSelect" class="ml-1 col-form-label"><strong>Agency:</strong></label>
+                </div>
+                <div class="col-8">
+                  <select type="text" class="form-control" id="pscSelect" formControlName="programSystemCode">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let opt of programSystemCodeValues" [ngValue]="opt">{{opt?.description}}</option>
+                  </select>
+                  <app-validation-message [control]="searchForm.get('programSystemCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="row">
+                <div class="col-3">
+                  <label for="nameInput" class="ml-1 col-form-label"><strong>Facility Name:</strong></label>
+                </div>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="nameInput" formControlName="name">
+                  <app-validation-message [control]="searchForm.get('name')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-7">
+                  <label for="agencyFacilityIdentifierInput" class="ml-1 col-form-label"><strong>Agency Facility ID:</strong></label>
+                </div>
+                <div class="col-5">
+                  <input type="text" class="form-control" id="agencyFacilityIdentifierInput" formControlName="agencyFacilityIdentifier">
+                  <app-validation-message [control]="searchForm.get('agencyFacilityIdentifier')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-4">
+                  <label for="cityInput" class="ml-1 col-form-label"><strong>City:</strong></label>
+                </div>
+                <div class="col-8">
+                  <input type="text" class="form-control" id="cityInput" formControlName="city">
+                  <app-validation-message [control]="searchForm.get('city')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-6">
+                  <label for="stateSelect" class="ml-1 col-form-label"><strong>State:</strong></label>
+                </div>
+                <div class="col-6">
+                  <select type="text" class="form-control" id="stateSelect" formControlName="stateCode">
+                    <option [ngValue]="null"></option>
+                    <option *ngFor="let opt of stateValues" [ngValue]="opt">{{opt?.uspsCode}}</option>
+                  </select>
+                  <app-validation-message [control]="searchForm.get('stateCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="row">
+                <div class="col-6 text-right">
+                  <label for="postalCodeInput" class="ml-1 col-form-label"><strong>Postal Code:</strong></label>
+                </div>
+                <div class="col-6">
+                  <input type="text" class="form-control" id="postalCodeInput" formControlName="postalCode">
+                  <app-validation-message [control]="searchForm.get('postalCode')"></app-validation-message>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="float-right py-3">
+                <button type="submit" class="btn btn-success mr-2">Search</button>
+                <button type="reset" class="btn btn-primary mr-2">Reset</button>
+                <a class="btn btn-secondary" routerLink="/facility">Back to My Facilities</a>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="row" *ngIf="searchResults">
+          <div class="col-12">
+            <hr>
+            <app-master-facility-search-table [tableData]="searchResults" (accessRequested)="onAccessRequested($event)"></app-master-facility-search-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

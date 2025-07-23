@@ -1,0 +1,35 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="d-flex flex-row flex-wrap justify-content-between">
+	<div style="display:inline-flex;">
+		<app-facility-info [facility]="facility" class="ml-2"></app-facility-info>
+	</div>
+	<div>
+		<div style="display:inline-flex; align-items: center;">
+			<button class="btn btn-success m-1 float-right" [routerLink]="['/facility', facility.id, 'report']"
+				[attr.aria-label]="'begin or continue reporting for '+ facility?.name"
+				[id]="'continueReport ' + facility.programSystemCode.code + facility.agencyFacilityIdentifier">
+				Begin / Continue Reporting
+			</button>
+			<a routerLink="." style="padding-left:10px" (click)="openRemoveAssociationModal(facility)"
+				[attr.aria-label]="'remover user access to' + facility?.name"
+				[attr.data-cy]="'remover user access to' + facility?.name">
+				<fa-icon icon="trash-alt"></fa-icon>
+			</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,191 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+
+   <div class="row">
+      <div class="col-sm-12 col-md-9">
+
+         <div class="card">
+            <div class="card-header text-center">
+               <strong>Semi-Annual Reports</strong>
+            </div>
+
+            <div class="d-flex flex-row pl-2 py-3" *ngIf="user?.isAdmin()">
+               <label for="admin-agency-select" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Agency:</strong>
+               </label>
+               <select id="admin-agency-select" style="width: auto"
+                       class="form-control form-control-sm" #sltSelect
+                       [(ngModel)]="selectedAgency"
+                       (change)="onAgencySelected()" aria-label="select agency">
+                  <option value=""></option>
+                  <option *ngFor="let opt of agencyDataValues" [ngValue]="opt">{{opt.programSystemCode.code}} - {{opt.programSystemCode.description}}</option>
+               </select>
+               <hr>
+            </div>
+
+            <div class="d-flex flex-row pl-2 py-3">
+               <label for="cbo-report-status" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Report Status:</strong>
+               </label>
+               <select id="cbo-report-status" style="width: 150px"
+                       class="form-control form-control-sm mr-3" #statusSelect
+                       [(ngModel)]="selectedMidYearReportStatus"
+                       (change)="onStatusSelected()" aria-label="select semi-annual report status">
+                  <option value="SUBMITTED">Pending Review</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RETURNED">Reviewed and Returned</option>
+                  <option value="APPROVED">Accepted</option>
+               </select>
+               <label for="cbo-report-year" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Report Year:</strong>
+               </label>
+               <select id="cbo-report-year" style="width: 150px;"
+                       class="form-control form-control-sm mr-3" #yearSelect
+                       [(ngModel)]="selectedYear"
+                       (change)="refreshFacilityReports()" aria-label="select semi-annual report year">
+                  <option [ngValue]="undefined">All Years</option>
+                  <option *ngFor="let opt of selectedAgency?.years" [value]="opt">{{opt}}</option>
+               </select>
+               <label for="cbo-industry-sector" class="col-form-label col-form-label-sm mr-2">
+                  <strong>Industry Sector:</strong>
+               </label>
+               <select id="cbo-industry-sector" style="width: 150px;"
+                       class="form-control form-control-sm" #industrySelect
+                       (change)="onIndustrySelected(industrySelect.value)" aria-label="select industry sector">
+                  <option value="null" selected>All Sectors</option>
+                  <option *ngFor="let opt of industrySectors" [value]="opt">{{opt}}</option>
+               </select>
+            </div>
+
+            <app-monthly-submission-review-list [reviewer]="user?.isReviewer()" [tableData]="submissions" [monthlyReportStatus]="statusSelect.value"></app-monthly-submission-review-list>
+
+			<div class="validation-message p-3" *ngIf="invalidSelection">
+               <span>At least one submission must be selected.</span>
+            </div>
+			<div class="validation-message p-3" *ngIf="cannotReject">
+               <span>One or more of the selected reports has already been submitted for annual review. You cannot reject semi-annual submissions while the annual report status is "Pending Review", "Advanced QA", or "Approved".</span>
+            </div>
+
+            <div class="card-footer">
+               <div class="row" *ngIf="user?.isReviewer()">
+                  <div class="col" style="text-align: right">
+					<button class="btn btn-primary btn-md mr-3"
+                           *ngIf="statusSelect.value !== 'IN_PROGRESS' && statusSelect.value !== 'RETURNED'"
+                           (click)="onReject(yearSelect.value)">
+                        <span>Reject and Return to Facility</span>
+                     </button>
+                     <button class="btn btn-success btn-md"
+                           *ngIf="!hideButtons"
+                           (click)="onApprove(yearSelect.value)">
+                        <span>Accept</span>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+
+      <div class="col-sm-12 col-md-3">
+         <div style="flex: 0 0 250px">
+            <div class="card">
+               <div class="card-header text-center">
+                  <strong>{{currentYear}} Semi-Annual Monthly Reporting</strong>
+               </div>
+                  <div class="card-body">
+                     <div *ngIf="user?.isReviewer() || (user?.isAdmin() && selectedAgency)">
+                     <br>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="inProgressCount > 0 ? 'all' : 'none'"
+                           [title]="inProgressCount + ' reports Returned Status'"
+                           (click)="onFilter(monthlyReportStatus.IN_PROGRESS)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ff1a1a; font-size: 100%;">
+                              {{inProgressCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedMidYearReportStatus == monthlyReportStatus.IN_PROGRESS && selectedYear == currentYear">
+	                           <strong class="mr-2">In Progress</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show In Progress reports"
+                                    *ngIf="inProgressCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="returnedCount > 0 ? 'all' : 'none'"
+                           [title]="returnedCount + ' reports Returned Status'"
+                           (click)="onFilter(monthlyReportStatus.RETURNED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ff1a1a; font-size: 100%;">
+                              {{returnedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedMidYearReportStatus == monthlyReportStatus.RETURNED && selectedYear == currentYear">
+	                           <strong class="mr-2">Reviewed and Returned</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Returned reports"
+                                    *ngIf="returnedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="submittedCount > 0 ? 'all' : 'none'"
+                           [title]="submittedCount + ' reports Pending Review Status'"
+                           (click)="onFilter(monthlyReportStatus.SUBMITTED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #ffb90f; font-size: 100%;">
+                              {{submittedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedMidYearReportStatus == monthlyReportStatus.SUBMITTED && selectedYear == currentYear">
+	                           <strong class="mr-2">Pending Review</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Pending Review reports"
+                                    *ngIf="submittedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="mb-3 align-middle">
+                        <a href="javascript:void(0);"
+                           class="text-nowrap text-decoration-none text-body"
+                           [style.pointer-events]="approvedCount > 0 ? 'all' : 'none'"
+                           [title]="approvedCount + ' reports Approved'"
+                           (click)="onFilter(monthlyReportStatus.APPROVED)">
+                           <span class="badge badge-pill badge-danger text-larger mr-3"
+                              style="background-color: #209c98; font-size: 100%;">
+                              {{approvedCount}}
+                           </span>
+                           <span [class.selected-filter-highlight]="selectedMidYearReportStatus == monthlyReportStatus.APPROVED && selectedYear == currentYear">
+	                           <strong class="mr-2">Approved</strong>
+	                           <fa-icon icon="filter"
+                                    title="Show Approved reports"
+                                    *ngIf="approvedCount > 0"></fa-icon>
+                           </span>
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

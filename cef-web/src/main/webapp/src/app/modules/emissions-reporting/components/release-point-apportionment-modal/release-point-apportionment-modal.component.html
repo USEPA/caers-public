@@ -1,0 +1,50 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="releasePointApptForm" >
+    <div class="modal-header">
+        <h4 class="modal-title w-100"><strong>Release Point Apportionment</strong></h4>
+    </div>
+
+    <div class="modal-body">
+        <strong class="mb-2">Select a Release Point</strong>
+    	<app-required-asterisk [control]="releasePointApptForm.get('selectedReleasePointAppt')"></app-required-asterisk>
+        <select [(ngModel)]="rpApptSelected" type="text" id="releasePointSelect" class="form-control mb-2" formControlName="selectedReleasePointAppt" aria-label="select release point">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let rp of releasePoints" [ngValue]="rp.releasePointIdentifier">
+                {{rp.releasePointIdentifier}}&nbsp;-&nbsp;{{rp.description}}
+            </option>
+        </select>
+        <app-validation-message [control]="releasePointApptForm.get('selectedReleasePointAppt')"></app-validation-message>
+        <strong class="mb-2">Select a Control Path (optional)</strong>
+        <select [(ngModel)]="controlPathSelected" type="text" id="controlPathSelect" class="form-control mb-2" formControlName="controlPath" aria-label="select control path">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let cp of controlPaths" [ngValue]="cp">
+                {{cp.pathId}}
+            </option>
+        </select>
+        <fa-icon class="mt-2 mr-2" title="The average annual percent of an emissions process that is vented through a release point. 100% of total emissions from that process should be apportioned to one or more release points." [icon]="['fas', 'question-circle']"></fa-icon>
+        <strong>% Release Point Apportionment</strong>
+    	<app-required-asterisk [control]="releasePointApptForm.get('percent')"></app-required-asterisk>
+        <input class="ml-4 mb-1" type="text" maxlength="5" formControlName="percent" id="percentInput" aria-label="emission percentage">
+        <app-validation-message [control]="releasePointApptForm.get('percent')"></app-validation-message>
+    </div>
+
+        <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="onSubmit($event)">Save</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="onClose()">Cancel</button>
+    </div>
+</form>   

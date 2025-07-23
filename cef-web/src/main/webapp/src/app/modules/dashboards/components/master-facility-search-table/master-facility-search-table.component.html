@@ -1,0 +1,93 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+  <div class="row">
+    <div class="form-inline col-3">
+      <label for="id-filter-text" class="col-form-label mr-2">
+          <strong>Filter Table:</strong>
+      </label>
+      <div class="input-group">
+          <input id="id-filter-text" type="text" placeholder="Search"
+                class="form-control form-control-sm"
+                [formControl]="filter"/>
+          <div class="input-group-append">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Clear filter"
+                    (click)="onClearFilterClick()">
+                <fa-icon icon="times"></fa-icon>
+            </button>
+          </div>
+      </div>
+    </div>
+
+    <div class="form-inline col-3">
+      <label for="id-filter-text" class="col-form-label mr-2">
+          <strong>Filter Request Status:</strong>
+      </label>
+      <div class="input-group">
+          <select type="text" class="form-control" id="statusSelect" [formControl]="statusFilter">
+            <option [ngValue]="null"></option>
+            <option ngValue="UNASSOCIATED">No Request Sent</option>
+            <option ngValue="PENDING">Pending Request</option>
+            <option ngValue="APPROVED">Approved Request</option>
+          </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="mh-100 overflow-auto">
+    <table class="table table-sm table-striped table-bordered">
+      <thead class="thead-cef-medium">
+        <tr>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Facility Name</th>
+          <th scope="col" sortable="agencyFacilityIdentifier" (sort)="onSort($event)">Agency Facility ID</th>
+          <th scope="col" sortable="streetAddress" (sort)="onSort($event)">Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!tableItems || tableItems.length === 0">
+          <td colspan="4" class="text-center">
+              <strong class="text-larger">No data available.</strong>
+          </td>
+        </tr>
+        <ng-container *ngFor="let item of tableItems">
+          <tr [class.cursor-pointer]="!item.associationStatus" [class.table-dark]="item === selectedFacility" [class.text-muted]="item.associationStatus" (click)="selectFacility(item)">
+            <td>
+              {{item.name}} 
+              <strong *ngIf="item.associationStatus">
+                <span *ngIf="item.associationStatus == 'ACTIVE'" class="text-bs-teal">
+                  (<fa-icon icon="check"></fa-icon> Access Request Approved)
+                </span>
+                <span *ngIf="item.associationStatus == 'PENDING'" class="text-info">
+                  (<fa-icon icon="clock"></fa-icon> Request Pending Approval)
+                </span>
+              </strong>
+            </td>
+            <td>{{item.agencyFacilityIdentifier}}</td>
+            <td>{{item.streetAddress}}, {{item.city}}, {{item?.stateCode?.uspsCode}} {{item.postalCode}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <ngb-pagination [(page)]="controller.page" [pageSize]="controller.pageSize" [collectionSize]="controller.total$ | async" [maxSize]="5" [rotate]="true"></ngb-pagination>
+  </div>
+
+  <div>
+    <button type="button" class="btn btn-success" (click)="openRequestAccessModal()" [disabled]="!selectedFacility">Request Access</button>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+UPDATE RELEASE_POINT_TYPE_CODE SET DESCRIPTION = 'Fugitive 3-D: Center of Release Footprint Coords' where code = '7';
+UPDATE RELEASE_POINT_TYPE_CODE SET DESCRIPTION = 'Fugitive 2-D: Two Midpoint Coord Pairs' where code = '9';

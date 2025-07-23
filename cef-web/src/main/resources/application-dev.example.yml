@@ -1,0 +1,103 @@
+#
+# © Copyright 2019 EPA CAERS Project Team
+#
+# This file is part of the Common Air Emissions Reporting System (CAERS).
+#
+# CAERS is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with CAERS.  If
+# not, see <https://www.gnu.org/licenses/>.
+#
+server.servlet.session.cookie.secure: false
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/CEF
+    username: cef
+    password: password
+    tomcat:
+      fairQueue: true
+      jmx-enabled: false
+      initialSize: 2
+      maxActive: 5
+      maxIdle: 2
+      testOnBorrow: true
+      testWhileIdle: true
+      timeBetweenEvictionRunsMillis: 60000
+      validationQuery: select 1
+      validationQueryTimeout: 10
+      maxWait: 30000
+  mail:
+      host: CDXDMAIL01.cloud.epacdx
+      port: 25
+      properties:
+        mail:
+          smtp:
+            auth: false
+  security.oauth2.authorizationserver.endpoint.token-uri: https://cdxapidev.epacdx.net/oauth/token
+cdx:
+  registerEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterService
+  registerProgramFacilityEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterProgramFacilityService
+  registerSignEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterSignService
+  streamlinedRegistrationEndpointConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/StreamlinedRegistrationService
+  inboxClientConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterInboxServiceConditionalMTOM
+  pdfClientConfiguration:
+    serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterPdfServiceConditionalMTOM
+  naas-token-url: https://naasdev.epacdxnode.net/xml/SecurityToken_v30.wsdl
+  naas-user: caer-cef-admin@epa.gov
+  naas-password: CDX01caer@!
+  naas-ip: 127.0.0.1
+  cdx-base-url: https://dev.epacdx.net
+  app-base-url: https://cdxappsdev.epacdx.net/cef-web
+  submission-history-url: https://dev.epacdx.net/SilentHandoff?URL=https://devngn.epacdxnode.net/cromerr-review/action/submitter/details/details/
+  allowed-origins:
+    - https://cdx.epa.gov
+    - https://cdxnodengn.epa.gov
+    - https://test.epacdx.net
+    - https://testngn.epacdxnode.net
+    - https://testngn2.epacdxnode.net
+    - https://dev.epacdx.net
+    - https://devngn.epacdxnode.net
+    - https://devngn2.epacdxnode.net
+    - https://cdxappsdev.epacdx.net
+    - https://dev.e-enterprise.gov
+    - https://dev2.e-enterprise.gov
+    - https://test.e-enterprise.gov
+    - https://test2.e-enterprise.gov
+    - https://e-enterprise.gov
+    - https://www2.e-enterprise.gov
+    - http://localhost:8080
+    - https://www.google-analytics.com
+excel-parser:
+  base-url: https://cdxappsdev.epacdx.net/excel-json-parser/api/v2
+virus-scanner:
+  endpoint: https://tools.epacdxnode.net/xml/validator_v30.wsdl
+network-nodes:
+  eis:
+    serviceUrl: https://testngn.epacdxnode.net/ngn-enws20/services/NetworkNode2Service
+    dataflow: CERS_v2
+scc:
+  sccwebservices-endpoint: https://sor-scc-api.epa.gov/sccwebservices/v1
+jwt:
+    public-key-text: -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtqrTpfrnj/E5Vmd91xkY
+        zYLRk0fsZvRmfZgI0dnWlhVKV/4FhH1DsIJAsx1fvoz4LqrhXDMCCITPGxX2TayO
+        1qx0Q8oHHTaXRXVNDAFZEEMNtGDs+hY0BU1qJZ/mZJZZrUPbS1aDn8GYivV5bhby
+        IIW0AQS/9KYGxAQUXp0bjZZmKYhHoEChNJik1bNf3w2vCdXnp3ZJu6QDCgTsndUA
+        /Lu3P2urluWsYHUtGyDRsNWqGdmXjN4BPhtnMfCje5LsQf6hRgNiapI8sLyLebjQ
+        VxfmBFmWTSO4GQJQ7WtCQex3zZS+VelT34EgcI9Yyhrth5NktAfJvzirSZqO5tn5
+        KwIDAQAB
+        -----END PUBLIC KEY-----
+# Paths to include
+springdoc.paths-to-match: /api/public/export/**

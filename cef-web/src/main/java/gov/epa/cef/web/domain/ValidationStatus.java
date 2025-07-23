@@ -1,0 +1,41 @@
+/*
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+*/
+package gov.epa.cef.web.domain;
+
+public enum ValidationStatus {
+//    FAILED("Failed Validation"),
+    PASSED("Passed Validaton"),
+    PASSED_WARNINGS("Passed Validaton with Warnings"),
+    SEMIANNUAL_PASSED("Semi-Annual Passed Validaton"),
+    SEMIANNUAL_PASSED_WARNINGS("Semi-Annual Passed Validaton with Warnings"),
+    UNVALIDATED("Not Validated");
+
+    private final String label;
+
+    ValidationStatus(String label) {
+        this.label = label;
+    }
+
+    public String code() {
+        return this.name();
+    }
+
+    public String label() {
+        return this.label;
+    }
+
+}

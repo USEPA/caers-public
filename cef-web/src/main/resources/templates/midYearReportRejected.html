@@ -1,0 +1,32 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<p>Your <span th:text="${reportingYear}" /> semi-annual report for <span th:text="${facilityName}" />, submitted from CAER, has been returned.
+		Please review "Additional Comments" below for details of why the semi-annual fuel report was sent back.
+	</p>
+	<div th:if="${!#strings.isEmpty(comments) || !#strings.isEmpty(attachment)}">
+		<strong>Additional Comments:</strong><br/>
+		<p th:text="${comments}" style="padding-top: 0; margin-top: 0"></p>
+	</div>
+	<p>If you have any questions about this notice please contact <span th:text="${slt}"/> at <span th:text="${sltEmail}"/>.</p>
+	<br/>
+	<p>US Environmental Protection Agency</p>
+</body>
+</html>

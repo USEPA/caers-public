@@ -1,0 +1,106 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="properties">
+
+  <div class="card mb-3">
+    <div class="card-header text-center">
+      <span class="pageHeader"><strong>Administrative Properties</strong></span>
+      <div class="float-right">
+        <button type="button" class="btn btn-success" (click)="onSubmit()">Update Properties</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="propertyForm">
+        <div class="row pb-1" *ngFor="let prop of properties; let even = even; let odd = odd"  [ngClass]="{ odd: odd, even: even }">
+          <div class="col-sm-6 col-lg-4">
+            <label for="{{prop.name + 'Input'}}" class="ml-1 col-form-label">
+              <fa-icon class="mt-2 ml-2" title="{{prop.description}}" [icon]="['fas', 'question-circle']"></fa-icon>
+              &nbsp;<strong>{{prop.label}}:</strong>
+            </label>
+          </div>
+          <div class="col-sm-6">
+            <div class="textboxes" *ngIf="prop.datatype !== 'boolean'">
+              <div *ngIf="prop.datatype === 'textarea'">
+                <textarea maxlength="255" class="form-control" id="{{prop.name + 'Input'}}" [formControlName]="prop.name"></textarea>
+              </div>
+              <div *ngIf="prop.datatype === 'richtextarea'">
+	                <editor
+	                  [init]="{
+					     height: 200,
+					     menubar: false,
+					     plugins: [
+					       'advlist autolink lists link charmap print preview anchor',
+					       'searchreplace visualblocks fullscreen',
+					       'insertdatetime table paste help wordcount'
+					     ],
+					     toolbar:
+					       'undo redo | formatselect | bold italic underline backcolor | ' +
+					       'alignleft aligncenter alignright alignjustify | ' +
+					       'bullist numlist outdent indent | removeformat | help'
+					   }"
+					   id="{{prop.name + 'Input'}}" [formControlName]="prop.name">
+					 </editor>
+	            </div>
+              <div *ngIf="prop.datatype === 'string'">
+                <input type="text" class="form-control" id="{{prop.name + 'Input'}}" [formControlName]="prop.name">
+              </div>
+              <app-validation-message [control]="propertyForm.get([prop.name])"></app-validation-message>
+            </div>
+            <div class="custom-control custom-switch custom-switch" *ngIf="prop.datatype === 'boolean'">
+              <input type="checkbox" [checked]="prop.value===true" class="custom-control-input" id="{{'switch'+prop.name}}"
+              [attr.aria-label]="prop.description" [formControlName]="prop.name">
+              <label class="custom-control-label" for="{{'switch'+prop.name}}">
+                <span *ngIf="propertyForm.value[prop.name]===true">Enabled</span>
+                <span *ngIf="propertyForm.value[prop.name]!==true">Disabled</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header text-center">
+      <strong>Admin Functions</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="row pb-3" *ngIf="migrationFeature">
+        <button type="button" class="btn btn-success mr-2" (click)="openMigrateUserAssociationsModal()" [disabled]="migrating">
+          Migrate User Associations
+          <div class="spinner-border spinner-border-sm text-light" role="status" *ngIf="migrating">
+            <span class="sr-only">Migrating...</span>
+          </div>
+        </button>
+        Migrate user facility associations from CDX into CAER. This will only work if there are not any existing associations and should not be used in any production environments.
+      </div>
+      <div class="row pb-3">
+        <button type="button" class="btn btn-success mr-2" (click)="openRecalculateEmissionTonsModal()">Recalculate Emission Tons</button>
+        Recalculate the emissions in tons for a specific report.
+      </div>
+      <div class="row pb-3">
+        <button type="button" class="btn btn-success mr-2" (click)="openTestEmailModal()">Send test email</button>
+        Send a test email to the addresses listed as admin emails.
+      </div>
+      <div class="row pb-3">
+        <button type="button" class="btn btn-success mr-2" (click)="calculateNonPointStandardizedFuelUse()">Calculate Non-Point Standardized Fuel Use</button>
+        Calculate and save the standardized fuel use for Non-Point Fuel Subtraction Report.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="mh-100 overflow-auto">
+  <table id="facilityNaicsTable" class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+      <th scope="col" sortable="description" (sort)="onSort($event)">NAICS Description</th>
+      <th scope="col" sortable="code" (sort)="onSort($event)">NAICS Code</th>
+      <th scope="col" sortable="naicsCodeType" (sort)="onSort($event)">NAICS Code Type</th>
+      <ng-container *ngIf="!readOnlyMode && !naicsEntryEnabled">
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </ng-container>
+     
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of tableItems">
+      <td>{{item.description}}</td>
+      <td>{{item.code}}</td>
+      <td>{{item.naicsCodeType}}
+      </td>
+      <ng-container *ngIf="!readOnlyMode && !naicsEntryEnabled">
+        <td><a routerLink="." (click)="openEditModal(item)" [attr.aria-label]="'edit naics code' + item?.code" [attr.data-cy]="'edit naics code' + item?.code">
+          <fa-icon style="color:#209c98" [icon]="faEdit"></fa-icon>
+        </a></td>
+        <td><a routerLink="." (click)="openDeleteModal(item.code, item.id, item.facilitySiteId)" [id]="'deleteNaics' + item?.code" [attr.aria-label]="'delete' + item?.description + 'NAICS code from facility'">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </a></td>
+      </ng-container> 
+    </tr>
+      <ng-container *ngIf="!readOnlyMode && !naicsEntryEnabled">
+        <tr>
+          <td colspan="4"></td>
+          <td><a routerLink="." (click)="openFacilityNaicsModal()" id="addNaicsBtn" aria-label="add facility NAICS code"><fa-icon [icon]="faPlus"></fa-icon></a></td> 
+        </tr>
+      </ng-container> 
+   
+    </tbody>
+  </table>
+</div>

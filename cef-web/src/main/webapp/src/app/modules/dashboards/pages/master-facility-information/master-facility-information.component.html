@@ -1,0 +1,64 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div>
+
+  <div class="row" *ngIf="user?.isAdmin()">
+    <div class="col-8">
+      <div class="d-flex flex-row py-3">
+          <label for="admin-agency-select" class="col-form-label mr-2">
+            <strong>Agency:</strong>
+          </label>
+          <select id="admin-agency-select" style="width: auto"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="programSystemCode" 
+                  (change)="onAgencySelected()" aria-label="select agency">
+            <option value=""></option>
+            <option *ngFor="let opt of agencyDataValues" [ngValue]="opt">{{opt.code}} - {{opt.description}}</option>
+          </select>
+          <hr>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <button *ngIf="this.programSystemCode" type="submit" class="btn btn-success" (click)="addMasterFacilityRecord()">Add New Facility</button>
+      <app-master-facility-table [tableData]="records" (facilitySelected)="onFacilitySelected($event)"></app-master-facility-table>
+    </div>
+
+    <div class="col-8">
+      <div class="card mb-3" *ngIf="selectedFacility">
+        <div class="card-header text-center">
+            <span class="pageHeader"><strong *ngIf="addFacility">New </strong><strong>Facility Details</strong></span>
+            <div class="float-right" *ngIf="!editInfo && !addFacility">
+                <button type="button" class="btn btn-success" aria-label="edit facility details" (click)="onEditClick(selectedFacility)">Edit</button>
+            </div>
+        </div>
+        <div class="card-body" *ngIf="!editInfo && !addFacility">
+          <app-master-facility-info [facility]="selectedFacility"></app-master-facility-info>
+        </div>
+        <div class="card-body" *ngIf="editInfo || addFacility">
+            <app-edit-master-facility-info [facility]="selectedFacility" [addFacility]="addFacility" [programSystemCode]="programSystemCode"></app-edit-master-facility-info>
+            <div class="float-right pb-3 pr-3" *ngIf="selectedFacility">
+                <button type="button" class="btn btn-primary mr-2" (click)="onCancelEdit()">Cancel</button>
+                <button type="submit" class="btn btn-success" (click)="updateMasterFacilityRecord()">Save</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+</div>

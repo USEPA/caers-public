@@ -1,0 +1,103 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<form [formGroup]="attachmentForm" enctype="multipart/form-data">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{message}}
+    </p>
+
+    <div class="row pb-2">
+      <label for="file-attachment" class="col-sm-6 col-md-2 col-form-label" title="A file is required.">
+          <strong>Attachment:</strong>
+      </label>
+      <div class="col-sm-6 col-md-10">
+        <div class="custom-file">
+          <input #fileAttachment id="file-attachment" type="file" enctype="multipart/form-data"
+                class="form-control" (change)="onFileChanged($event.target.files)" formControlName="attachment">
+          <label for="file-attachment" class="custom-file-label">Click to browse...</label>
+          <app-validation-message [control]="attachmentForm.get('attachment')"></app-validation-message>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="uploadFailed">
+      <div class="validation-user-errors" *ngIf="uploadUserErrors.length">
+        <div class="h5 font-weight-bolder">
+            <span>Error(s)</span>
+        </div>
+        <div id="id-user-errors" [ngbCollapse]="bsflags.showUserErrors === false">
+            <ol>
+                <li *ngFor="let error of uploadUserErrors" style="color: #BF211E;">
+                    <span class="font-weight-bold ml-2 mr-1">Message:</span>
+                    <span [textContent]="error.message"></span>
+                </li>
+            </ol>
+        </div>
+      </div>
+      
+      <div class="validation-system-errors" *ngIf="uploadSystemErrors?.length">
+          <div class="h5 font-weight-bolder">
+            <span>Diagnostic Error(s): </span>
+          </div>
+          <div id="id-system-errors" [ngbCollapse]="bsflags.showSystemErrors === false">
+            <ol>
+                <li *ngFor="let error of uploadSystemErrors" style="color: #BF211E;">
+                    <span class="font-weight-bold ml-2 mr-1">Message:</span>
+                    <span [textContent]="error.message"></span>
+                </li>
+            </ol>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onClose()">{{cancelButtonText}}</button>
+    <button type="button" class="btn btn-success"
+            [ngClass]="{'disable-click' : disableButton }"
+            [disabled]="disableButton"
+            (click)="onSubmit()">
+        {{confirmButtonText}}
+    </button>
+  </div>
+</form>
+
+<ng-template #PleaseWaitModal>
+    <div class="modal-header bg-info text-white">
+        <div class="modal-title h4"><strong>File Upload</strong></div>
+    </div>
+    <div class="modal-body">
+        <div class="mb-2">Please wait this could take a minute or two.</div>
+        <div class="mb-2 font-weight-bold">
+            <span [textContent]="pleaseWait.message"></span>
+            <span class="ml-2" [textContent]="pleaseWait.progress + '%'"></span>
+        </div>
+        <div class="progress" style="height: 40px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                 role="progressbar" [style.width]="pleaseWait.progress + '%'"
+                 [attr.aria-valuenow]="pleaseWait.progress" aria-valuemin="0" aria-valuemax="100">
+            </div>
+        </div>
+    </div>
+</ng-template>

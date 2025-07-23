@@ -1,0 +1,65 @@
+<!--
+ * © Copyright 2019 EPA CAERS Project Team
+ *
+ * This file is part of the Common Air Emissions Reporting System (CAERS).
+ *
+ * CAERS is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software Foundation, 
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with CAERS.  If 
+ * not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="mh-100 overflow-auto">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-cef-medium">
+    <tr>
+      <th scope="col" sortable="releasePointIdentifier" (sort)="onSort($event)">Release Point</th>
+      <th scope="col">Release Type</th>
+      <th scope="col">Control Path</th>
+      <th scope="col" sortable="percent" (sort)="onSort($event)">%</th>
+      <ng-container *ngIf="!readOnlyMode">
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </ng-container>
+     
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableItems">
+        <td><a routerLink="{{baseUrl}}/release/{{item.releasePointId}}" [attr.aria-label]="'release point apportionment' + item?.releasePointIdentifier">
+          {{item.releasePointIdentifier}}
+        </a></td>
+        <td>{{item.releasePointTypeCode.description}}</td>
+        <td>{{item?.controlPath?.pathId}}</td>
+        <td>{{item.percent}}%</td>
+        <ng-container *ngIf="!readOnlyMode">
+          <td><a routerLink="." (click)="openEditModal(item)" [attr.aria-label]="'edit release point apportionment' + item?.releasePointIdentifier">
+            <fa-icon style="color:#209c98" [icon]="faEdit"></fa-icon>
+          </a></td>
+          <td><a routerLink="." (click)="openDeleteModal(item.releasePointIdentifier, item.id)" [attr.aria-label]="'delete release point apportionment' + item?.releasePointIdentifier">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </a></td>
+        </ng-container> 
+      </tr>
+      <tr>
+        <td colspan="3"><strong>Total % Apportionment of Emissions</strong></td>
+        <td colspan="3">{{totalApptPct}}%</td>
+      </tr>
+      <ng-container *ngIf="!readOnlyMode">
+        <tr>
+          <td colspan="5"></td>
+          <td><button style="color:#187773;border:none;background-color: Transparent;padding-left: 0" (click)="openReleasePointAptModal()" aria-label="add release point apportionment" id="tblAddReleasePointApptBtn"><fa-icon [icon]="faPlus"></fa-icon></button></td>
+        </tr>
+      </ng-container> 
+      <tr>
+        <td colspan="6"><i>Note: Each process must allocate exactly 100% of its emissions to one or more release points before the report can be submitted.</i></td>
+      </tr>
+    </tbody>
+  </table>
+  
+</div>
