@@ -184,8 +184,10 @@ CAERS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANT
 You should have received a copy of the GNU General Public License along with CAERS.  If not, see [GNU Licenses](https://www.gnu.org/licenses/).
 
 ## #Disclaimer 
-Disclaimer: The United States Environmental Protection Agency provides this code on an "as is" basis and the user assumes responsibility for its use. EPA has relinquished control of the information and no longer has responsibility
+Disclaimer: The United States Environmental Protection Agency provides this code on an "as is" basis and the user assumes responsibility for its use. 
 
-to protect the integrity, confidentiality, or availability of the information. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply 
+EPA has relinquished control of the information and no longer has responsibility to protect the integrity, confidentiality, or availability of the information. 
 
-their endorsement, recommendation or favoring by EPA. The EPA seal and logo shall not be used in any manner to imply endorsement of any commercial product or activity by EPA or the United States Government.
+Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation or favoring by EPA. 
+
+The EPA seal and logo shall not be used in any manner to imply endorsement of any commercial product or activity by EPA or the United States Government.
