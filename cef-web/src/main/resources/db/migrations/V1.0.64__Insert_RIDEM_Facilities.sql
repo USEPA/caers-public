@@ -1,5 +1,5 @@
-insert into slt_config (name, program_system_code, value) values ('slt-email', 'RIDEM', 'caer@cgifederal.com');
-insert into slt_config (name, program_system_code, value) values ('slt-eis-user', 'RIDEM', 'josmarti');
+insert into slt_config (name, program_system_code, value) values ('slt-email', 'RIDEM', 'placeholder@example.com');
+insert into slt_config (name, program_system_code, value) values ('slt-eis-user', 'RIDEM', 'userexample');
 insert into slt_config (name, program_system_code, value) values ('slt-eis-program-code', 'RIDEM', 'RIDEM');
 
 insert into master_facility_record (eis_program_id, program_system_code, name, category_code, source_type_code, status_code, agency_facility_id, description, status_year, street_address, city, county_code, state_code, postal_code, country_code, mailing_street_address, mailing_city, mailing_state_code, mailing_postal_code, mailing_country_code, latitude, longitude, tribal_code, created_by, last_modified_by, last_modified_date) VALUES ('5474011', 'RIDEM', 'STERLING CLEANSERS', 'UNK', '116', 'OP', 'AIR1446', 'NA', '2019', '288 CRANSTON ST', 'PROVIDENCE', '44007', '44', '02907', NULL, '288 CRANSTON ST', 'PROVIDENCE', '44', '02907', NULL, '41.81287', '-71.42898', NULL,'SYSTEM', 'SYSTEM', NOW());

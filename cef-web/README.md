@@ -87,14 +87,18 @@ If you are experiencing issues with running CAERS from the oar-caer repository, 
     - url: "jdbc:postgresql://localhost:5432/CEF"
     - username: _REMOVED_
     - password: _REMOVED_
-- Set up a connection to the CDX development database.  
-    - **Only attempt connecting to the dev database if you're able to connect to the CDX VPN (external contributors will not have this ability and should develop against their new local database)**
-    - Make sure your local pgAdmin can connect to the CDX development database. Note: you will need to be on the CDX VPN to be able to access this database (Request a [CDX developer account](https://alm.cgifederal.com/collaborate/display/CDXO/Request+a+CDX+developer+account)).
-    - host: cdx-pgs-general-shared-dev-01.cloud.epacdx
-    - port: 5432
-    - database: CEF
-    - username: USERNAME_REMOVED
-    - password: PASSWORD_REMOVED
+
+- Populating the database
+    1. Find the CAERS databae backup at `cef-web\src\main\resources\db\caers_db.backup`
+    2. Run the following command to restore the database
+        ```
+        pg_restore -U cef -d CEF caers_db.backup
+        ```
+    3. Alternatively restore through pgAdmin
+        1. Open pgAdmin
+        2. Find your database
+        3. Right Click and click "Restor"
+        4. Navigate and open then backup file
 
 ## Building CAERS
 - ### Maven build
