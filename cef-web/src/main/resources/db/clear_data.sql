@@ -21,3 +21,7 @@ TRUNCATE TABLE program_system_code CASCADE;
 -- Program System Code
 TRUNCATE TABLE pollutant_program_system_code CASCADE;
 ALTER SEQUENCE pollutant_program_system_code_id_seq RESTART WITH 1;
+
+-- SCHEMA VERSION
+TRUNCATE TABLE schema_version_cef CASCADE;
+
