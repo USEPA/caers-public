@@ -23,8 +23,8 @@ spring:
     type: org.apache.tomcat.jdbc.pool.DataSource # overriding default hikari
     driver-class-name: "org.postgresql.Driver"
     url: "jdbc:postgresql://localhost:15432/CEF"
-    username: cef
-    password: password
+    username: _REMOVED_
+    password: _REMOVED_
     tomcat:
       fairQueue: true
       jmx-enabled: false

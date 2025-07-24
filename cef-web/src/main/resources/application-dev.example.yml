@@ -19,8 +19,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/CEF
-    username: cef
-    password: password
+    username: _REMOVED_
+    password: _REMOVED_
     tomcat:
       fairQueue: true
       jmx-enabled: false
@@ -55,8 +55,8 @@ cdx:
   pdfClientConfiguration:
     serviceUrl: https://devngn.epacdxnode.net/cdx-register-II/services/RegisterPdfServiceConditionalMTOM
   naas-token-url: https://naasdev.epacdxnode.net/xml/SecurityToken_v30.wsdl
-  naas-user: caer-cef-admin@epa.gov
-  naas-password: CDX01caer@!
+  naas-user: _REMOVED_
+  naas-password: _REMOVED_
   naas-ip: 127.0.0.1
   cdx-base-url: https://dev.epacdx.net
   app-base-url: https://cdxappsdev.epacdx.net/cef-web

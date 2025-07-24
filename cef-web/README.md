@@ -85,8 +85,8 @@ If you are experiencing issues with running CAERS from the oar-caer repository, 
 - Set up a local "CEF" schema on your local PostgreSQL database with password = "password". This is the default setting for the local development environment connection strings
     - driver-class-name: "org.postgresql.Driver"
     - url: "jdbc:postgresql://localhost:5432/CEF"
-    - username: cef
-    - password: password
+    - username: _REMOVED_
+    - password: _REMOVED_
 - Set up a connection to the CDX development database.  
     - **Only attempt connecting to the dev database if you're able to connect to the CDX VPN (external contributors will not have this ability and should develop against their new local database)**
     - Make sure your local pgAdmin can connect to the CDX development database. Note: you will need to be on the CDX VPN to be able to access this database (Request a [CDX developer account](https://alm.cgifederal.com/collaborate/display/CDXO/Request+a+CDX+developer+account)).
