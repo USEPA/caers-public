@@ -97,7 +97,7 @@ If you are experiencing issues with running CAERS from the oar-caer repository, 
     3. Alternatively restore through pgAdmin
         1. Open pgAdmin
         2. Find your database
-        3. Right Click and click "Restor"
+        3. Right Click and click "Restore"
         4. Navigate and open then backup file
 
 ## Building CAERS
