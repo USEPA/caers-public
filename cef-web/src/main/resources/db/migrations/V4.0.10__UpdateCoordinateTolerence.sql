@@ -1,2 +1,0 @@
-UPDATE master_facility_record SET coordinate_tolerance = 0.005 WHERE agency_facility_id = '2815300004';
-UPDATE master_facility_record SET coordinate_tolerance = 0.011 WHERE agency_facility_id = '02900015';

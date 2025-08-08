@@ -1,2 +1,0 @@
-UPDATE calculation_material_code set heat_content_ratio_denominator = 'FT3SD' where code in ('425','809','819','209', '251', '502', '518'); 
-UPDATE unit_measure_code set fuel_use_type = 'gas' where code = 'FT3SD';
