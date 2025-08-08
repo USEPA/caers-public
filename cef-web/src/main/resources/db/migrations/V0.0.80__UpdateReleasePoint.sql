@@ -1,2 +1,0 @@
-ALTER TABLE release_point ALTER COLUMN latitude DROP NOT NULL;
-ALTER TABLE release_point ALTER COLUMN longitude DROP NOT NULL;

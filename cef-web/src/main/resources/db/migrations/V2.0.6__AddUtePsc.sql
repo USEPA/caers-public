@@ -1,1 +1,0 @@
-INSERT INTO program_system_code (code, description) VALUES ('TR687','Ute Indian Tribe of the Uintah & Ouray Reservation, Utah');

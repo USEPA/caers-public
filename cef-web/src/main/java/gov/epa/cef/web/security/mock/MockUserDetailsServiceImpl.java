@@ -89,14 +89,14 @@ public class MockUserDetailsServiceImpl implements AuthenticationUserDetailsServ
                 //RoleType role = AppRole.RoleType.REVIEWER;
                 RoleType role = AppRole.RoleType.CAERS_ADMIN;
 
-                String userId = "brundage.kevin";
+                String userId = "user.test";
                 List<GrantedAuthority> roles = this.securityService.createUserRoles(role, USER_ROLE_ID);
 
                 user = new ApplicationUser(userId, roles);
 
-                user.setEmail("brundage.kevin@epa.gov");
-                user.setFirstName("Kevin");
-                user.setLastName("Brundage");
+                user.setEmail("user.test@epa.gov");
+                user.setFirstName("Test");
+                user.setLastName("User");
                 user.setOrganization("Organization");
                 user.setTitle("Mr.");
                 user.setPhoneNumber("919-555-1234");
